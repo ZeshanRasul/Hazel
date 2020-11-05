@@ -1,6 +1,7 @@
+#include "hzpch.h"
 #include "Application.h"
 
-#include "Hazel/Events/ApplicationEvent.h"
+#include "Hazel/Events/MouseEvent.h"
 #include "Log.h"
 
 namespace Hazel {
@@ -17,7 +18,7 @@ namespace Hazel {
 
 	void Application::Run()
 	{
-		WindowResizeEvent e(1280, 720);
+		MouseButtonPressedEvent e(0);
 		if (e.IsInCategory(EventCategoryApplication))
 		{
 			HZ_TRACE(e);

@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace Hazel {
 
 	class HAZEL_API MouseMovedEvent : public Event
@@ -56,6 +54,8 @@ namespace Hazel {
 	{
 	public:
 		inline int GetMouseButton() const { return m_Button; }
+
+		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput);
 	
 	protected:
 		MouseButtonEvent(int button)
