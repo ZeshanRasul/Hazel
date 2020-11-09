@@ -19,10 +19,16 @@ namespace Hazel {
 
 		void OnEvent(Event& event);
 
+		inline static Application& Get() { return *s_Instance; };
+
+		inline Window& GetWindow() { return *m_Window; }
+
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
 	private:
+		static Application* s_Instance;
+
 		bool OnWindowClose(WindowCloseEvent& event);
 
 		std::unique_ptr<Window> m_Window;
