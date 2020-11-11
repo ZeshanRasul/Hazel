@@ -25,7 +25,7 @@ namespace Hazel {
 //	static ID3D11Device* g_pd3dDevice = NULL;
 	//static ID3D11DeviceContext* g_pd3dDeviceContext = NULL;
 	//static IDXGISwapChain* g_pSwapChain = NULL;
-	//static ID3D11RenderTargetView* g_mainRenderTargetView = NULL;
+
 
 	// Forward declarations of helper functions
 	bool CreateDeviceD3D(HWND hWnd);
@@ -60,7 +60,7 @@ namespace Hazel {
 		//createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 		D3D_FEATURE_LEVEL featureLevel;
 		const D3D_FEATURE_LEVEL featureLevelArray[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_0, };
-		if (D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &(app.g_pSwapChain), &(app.g_pd3dDevice), &featureLevel, &app.g_pd3dDeviceContext) != S_OK)
+		if (D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &(app.g_pSwapChain), &(g_pd3dDevice), &featureLevel, &g_pd3dDeviceContext) != S_OK)
 			return false;
 
 		CreateRenderTarget();
@@ -75,8 +75,8 @@ namespace Hazel {
 
 		CleanupRenderTarget();
 		if (app.g_pSwapChain) { app.g_pSwapChain->Release(); app.g_pSwapChain = NULL; }
-		if (app.g_pd3dDeviceContext) { app.g_pd3dDeviceContext->Release(); app.g_pd3dDeviceContext = NULL; }
-		if (app.g_pd3dDevice) { app.g_pd3dDevice->Release(); app.g_pd3dDevice = NULL; }
+		if (g_pd3dDeviceContext) { g_pd3dDeviceContext->Release(); g_pd3dDeviceContext = NULL; }
+		if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
 	}
 
 	void CreateRenderTarget()
@@ -85,7 +85,7 @@ namespace Hazel {
 
 		ID3D11Texture2D* pBackBuffer;
 		app.g_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
-		app.g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &app.g_mainRenderTargetView);
+		g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
 		pBackBuffer->Release();
 	}
 
@@ -93,7 +93,7 @@ namespace Hazel {
 	{
 		Application& app = Application::Get();
 
-		if (app.g_mainRenderTargetView) { app.g_mainRenderTargetView->Release(); app.g_mainRenderTargetView = NULL; }
+		if (g_mainRenderTargetView) { g_mainRenderTargetView->Release(); g_mainRenderTargetView = NULL; }
 	}
 
 
@@ -134,7 +134,7 @@ namespace Hazel {
 		Application& app = Application::Get();
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
-		ImGui_ImplDX11_Init(app.g_pd3dDevice, app.g_pd3dDeviceContext);
+		ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 	}
 
 	void Application::OnEvent(Event& event)
@@ -163,12 +163,12 @@ namespace Hazel {
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();
-				//ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData(), app.g_pd3dDevice, app.g_pd3dDeviceContext);
+				//ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData(), g_pd3dDevice, g_pd3dDeviceContext);
 
 			}
 
-			glClearColor(1, 0, 1, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+			//glClearColor(1, 0, 1, 1);
+		//	glClear(GL_COLOR_BUFFER_BIT);
 			m_Window->OnUpdate();
 		}
 	}

@@ -44,8 +44,9 @@
 #endif
 
 // DirectX data
-static ID3D11Device*            g_pd3dDevice = NULL;
-static ID3D11DeviceContext*     g_pd3dDeviceContext = NULL;
+ID3D11Device*            g_pd3dDevice = NULL;
+ID3D11DeviceContext*     g_pd3dDeviceContext = NULL;
+
 static IDXGIFactory*            g_pFactory = NULL;
 static ID3D11Buffer*            g_pVB = NULL;
 static ID3D11Buffer*            g_pIB = NULL;
@@ -71,7 +72,6 @@ static void ImGui_ImplDX11_ShutdownPlatformInterface();
 
 static void ImGui_ImplDX11_SetupRenderState(ImDrawData* draw_data, ID3D11DeviceContext* ctx)
 {
-    Hazel::Application& app = Hazel::Application::Get();
     // Setup viewport
     D3D11_VIEWPORT vp;
     memset(&vp, 0, sizeof(D3D11_VIEWPORT));
@@ -110,14 +110,11 @@ static void ImGui_ImplDX11_SetupRenderState(ImDrawData* draw_data, ID3D11DeviceC
 void ImGui_ImplDX11_RenderDrawData(ImDrawData* draw_data, ID3D11Device* g_pd3dDevice, ID3D11DeviceContext* g_pd3dDeviceContext)
 {
 
-//    ID3D11Device* g_pd3dDevice = Hazel::Application::Get().g_pd3dDevice;
-    ID3D11DeviceContext* g_pd3dDeviceContext2 = Hazel::Application::Get().g_pd3dDeviceContext;
-
     // Avoid rendering when minimized
     if (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f)
         return;
 
-    ID3D11DeviceContext* ctx = g_pd3dDeviceContext2;
+    ID3D11DeviceContext* ctx = g_pd3dDeviceContext;
 
     // Create and grow vertex/index buffers if needed
     if (!g_pVB || g_VertexBufferSize < draw_data->TotalVtxCount)
@@ -299,9 +296,6 @@ void ImGui_ImplDX11_RenderDrawData(ImDrawData* draw_data, ID3D11Device* g_pd3dDe
 
 static void ImGui_ImplDX11_CreateFontsTexture()
 {
-    ID3D11Device* g_pd3dDevice = Hazel::Application::Get().g_pd3dDevice;
-    ID3D11DeviceContext* g_pd3dDeviceContext = Hazel::Application::Get().g_pd3dDeviceContext;
-
     // Build texture atlas
     ImGuiIO& io = ImGui::GetIO();
     unsigned char* pixels;
@@ -519,7 +513,6 @@ void    ImGui_ImplDX11_InvalidateDeviceObjects()
     if (!g_pd3dDevice)
         return;
 
-    Hazel::Application& app = Hazel::Application::Get();
 
     if (g_pFontSampler) { g_pFontSampler->Release(); g_pFontSampler = NULL; }
     if (g_pFontTextureView) { g_pFontTextureView->Release(); g_pFontTextureView = NULL; ImGui::GetIO().Fonts->TexID = NULL; } // We copied g_pFontTextureView to io.Fonts->TexID so let's clear that as well.
@@ -673,14 +666,12 @@ static void ImGui_ImplDX11_SetWindowSize(ImGuiViewport* viewport, ImVec2 size)
 
 static void ImGui_ImplDX11_RenderWindow(ImGuiViewport* viewport, void*)
 {
-    Hazel::Application& app = Hazel::Application::Get();
-
     ImGuiViewportDataDx11* data = (ImGuiViewportDataDx11*)viewport->RendererUserData;
     ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
     g_pd3dDeviceContext->OMSetRenderTargets(1, &data->RTView, NULL);
     if (!(viewport->Flags & ImGuiViewportFlags_NoRendererClear))
         g_pd3dDeviceContext->ClearRenderTargetView(data->RTView, (float*)&clear_color);
-    ImGui_ImplDX11_RenderDrawData(viewport->DrawData, app.g_pd3dDevice, app.g_pd3dDeviceContext);
+    ImGui_ImplDX11_RenderDrawData(viewport->DrawData, g_pd3dDevice, g_pd3dDeviceContext);
 }
 
 static void ImGui_ImplDX11_SwapBuffers(ImGuiViewport* viewport, void*)

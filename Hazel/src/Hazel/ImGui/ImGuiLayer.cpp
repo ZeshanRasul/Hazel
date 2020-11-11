@@ -51,12 +51,15 @@ namespace Hazel {
 		io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
 		io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
 
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
+
 		unsigned char* pixels;
 		int width, height;
 		io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
 	//s	ImGui_ImplOpenGL3_Init("#version 150");
 		Application& app = Application::Get();
-		ImGui_ImplDX11_Init(app.g_pd3dDevice, app.g_pd3dDeviceContext);
+		ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
 		
 	}
@@ -84,11 +87,32 @@ namespace Hazel {
 		static bool show = true;
 		ImGui::ShowDemoWindow(&show);
 
-		ImGui::Render();
-		app.g_pd3dDeviceContext->OMSetRenderTargets(1, &app.g_mainRenderTargetView, NULL);
-		app.g_pd3dDeviceContext->ClearRenderTargetView(app.g_mainRenderTargetView, (float*)&clear_color);
+		{
+			static float f = 0.0f;
+			static int counter = 0;
 
-		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData(), app.g_pd3dDevice, app.g_pd3dDeviceContext);
+			ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+			ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+		
+
+			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+			ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+			if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+				counter++;
+			ImGui::SameLine();
+			ImGui::Text("counter = %d", counter);
+
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::End();
+		}
+
+		ImGui::Render();
+		g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+		g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
+
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData(), g_pd3dDevice, g_pd3dDeviceContext);
 
 		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}

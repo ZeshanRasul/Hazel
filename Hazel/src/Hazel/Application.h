@@ -12,7 +12,10 @@
 
 #include "Window.h"
 
+
 namespace Hazel {
+
+	ID3D11RenderTargetView* g_mainRenderTargetView = NULL;
 
 	class HAZEL_API Application
 	{
@@ -41,7 +44,7 @@ namespace Hazel {
 		ID3D11Device* g_pd3dDevice;
 		ID3D11DeviceContext* g_pd3dDeviceContext;
 		IDXGISwapChain* g_pSwapChain;
-		ID3D11RenderTargetView* g_mainRenderTargetView;
+		//ID3D11RenderTargetView* g_mainRenderTargetView;
 		ID3D11Buffer* g_pVertexConstantBuffer;
 
 
