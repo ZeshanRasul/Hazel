@@ -80,7 +80,7 @@ namespace Hazel {
 		float deltaTime = time > 0.0f ? time - m_Time : 1.0f / 60.0f;
 		m_Time = time;
 
-		ImVec4 clear_color = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+		ImVec4 clear_color = ImVec4(0.5f, 0.49f, 1.00f, 0.5f);
 
 	//	ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplDX11_NewFrame();
@@ -89,14 +89,12 @@ namespace Hazel {
 		static bool show = true;
 		//ImGui::ShowDemoWindow(&show);
 
-	//	ImGui::Begin("Framerate", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
-	//	ImGui::SetWindowSize(ImVec2(200, 30), true);
-	//	ImGui::SetWindowPos(ImVec2(2, 2), true);
-	//	ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-	//	ImGui::End();
+		ImGui::Begin("Framerate", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
+		ImGui::SetWindowSize(ImVec2(200, 30), true);
+		ImGui::SetWindowPos(ImVec2(2, 2), true);
+		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::End();
 		ImGui::ShowDemoWindow(&show);
-
-		HZ_CORE_TRACE("Rendering IMGUI");
 
 		ImGui::Render();
 		app.g_pd3dDeviceContext->OMSetRenderTargets(1, &app.g_mainRenderTargetView, NULL);

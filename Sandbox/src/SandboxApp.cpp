@@ -20,7 +20,7 @@ public:
 
 	void OnEvent(Hazel::Event& event) override
 	{
-		HZ_INFO("Event: {0}", event);
+	//	HZ_INFO("Event: {0}", event);
 	}
 };
 
