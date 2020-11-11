@@ -163,7 +163,7 @@ namespace Hazel {
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();
-				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData(), app.g_pd3dDevice, app.g_pd3dDeviceContext);
+				//ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData(), app.g_pd3dDevice, app.g_pd3dDeviceContext);
 
 			}
 

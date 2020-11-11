@@ -51,7 +51,7 @@ static ID3D11Buffer*            g_pVB = NULL;
 static ID3D11Buffer*            g_pIB = NULL;
 static ID3D11VertexShader*      g_pVertexShader = NULL;
 static ID3D11InputLayout*       g_pInputLayout = NULL;
-
+static ID3D11Buffer* g_pVertexConstantBuffer = NULL;
 static ID3D11PixelShader*       g_pPixelShader = NULL;
 static ID3D11SamplerState*      g_pFontSampler = NULL;
 static ID3D11ShaderResourceView*g_pFontTextureView = NULL;
@@ -90,7 +90,7 @@ static void ImGui_ImplDX11_SetupRenderState(ImDrawData* draw_data, ID3D11DeviceC
     ctx->IASetIndexBuffer(g_pIB, sizeof(ImDrawIdx) == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT, 0);
     ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     ctx->VSSetShader(g_pVertexShader, NULL, 0);
-    ctx->VSSetConstantBuffers(0, 1, &(app.g_pVertexConstantBuffer));
+    ctx->VSSetConstantBuffers(0, 1, &(g_pVertexConstantBuffer));
     ctx->PSSetShader(g_pPixelShader, NULL, 0);
     ctx->PSSetSamplers(0, 1, &g_pFontSampler);
     ctx->GSSetShader(NULL, NULL, 0);
@@ -111,13 +111,13 @@ void ImGui_ImplDX11_RenderDrawData(ImDrawData* draw_data, ID3D11Device* g_pd3dDe
 {
 
 //    ID3D11Device* g_pd3dDevice = Hazel::Application::Get().g_pd3dDevice;
-  //  ID3D11DeviceContext* g_pd3dDeviceContext = Hazel::Application::Get().g_pd3dDeviceContext;
+    ID3D11DeviceContext* g_pd3dDeviceContext2 = Hazel::Application::Get().g_pd3dDeviceContext;
 
     // Avoid rendering when minimized
     if (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f)
         return;
 
-    ID3D11DeviceContext* ctx = g_pd3dDeviceContext;
+    ID3D11DeviceContext* ctx = g_pd3dDeviceContext2;
 
     // Create and grow vertex/index buffers if needed
     if (!g_pVB || g_VertexBufferSize < draw_data->TotalVtxCount)
@@ -172,7 +172,10 @@ void ImGui_ImplDX11_RenderDrawData(ImDrawData* draw_data, ID3D11Device* g_pd3dDe
     {
         Hazel::Application& app = Hazel::Application::Get();
         D3D11_MAPPED_SUBRESOURCE mapped_resource;
-        if (ctx->Map(app.g_pVertexConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource) != S_OK)
+        D3D11_MAPPED_SUBRESOURCE *new_mapped_resource = &mapped_resource;
+        ID3D11Buffer* temp = g_pVertexConstantBuffer;
+
+        if (ctx->Map(g_pVertexConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped_resource) != S_OK)
             return;
         VERTEX_CONSTANT_BUFFER* constant_buffer = (VERTEX_CONSTANT_BUFFER*)mapped_resource.pData;
         float L = draw_data->DisplayPos.x;
@@ -187,7 +190,7 @@ void ImGui_ImplDX11_RenderDrawData(ImDrawData* draw_data, ID3D11Device* g_pd3dDe
             { (R+L)/(L-R),  (T+B)/(B-T),    0.5f,       1.0f },
         };
         memcpy(&constant_buffer->mvp, mvp, sizeof(mvp));
-        ctx->Unmap(app.g_pVertexConstantBuffer, 0);
+        ctx->Unmap(g_pVertexConstantBuffer, 0);
     }
 
     // Backup DX state that will be modified to restore it afterwards (unfortunately this is very ugly looking and verbose. Close your eyes!)
@@ -432,7 +435,7 @@ bool    ImGui_ImplDX11_CreateDeviceObjects()
             desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
             desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
             desc.MiscFlags = 0;
-            g_pd3dDevice->CreateBuffer(&desc, NULL, &app.g_pVertexConstantBuffer);
+            g_pd3dDevice->CreateBuffer(&desc, NULL, &g_pVertexConstantBuffer);
         }
     }
 
@@ -527,7 +530,7 @@ void    ImGui_ImplDX11_InvalidateDeviceObjects()
     if (g_pDepthStencilState) { g_pDepthStencilState->Release(); g_pDepthStencilState = NULL; }
     if (g_pRasterizerState) { g_pRasterizerState->Release(); g_pRasterizerState = NULL; }
     if (g_pPixelShader) { g_pPixelShader->Release(); g_pPixelShader = NULL; }
-    if (app.g_pVertexConstantBuffer) { app.g_pVertexConstantBuffer->Release(); app.g_pVertexConstantBuffer = NULL; }
+    if (g_pVertexConstantBuffer) { g_pVertexConstantBuffer->Release(); g_pVertexConstantBuffer = NULL; }
     if (g_pInputLayout) { g_pInputLayout->Release(); g_pInputLayout = NULL; }
     if (g_pVertexShader) { g_pVertexShader->Release(); g_pVertexShader = NULL; }
 }

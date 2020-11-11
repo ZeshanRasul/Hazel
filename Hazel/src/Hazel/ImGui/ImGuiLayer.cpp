@@ -55,7 +55,8 @@ namespace Hazel {
 		int width, height;
 		io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
 	//s	ImGui_ImplOpenGL3_Init("#version 150");
-	//	ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
+		Application& app = Application::Get();
+		ImGui_ImplDX11_Init(app.g_pd3dDevice, app.g_pd3dDeviceContext);
 
 		
 	}
@@ -74,6 +75,8 @@ namespace Hazel {
 		float deltaTime = time > 0.0f ? time - m_Time : 1.0f / 60.0f;
 		m_Time = time;
 
+		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
 	//	ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplDX11_NewFrame();
 		ImGui::NewFrame();
@@ -82,6 +85,9 @@ namespace Hazel {
 		ImGui::ShowDemoWindow(&show);
 
 		ImGui::Render();
+		app.g_pd3dDeviceContext->OMSetRenderTargets(1, &app.g_mainRenderTargetView, NULL);
+		app.g_pd3dDeviceContext->ClearRenderTargetView(app.g_mainRenderTargetView, (float*)&clear_color);
+
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData(), app.g_pd3dDevice, app.g_pd3dDeviceContext);
 
 		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
