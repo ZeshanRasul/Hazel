@@ -5,7 +5,13 @@
 #include "Hazel/Events/KeyEvent.h"
 #include "Hazel/Events/MouseEvent.h"
 
+#include "Hazel/Application.h"
+
 #include "glad/glad.h"
+
+#define GLFW_EXPOSE_NATIVE_WGL
+#define GLFW_EXPOSE_NATIVE_WIN32 
+#include <GLFW/glfw3native.h>
 
 
 namespace Hazel {
@@ -57,6 +63,13 @@ namespace Hazel {
 
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
+
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		HWND hWnd = glfwGetWin32Window(m_Window);
+		Application& app = Application::Get();
+		app.SetHWND(hWnd);
+
+
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		HZ_CORE_ASSERT(status, "Failed to initialize Glad!");
 

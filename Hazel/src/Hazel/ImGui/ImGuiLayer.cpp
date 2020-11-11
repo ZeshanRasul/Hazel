@@ -3,6 +3,7 @@
 
 #include "imgui.h"
 #include "Platform/OpenGL/ImGuiOpenGlRenderer.h"
+#include "Platform/DirectX11/imgui_impl_dx11.h"
 #include "GLFW/glfw3.h"
 
 #include "Hazel/Application.h"
@@ -50,8 +51,8 @@ namespace Hazel {
 		io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
 		io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
 
-		ImGui_ImplOpenGL3_Init("#version 130");
-
+		ImGui_ImplOpenGL3_Init("#version 150");
+		
 	}
 
 	void ImGuiLayer::OnDetach()
