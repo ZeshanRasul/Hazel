@@ -36,12 +36,15 @@ namespace Hazel {
 
 	bool CreateDeviceD3D(HWND hWnd)
 	{
+
+		Application& app = Application::Get();
+
 		// Setup swap chain
 		DXGI_SWAP_CHAIN_DESC sd;
 		ZeroMemory(&sd, sizeof(sd));
 		sd.BufferCount = 2;
-		sd.BufferDesc.Width = 0;
-		sd.BufferDesc.Height = 0;
+		sd.BufferDesc.Width = app.GetWindow().GetWidth();
+		sd.BufferDesc.Height = app.GetWindow().GetHeight();
 		sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		sd.BufferDesc.RefreshRate.Numerator = 60;
 		sd.BufferDesc.RefreshRate.Denominator = 1;
@@ -54,8 +57,6 @@ namespace Hazel {
 		sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
 		UINT createDeviceFlags = 0;
-
-		Application& app = Application::Get();
 
 		//createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 		D3D_FEATURE_LEVEL featureLevel;
@@ -163,12 +164,8 @@ namespace Hazel {
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();
-				//ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData(), app.g_pd3dDevice, app.g_pd3dDeviceContext);
-
 			}
 
-	//		glClearColor(1, 0, 1, 1);
-	//		glClear(GL_COLOR_BUFFER_BIT);
 			m_Window->OnUpdate();
 		}
 	}

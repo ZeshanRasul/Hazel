@@ -59,7 +59,7 @@ namespace Hazel {
 	//s	ImGui_ImplOpenGL3_Init("#version 150");
 		Application& app = Application::Get();
 		ImGui_ImplDX11_Init(app.g_pd3dDevice, app.g_pd3dDeviceContext);
-		ImGui_ImplWin32_Init(app.GetHWND());
+		//ImGui_ImplWin32_Init(app.GetHWND());
 
 		
 	}
@@ -89,11 +89,11 @@ namespace Hazel {
 		static bool show = true;
 		//ImGui::ShowDemoWindow(&show);
 
-		ImGui::Begin("Framerate", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
-		ImGui::SetWindowSize(ImVec2(200, 30), true);
-		ImGui::SetWindowPos(ImVec2(2, 2), true);
-		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::End();
+	//	ImGui::Begin("Framerate", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
+	//	ImGui::SetWindowSize(ImVec2(200, 30), true);
+	//	ImGui::SetWindowPos(ImVec2(2, 2), true);
+	//	ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	//	ImGui::End();
 		ImGui::ShowDemoWindow(&show);
 
 		HZ_CORE_TRACE("Rendering IMGUI");
@@ -104,7 +104,7 @@ namespace Hazel {
 
 
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData(), app.g_pd3dDevice, app.g_pd3dDeviceContext);
-		app.g_pSwapChain->Present(0, 0);
+		app.g_pSwapChain->Present(1, 0);
 
 		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
