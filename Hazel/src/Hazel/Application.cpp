@@ -4,6 +4,7 @@
 #include "Glad/glad.h"
 
 #include "GLFW/glfw3.h"
+#include "imgui.h"
 
 
 #include "Platform/DirectX11/imgui_impl_dx11.h"
@@ -21,10 +22,10 @@
 namespace Hazel {
 
 	// Data
-	static ID3D11Device* g_pd3dDevice = NULL;
-	static ID3D11DeviceContext* g_pd3dDeviceContext = NULL;
-	static IDXGISwapChain* g_pSwapChain = NULL;
-	static ID3D11RenderTargetView* g_mainRenderTargetView = NULL;
+//	static ID3D11Device* g_pd3dDevice = NULL;
+	//static ID3D11DeviceContext* g_pd3dDeviceContext = NULL;
+	//static IDXGISwapChain* g_pSwapChain = NULL;
+	//static ID3D11RenderTargetView* g_mainRenderTargetView = NULL;
 
 	// Forward declarations of helper functions
 	bool CreateDeviceD3D(HWND hWnd);
@@ -53,10 +54,13 @@ namespace Hazel {
 		sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
 		UINT createDeviceFlags = 0;
+
+		Application& app = Application::Get();
+
 		//createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 		D3D_FEATURE_LEVEL featureLevel;
 		const D3D_FEATURE_LEVEL featureLevelArray[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_0, };
-		if (D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &featureLevel, &g_pd3dDeviceContext) != S_OK)
+		if (D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &(app.g_pSwapChain), &(app.g_pd3dDevice), &featureLevel, &app.g_pd3dDeviceContext) != S_OK)
 			return false;
 
 		CreateRenderTarget();
@@ -67,23 +71,29 @@ namespace Hazel {
 
 	void CleanupDeviceD3D()
 	{
+		Application& app = Application::Get();
+
 		CleanupRenderTarget();
-		if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
-		if (g_pd3dDeviceContext) { g_pd3dDeviceContext->Release(); g_pd3dDeviceContext = NULL; }
-		if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
+		if (app.g_pSwapChain) { app.g_pSwapChain->Release(); app.g_pSwapChain = NULL; }
+		if (app.g_pd3dDeviceContext) { app.g_pd3dDeviceContext->Release(); app.g_pd3dDeviceContext = NULL; }
+		if (app.g_pd3dDevice) { app.g_pd3dDevice->Release(); app.g_pd3dDevice = NULL; }
 	}
 
 	void CreateRenderTarget()
 	{
+		Application& app = Application::Get();
+
 		ID3D11Texture2D* pBackBuffer;
-		g_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
-		g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
+		app.g_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+		app.g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &app.g_mainRenderTargetView);
 		pBackBuffer->Release();
 	}
 
 	void CleanupRenderTarget()
 	{
-		if (g_mainRenderTargetView) { g_mainRenderTargetView->Release(); g_mainRenderTargetView = NULL; }
+		Application& app = Application::Get();
+
+		if (app.g_mainRenderTargetView) { app.g_mainRenderTargetView->Release(); app.g_mainRenderTargetView = NULL; }
 	}
 
 
@@ -121,8 +131,10 @@ namespace Hazel {
 
 	void Application::PushOverlay(Layer* layer)
 	{
+		Application& app = Application::Get();
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
+		ImGui_ImplDX11_Init(app.g_pd3dDevice, app.g_pd3dDeviceContext);
 	}
 
 	void Application::OnEvent(Event& event)
@@ -144,11 +156,15 @@ namespace Hazel {
 	
 	void Application::Run()
 	{
+		Application& app = Application::Get();
+
 		while (m_Running)
 		{
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();
+				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData(), app.g_pd3dDevice, app.g_pd3dDeviceContext);
+
 			}
 
 			glClearColor(1, 0, 1, 1);

@@ -5,6 +5,11 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 
+#include <d3d11.h>
+
+#pragma comment(lib, "d3d11.lib")
+
+
 #include "Window.h"
 
 namespace Hazel {
@@ -32,8 +37,17 @@ namespace Hazel {
 		void PushOverlay(Layer* layer);
 		HWND s_Hwnd;
 
+
+		ID3D11Device* g_pd3dDevice;
+		ID3D11DeviceContext* g_pd3dDeviceContext;
+		IDXGISwapChain* g_pSwapChain;
+		ID3D11RenderTargetView* g_mainRenderTargetView;
+		ID3D11Buffer* g_pVertexConstantBuffer;
+
+
 	private:
 		static Application* s_Instance;
+
 
 
 		bool OnWindowClose(WindowCloseEvent& event);

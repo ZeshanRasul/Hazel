@@ -51,7 +51,12 @@ namespace Hazel {
 		io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
 		io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
 
-		ImGui_ImplOpenGL3_Init("#version 150");
+		unsigned char* pixels;
+		int width, height;
+		io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+	//s	ImGui_ImplOpenGL3_Init("#version 150");
+	//	ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
+
 		
 	}
 
@@ -69,14 +74,17 @@ namespace Hazel {
 		float deltaTime = time > 0.0f ? time - m_Time : 1.0f / 60.0f;
 		m_Time = time;
 
-		ImGui_ImplOpenGL3_NewFrame();
+	//	ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplDX11_NewFrame();
 		ImGui::NewFrame();
 
 		static bool show = true;
 		ImGui::ShowDemoWindow(&show);
 
 		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData(), app.g_pd3dDevice, app.g_pd3dDeviceContext);
+
+		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
 	void ImGuiLayer::OnEvent(Event& event)
