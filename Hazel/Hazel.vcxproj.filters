@@ -58,6 +58,7 @@
       <Filter>Hazel</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\DirectX11\imgui_impl_dx11.h" />
+    <ClInclude Include="src\Platform\DirectX11\imgui_impl_win32.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">
@@ -81,5 +82,6 @@
       <Filter>Hazel</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\DirectX11\imgui_impl_dx11.cpp" />
+    <ClCompile Include="src\Platform\DirectX11\imgui_impl_win32.cpp" />
   </ItemGroup>
 </Project>

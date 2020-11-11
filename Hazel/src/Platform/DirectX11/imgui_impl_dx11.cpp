@@ -111,13 +111,13 @@ void ImGui_ImplDX11_RenderDrawData(ImDrawData* draw_data, ID3D11Device* g_pd3dDe
 {
 
 //    ID3D11Device* g_pd3dDevice = Hazel::Application::Get().g_pd3dDevice;
-    ID3D11DeviceContext* g_pd3dDeviceContext2 = Hazel::Application::Get().g_pd3dDeviceContext;
+   // ID3D11DeviceContext* g_pd3dDeviceContext2 = Hazel::Application::Get().g_pd3dDeviceContext;
 
     // Avoid rendering when minimized
     if (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f)
         return;
 
-    ID3D11DeviceContext* ctx = g_pd3dDeviceContext2;
+    ID3D11DeviceContext* ctx = g_pd3dDeviceContext;
 
     // Create and grow vertex/index buffers if needed
     if (!g_pVB || g_VertexBufferSize < draw_data->TotalVtxCount)

@@ -15,7 +15,7 @@ public:
 
 	void OnUpdate() override
 	{
-		HZ_INFO("Updating Example Layer");
+	//	HZ_INFO("Updating Example Layer");
 	}
 
 	void OnEvent(Hazel::Event& event) override

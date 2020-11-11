@@ -134,7 +134,7 @@ namespace Hazel {
 		Application& app = Application::Get();
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
-		ImGui_ImplDX11_Init(app.g_pd3dDevice, app.g_pd3dDeviceContext);
+		//ImGui_ImplDX11_Init(app.g_pd3dDevice, app.g_pd3dDeviceContext);
 	}
 
 	void Application::OnEvent(Event& event)
@@ -167,8 +167,8 @@ namespace Hazel {
 
 			}
 
-			glClearColor(1, 0, 1, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+	//		glClearColor(1, 0, 1, 1);
+	//		glClear(GL_COLOR_BUFFER_BIT);
 			m_Window->OnUpdate();
 		}
 	}
