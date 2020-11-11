@@ -159,8 +159,11 @@ namespace Hazel {
 	{
 		Application& app = Application::Get();
 
+		const float ClearColour[4] = { 0, 100, 249, 0 };
+		
 		while (m_Running)
 		{
+			//g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, ClearColour);
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();

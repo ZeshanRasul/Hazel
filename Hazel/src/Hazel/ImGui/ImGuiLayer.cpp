@@ -1,12 +1,16 @@
 #include "hzpch.h"
 #include "ImGuiLayer.h"
+#include "Hazel/Core.h"
 
 #include "imgui.h"
 #include "Platform/OpenGL/ImGuiOpenGlRenderer.h"
 #include "Platform/DirectX11/imgui_impl_dx11.h"
-#include "Platform/DirectX11/imgui_impl_win32.h"
 
+// Temporary includes
 #include "GLFW/glfw3.h"
+#include "d3d11.h"
+#pragma comment(lib, "d3d11.lib")
+
 
 #include "Hazel/Application.h"
 
@@ -88,12 +92,13 @@ namespace Hazel {
 
 		static bool show = true;
 		//ImGui::ShowDemoWindow(&show);
-
+/*
 		ImGui::Begin("Framerate", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 		ImGui::SetWindowSize(ImVec2(200, 30), true);
 		ImGui::SetWindowPos(ImVec2(2, 2), true);
 		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
+		*/
 		ImGui::ShowDemoWindow(&show);
 
 		ImGui::Render();
@@ -109,6 +114,136 @@ namespace Hazel {
 
 	void ImGuiLayer::OnEvent(Event& event)
 	{
+		EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<MouseButtonPressedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnMouseButtonPressedEvent));
+		dispatcher.Dispatch<MouseButtonReleasedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnMouseButtonReleasedEvent));
+		dispatcher.Dispatch<MouseMovedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnMouseMovedEvent));
+		dispatcher.Dispatch<MouseScrolledEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnMouseScrolledEvent));
+		dispatcher.Dispatch<KeyPressedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnKeyPressedEvent));
+		dispatcher.Dispatch<KeyReleasedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnKeyReleasedEvent));
+		dispatcher.Dispatch<KeyTypedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnKeyTypedEvent));
+		dispatcher.Dispatch<WindowResizeEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnWindowResizeEvent));
 	}
+
+	bool ImGuiLayer::OnMouseButtonPressedEvent(MouseButtonPressedEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseDown[event.GetMouseButton()] = true;
+		
+		return false;
+	}
+
+	bool ImGuiLayer::OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseDown[event.GetMouseButton()] = false;
+
+		return false;
+	}
+
+	bool ImGuiLayer::OnMouseMovedEvent(MouseMovedEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.MousePos = ImVec2(event.GetMouseX(), event.GetMouseY());
+
+		return false;
+
+	}
+
+	bool ImGuiLayer::OnMouseScrolledEvent(MouseScrolledEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseWheelH += event.GetXOffset();
+		io.MouseWheel += event.GetYOffset();
+
+		return false;
+	}
+
+	bool ImGuiLayer::OnKeyPressedEvent(KeyPressedEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.KeysDown[event.GetKeyCode()] = true;
+
+		io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
+		io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
+		io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
+		io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+
+		return false;
+	}
+
+	bool ImGuiLayer::OnKeyReleasedEvent(KeyReleasedEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.KeysDown[event.GetKeyCode()] = false;
+
+		return false;
+	}
+
+	bool ImGuiLayer::OnKeyTypedEvent(KeyTypedEvent& event)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		int keycode = event.GetKeyCode();
+
+		if (keycode > 0 && keycode < 0x10000)
+		{
+			io.AddInputCharacter((unsigned short)keycode);
+		}
+
+		return false;
+	}
+
+	bool ImGuiLayer::OnWindowResizeEvent(WindowResizeEvent& event)
+	{
+		HZ_CORE_TRACE(event);
+		ImGuiIO& io = ImGui::GetIO();
+		io.DisplaySize = ImVec2(event.GetWidth(), event.GetHeight());
+		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
+
+		Application& app = Application::Get();
+
+		//Handle window resizing for DirectX
+		if (app.g_pSwapChain)
+		{
+			app.g_pd3dDeviceContext->OMSetRenderTargets(0, 0, 0);
+
+			// Release all outstanding references to the swap chain's buffers.
+			app.g_mainRenderTargetView->Release();
+
+			HRESULT hr;
+			// Preserve the existing buffer count and format.
+			// Automatically choose the width and height to match the client rect for HWNDs.
+			hr = app.g_pSwapChain->ResizeBuffers(0, event.GetWidth(), event.GetHeight(), DXGI_FORMAT_UNKNOWN, 0);
+
+			// Perform error handling here!
+
+			// Get buffer and create a render-target-view.
+			ID3D11Texture2D* pBuffer;
+			hr = app.g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
+				(void**)&pBuffer);
+			// Perform error handling here!
+
+			hr = app.g_pd3dDevice->CreateRenderTargetView(pBuffer, NULL,
+				&app.g_mainRenderTargetView);
+			// Perform error handling here!
+			pBuffer->Release();
+
+			app.g_pd3dDeviceContext->OMSetRenderTargets(1, &app.g_mainRenderTargetView, NULL);
+
+			// Set up the viewport.
+			D3D11_VIEWPORT vp;
+			vp.Width = event.GetWidth();
+			vp.Height = event.GetHeight();
+			vp.MinDepth = 0.0f;
+			vp.MaxDepth = 1.0f;
+			vp.TopLeftX = 0;
+			vp.TopLeftY = 0;
+			app.g_pd3dDeviceContext->RSSetViewports(1, &vp);
+		}
+		
+		return false;
+
+	}
+
 
 }
