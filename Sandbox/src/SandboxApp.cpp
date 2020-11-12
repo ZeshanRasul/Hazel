@@ -16,6 +16,10 @@ public:
 	void OnUpdate() override
 	{
 	//	HZ_INFO("Updating Example Layer");
+		if (Hazel::Input::IsKeyPressed(258))
+		{
+			HZ_INFO("Tab key pressed (poll)!");
+		}
 	}
 
 	void OnEvent(Hazel::Event& event) override
