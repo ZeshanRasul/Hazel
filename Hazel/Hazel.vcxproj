@@ -160,9 +160,11 @@
     <ClInclude Include="src\Hazel\GraphicsEngine.h" />
     <ClInclude Include="src\Hazel\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Hazel\Input.h" />
+    <ClInclude Include="src\Hazel\KeyCodes.h" />
     <ClInclude Include="src\Hazel\Layer.h" />
     <ClInclude Include="src\Hazel\LayerStack.h" />
     <ClInclude Include="src\Hazel\Log.h" />
+    <ClInclude Include="src\Hazel\MouseButtonCodes.h" />
     <ClInclude Include="src\Hazel\Window.h" />
     <ClInclude Include="src\Platform\DirectX11\imgui_impl_dx11.h" />
     <ClInclude Include="src\Platform\DirectX11\imgui_impl_win32.h" />
@@ -201,4 +203,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-</Project> 
+</Project>
