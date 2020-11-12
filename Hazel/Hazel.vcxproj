@@ -79,22 +79,21 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>hzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;GLFW_INCLUDE_NONE;HZ_DEBUG;HZ_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;GLFW_INCLUDE_NONE;HZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\Debug-windows-x86_64\Hazel\Hazel.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Debug-windows-x86_64\Hazel\Hazel.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\Hazel\Hazel.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\Hazel\Hazel.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Debug-windows-x86_64\Hazel\Hazel.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\Hazel\Hazel.dll "..\bin\Debug-windows-x86_64\Sandbox" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\Hazel\Hazel.dll "..\bin\Debug-windows-x86_64\Sandbox" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -110,18 +109,17 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\Release-windows-x86_64\Hazel\Hazel.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Release-windows-x86_64\Hazel\Hazel.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\Hazel\Hazel.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\Hazel\Hazel.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Release-windows-x86_64\Hazel\Hazel.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\Hazel\Hazel.dll "..\bin\Release-windows-x86_64\Sandbox" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\Hazel\Hazel.dll "..\bin\Release-windows-x86_64\Sandbox" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -137,18 +135,17 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\Dist-windows-x86_64\Hazel\Hazel.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll\ (xcopy /Q /E /Y /I ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll ..\bin\Dist-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll ..\bin\Dist-windows-x86_64\Sandbox &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll\ (xcopy /Q /E /Y /I ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll "..\bin\Dist-windows-x86_64\Sandbox" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll "..\bin\Dist-windows-x86_64\Sandbox" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -160,6 +157,7 @@
     <ClInclude Include="src\Hazel\Events\Event.h" />
     <ClInclude Include="src\Hazel\Events\KeyEvent.h" />
     <ClInclude Include="src\Hazel\Events\MouseEvent.h" />
+    <ClInclude Include="src\Hazel\GraphicsEngine.h" />
     <ClInclude Include="src\Hazel\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Hazel\Layer.h" />
     <ClInclude Include="src\Hazel\LayerStack.h" />
@@ -173,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp" />
+    <ClCompile Include="src\Hazel\GraphicsEngine.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Hazel\Layer.cpp" />
     <ClCompile Include="src\Hazel\LayerStack.cpp" />
