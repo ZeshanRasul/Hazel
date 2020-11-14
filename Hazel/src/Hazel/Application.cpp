@@ -193,7 +193,7 @@ namespace Hazel {
 	{
 		HZ_CORE_TRACE(event);
 		ImGuiIO& io = ImGui::GetIO();
-		io.DisplaySize = ImVec2(event.GetWidth(), event.GetHeight());
+		io.DisplaySize = ImVec2((float)event.GetWidth(), (float)event.GetHeight());
 		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
 
 		//Handle window resizing for DirectX
@@ -226,8 +226,8 @@ namespace Hazel {
 
 			// Set up the viewport.
 			D3D11_VIEWPORT vp;
-			vp.Width = event.GetWidth();
-			vp.Height = event.GetHeight();
+			vp.Width = (FLOAT)event.GetWidth();
+			vp.Height = (FLOAT)event.GetHeight();
 			vp.MinDepth = 0.0f;
 			vp.MaxDepth = 1.0f;
 			vp.TopLeftX = 0;
