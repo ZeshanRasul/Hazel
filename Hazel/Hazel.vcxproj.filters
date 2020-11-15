@@ -43,9 +43,6 @@
     <ClInclude Include="src\Hazel\Events\MouseEvent.h">
       <Filter>Hazel\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\GraphicsEngine.h">
-      <Filter>Hazel</Filter>
-    </ClInclude>
     <ClInclude Include="src\Hazel\ImGui\ImGuiLayer.h">
       <Filter>Hazel\ImGui</Filter>
     </ClInclude>
@@ -86,9 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">
-      <Filter>Hazel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\GraphicsEngine.cpp">
       <Filter>Hazel</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\ImGui\ImGuiBuild.cpp">

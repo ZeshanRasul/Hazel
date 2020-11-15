@@ -81,6 +81,7 @@ namespace Hazel {
 		// Set GLFW Callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 			{
+				// either use data directly as m_Data or use Win32SetWindowLongPtrA
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 				data.Width = width;
@@ -188,7 +189,7 @@ namespace Hazel {
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		//glfwSwapBuffers(m_Window);
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
