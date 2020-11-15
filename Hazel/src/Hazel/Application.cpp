@@ -117,11 +117,6 @@ namespace Hazel {
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
-
-		
-	//	GLFWwindow* ourGLFWWindow =  m_Window2.m_W;
-	//	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-	//	HWND hWnd = glfwGetWin32Window(ourGLFWWindow);
 	}
 
 	Application::~Application()

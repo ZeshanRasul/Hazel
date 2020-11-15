@@ -7,6 +7,8 @@
 
 #include "Hazel/Application.h"
 
+#include "Platform/DirectX11/DirectXGraphicsContext.h"
+
 #include "glad/glad.h"
 
 #define GLFW_EXPOSE_NATIVE_WGL
@@ -62,6 +64,11 @@ namespace Hazel {
 
 
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
+
+		m_GraphicsContext = new DirectXGraphicsContext();
+		m_GraphicsContext->Init();
+		 
+
 		glfwMakeContextCurrent(m_Window);
 
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -190,6 +197,7 @@ namespace Hazel {
 	{
 		glfwPollEvents();
 		//glfwSwapBuffers(m_Window);
+		m_GraphicsContext->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)

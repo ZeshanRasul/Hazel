@@ -164,7 +164,9 @@
     <ClInclude Include="src\Hazel\LayerStack.h" />
     <ClInclude Include="src\Hazel\Log.h" />
     <ClInclude Include="src\Hazel\MouseButtonCodes.h" />
+    <ClInclude Include="src\Hazel\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Hazel\Window.h" />
+    <ClInclude Include="src\Platform\DirectX11\DirectXGraphicsContext.h" />
     <ClInclude Include="src\Platform\DirectX11\imgui_impl_dx11.h" />
     <ClInclude Include="src\Platform\DirectX11\imgui_impl_win32.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
@@ -178,6 +180,7 @@
     <ClCompile Include="src\Hazel\Layer.cpp" />
     <ClCompile Include="src\Hazel\LayerStack.cpp" />
     <ClCompile Include="src\Hazel\Log.cpp" />
+    <ClCompile Include="src\Platform\DirectX11\DirectXGraphicsContext.cpp" />
     <ClCompile Include="src\Platform\DirectX11\imgui_impl_dx11.cpp" />
     <ClCompile Include="src\Platform\DirectX11\imgui_impl_win32.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />

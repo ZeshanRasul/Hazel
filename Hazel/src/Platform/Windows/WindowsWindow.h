@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Hazel/Window.h"
+#include "Hazel/Renderer/GraphicsContext.h"
 
 #include "GLFW/glfw3.h"
 
@@ -41,6 +42,8 @@ namespace Hazel {
 		};
 
 		WindowData m_Data;
+
+		GraphicsContext* m_GraphicsContext;
 	};
 
 }
