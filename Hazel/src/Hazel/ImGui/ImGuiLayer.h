@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 #include "Hazel/Layer.h"
@@ -27,3 +28,5 @@ namespace Hazel
 	};
 
 }
+
+*/

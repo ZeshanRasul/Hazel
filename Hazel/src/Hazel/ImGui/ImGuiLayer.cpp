@@ -1,10 +1,11 @@
 #include "hzpch.h"
+/*
 #include "ImGuiLayer.h"
 #include "Hazel/Core.h"
 
 #include "imgui.h"
 #include "Platform/DirectX11/imgui_impl_dx11.h"
-#include "examples/imgui_impl_glfw.h"
+// #include "examples/imgui_impl_glfw.h"
 
 // Temporary includes
 #include "GLFW/glfw3.h"
@@ -110,16 +111,17 @@ namespace Hazel {
 		//ImGui::ShowDemoWindow(&show);
 
 		// TODO: Look into how we can set starting position to be inside the window.
-		/* 
+		 
 		ImGui::Begin("Framerate", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 		ImGui::SetWindowSize(ImVec2(200, 30), true);
 		ImGui::SetWindowPos(ImVec2(2, 2), true);
 		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
-		*/
+		
 		
 		ImGui::ShowDemoWindow(&show);
 
 	}
 
 }
+*/

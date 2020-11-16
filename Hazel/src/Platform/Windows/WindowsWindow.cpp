@@ -9,21 +9,9 @@
 
 #include "Platform/DirectX11/DirectXGraphicsContext.h"
 
-#include "glad/glad.h"
-
-#define GLFW_EXPOSE_NATIVE_WGL
-#define GLFW_EXPOSE_NATIVE_WIN32 
-#include <GLFW/glfw3native.h>
 
 
 namespace Hazel {
-
-	static bool s_GLFWInitialized = false;
-
-	static void GLFWErrorCallback(int error, const char* description)
-	{
-		HZ_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
-	}
 
 	Window* Window::Create(const WindowProps& props)
 	{
@@ -48,43 +36,16 @@ namespace Hazel {
 
 		HZ_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
-		if (!s_GLFWInitialized)
-		{
-			int success = glfwInit();
-			HZ_CORE_ASSERT(success, "Could not initialize GLFW!");
-
-			glfwSetErrorCallback(GLFWErrorCallback);
-			s_GLFWInitialized = true;
-		}
-
-		//Set GL Version to 3 to prevent errors with Parallels OpenGL version
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-
-		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
-
+		
 		m_GraphicsContext = new DirectXGraphicsContext();
 		m_GraphicsContext->Init();
 		 
 
-		glfwMakeContextCurrent(m_Window);
-
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		HWND hWnd = glfwGetWin32Window(m_Window);
-		Application& app = Application::Get();
-		app.SetHWND(hWnd);
-
-
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		HZ_CORE_ASSERT(status, "Failed to initialize Glad!");
-
-		glfwSetWindowUserPointer(m_Window, &m_Data);
+		
 		SetVSync(true);
 
-		HZ_CORE_INFO("Version: {0}", glGetString(GL_VERSION));
-
+		// TODO REDO Event callbacks with Windows events
+		/*
 		// Set GLFW Callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 			{
@@ -184,18 +145,19 @@ namespace Hazel {
 				MouseMovedEvent event((float)xPosition, (float)yPosition);
 				data.EventCallback(event);
 			});
+			*/
 
 
 	}
 
 	void WindowsWindow::Shutdown()
 	{
-		glfwDestroyWindow(m_Window);
+		
 	}
 
 	void WindowsWindow::OnUpdate()
 	{
-		glfwPollEvents();
+		
 		//glfwSwapBuffers(m_Window);
 		m_GraphicsContext->SwapBuffers();
 	}
@@ -204,11 +166,11 @@ namespace Hazel {
 	{
 		if (enabled)
 		{
-			glfwSwapInterval(1);
+			
 		}
 		else
 		{
-			glfwSwapInterval(0);
+			
 		}
 
 		m_Data.VSync = enabled;

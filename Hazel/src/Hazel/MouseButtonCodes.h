@@ -1,6 +1,6 @@
 #pragma once
 
-// From glfw3.h
+// From glfw3.h TODO change to windows keymap
 #define HZ_KEY_SPACE              32
 #define HZ_KEY_APOSTROPHE         39  /* ' */
 #define HZ_KEY_COMMA              44  /* , */
