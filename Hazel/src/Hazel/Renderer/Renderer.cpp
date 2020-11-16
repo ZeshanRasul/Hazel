@@ -3,6 +3,20 @@
 
 namespace Hazel {
 	
-	RendererApi Renderer::s_RendererApi = RendererApi::DirectX11;
+	void Renderer::BeginScene()
+	{
+
+	}
+
+	void Renderer::EndScene()
+	{
+
+	}
+
+	void Renderer::Submit()
+	{
+		// Bind Vertex Array
+		RenderCommand::DrawIndexed();
+	}
 
 }

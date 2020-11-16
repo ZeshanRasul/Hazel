@@ -1,20 +1,19 @@
 #pragma once
 
+#include "RenderCommand.h"
+
 namespace Hazel {
-	
-	enum class RendererApi
-	{
-		None = 0,
-		DirectX11 = 1
-	};
 
 	class Renderer
 	{
 	public:
-		inline static RendererApi GetRendererApi() { return s_RendererApi; }
+		static void BeginScene();
+		static void EndScene();
 
-	private:
-		static RendererApi s_RendererApi;
+		// Will eventuall take in a shared ptr vertex array
+		static void Submit();
+
+		inline static RendererAPI::API GetApi() { return RendererAPI::GetAPI(); }
 	};
 
 }
