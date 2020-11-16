@@ -10,6 +10,14 @@ namespace Hazel {
 	public:
 		WindowsWindow(const WindowProps& props);
 		virtual ~WindowsWindow();
+		struct WindowData
+		{
+			std::string Title;
+			unsigned int Width, Height;
+			bool VSync;
+
+			EventCallbackFn EventCallback;
+		};
 
 		void OnUpdate() override;
 
@@ -23,6 +31,8 @@ namespace Hazel {
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
 
+	//	inline virtual WindowData GetWindowData() const { return m_Data; }
+
 	private:
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
@@ -30,14 +40,6 @@ namespace Hazel {
 	private:
 		void* m_Window;
 
-		struct WindowData
-		{
-			std::string Title;
-			unsigned int Width, Height;
-			bool VSync;
-
-			EventCallbackFn EventCallback;
-		};
 
 		WindowData m_Data;
 

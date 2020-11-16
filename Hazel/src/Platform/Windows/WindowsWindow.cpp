@@ -1,4 +1,5 @@
 #include "hzpch.h"
+#include "Hazel/Window.h"
 #include "WindowsWindow.h"
 
 #include "Hazel/Events/ApplicationEvent.h"
@@ -12,6 +13,25 @@
 
 
 namespace Hazel {
+
+	LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+
+		switch (msg)
+		{
+		case WM_CLOSE:
+
+			WindowsWindow::WindowData& data = *(WindowsWindow::WindowData*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+			
+			WindowCloseEvent event;
+			data.EventCallback(event);
+
+			PostQuitMessage(0);
+			break;
+		}
+
+		return DefWindowProc(hWnd, msg, wParam, lParam);
+	}
 
 	Window* Window::Create(const WindowProps& props)
 	{
@@ -44,8 +64,8 @@ namespace Hazel {
 		WNDCLASSEX wc = { 0 };
 		wc.cbSize = sizeof( wc );
 		wc.style = CS_OWNDC;
-		wc.lpfnWndProc = DefWindowProc;
-		wc.cbClsExtra = 0;
+		wc.lpfnWndProc = WndProc;
+		wc.cbClsExtra = 4;
 		wc.cbWndExtra = 0;
 		wc.hInstance = m_hInstance;
 		wc.hIcon = nullptr;
@@ -68,11 +88,12 @@ namespace Hazel {
 		);
 
 		ShowWindow(m_Hwnd, SW_SHOW);
+
+		SetWindowLongPtr(m_Hwnd, GWLP_USERDATA, (LONG_PTR)&m_Data);
 		
 		m_GraphicsContext = new DirectXGraphicsContext();
 		m_GraphicsContext->Init();
 		 
-
 		
 		SetVSync(true);
 
@@ -98,7 +119,7 @@ namespace Hazel {
 
 				WindowCloseEvent event;
 				data.EventCallback(event);
-			});
+			}); DONE
 
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
 			{
@@ -189,9 +210,17 @@ namespace Hazel {
 
 	void WindowsWindow::OnUpdate()
 	{
-		
-		//glfwSwapBuffers(m_Window);
+		MSG msg;
+		BOOL result;
+
+		while (result = GetMessage(&msg, nullptr, 0, 0) > 0)
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+
 		m_GraphicsContext->SwapBuffers();
+
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
