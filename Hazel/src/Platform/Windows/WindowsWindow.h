@@ -42,6 +42,10 @@ namespace Hazel {
 		WindowData m_Data;
 
 		GraphicsContext* m_GraphicsContext;
+
+		HINSTANCE m_hInstance;
+
+		HWND m_Hwnd;
 	};
 
 }

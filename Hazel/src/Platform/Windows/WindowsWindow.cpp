@@ -19,6 +19,7 @@ namespace Hazel {
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
+		:m_hInstance(GetModuleHandle(nullptr))
 	{
 		Init(props);
 	}
@@ -28,7 +29,7 @@ namespace Hazel {
 		Shutdown();
 	}
 
-	void WindowsWindow::Init(const WindowProps& props)
+	void CALLBACK WindowsWindow::Init(const WindowProps& props)
 	{
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
@@ -36,6 +37,37 @@ namespace Hazel {
 
 		HZ_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
+		const wchar_t* pClassName = L"Hazel Window";
+
+		// Register window class
+		// First setup configuration structure
+		WNDCLASSEX wc = { 0 };
+		wc.cbSize = sizeof( wc );
+		wc.style = CS_OWNDC;
+		wc.lpfnWndProc = DefWindowProc;
+		wc.cbClsExtra = 0;
+		wc.cbWndExtra = 0;
+		wc.hInstance = m_hInstance;
+		wc.hIcon = nullptr;
+		wc.hCursor = nullptr;
+		wc.hbrBackground = nullptr;
+		wc.lpszMenuName = nullptr;
+		wc.lpszClassName = pClassName;
+		wc.hIconSm = nullptr;
+
+		RegisterClassEx( &wc );
+
+		const wchar_t* pWindowName = L"Hazel Engine";
+
+		HWND m_Hwnd = CreateWindowEx(
+			0, pClassName,
+			pWindowName,
+			WS_CAPTION | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU,
+			200, 200, 640, 480,
+			nullptr, nullptr, m_hInstance, nullptr
+		);
+
+		ShowWindow(m_Hwnd, SW_SHOW);
 		
 		m_GraphicsContext = new DirectXGraphicsContext();
 		m_GraphicsContext->Init();
