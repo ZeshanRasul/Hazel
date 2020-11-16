@@ -1,10 +1,12 @@
 #pragma once
 
+#include <Windows.h>
+
 #ifdef HZ_PLATFORM_WINDOWS
 
 	extern Hazel::Application* Hazel::CreateApplication();
 
-	int main(int argc, char* argv)
+	int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 	{
 		Hazel::Log::Init();
 		HZ_CORE_WARN("Initialized Core Logger");

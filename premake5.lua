@@ -81,18 +81,26 @@ project "Hazel"
 			symbols "on"
 
 		filter "configurations:Release"
-			defines "HZ_RELEASE"
+			defines 
+			{
+				"HZ_RELEASE",
+				"NDEBUG"
+			}
 			runtime "Release"
 			optimize "on"
 
 		filter "configurations:Dist"
-			defines "HZ_DIST"
+			defines
+			{
+				"HZ_DIST",
+				"NDEBUG"
+			}
 			runtime "Release"
 			optimize "on"
 
 project "Sandbox"
 	location "Sandbox"
-	kind "ConsoleApp"
+	kind "WindowedApp"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
@@ -133,11 +141,19 @@ project "Sandbox"
 			symbols "on"
 
 		filter "configurations:Release"
-			defines "HZ_RELEASE"
+			defines
+			{
+				"HZ_RELEASE",
+				"NDEBUG"
+			}
 			runtime "Release"
 			optimize "on"
 
 		filter "configurations:Dist"
-			defines "HZ_DIST"
+			defines
+			{
+				"HZ_DIST",
+				"NDEBUG"
+			}
 			runtime "Release"
 			optimize "on"
