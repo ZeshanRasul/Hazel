@@ -24,6 +24,15 @@ public:
 
 	void OnEvent(Hazel::Event& event) override
 	{
+	//	std::string& string = event.ToString();
+	//	std::wstring widestr = std::wstring(string.begin(), string.ToString().end());
+
+	//	const wchar_t* widecstr = widestr.c_str();
+
+	//	OutputDebugString((event.ToString().c_str());
+
+	// TODO Add a To wchar_t* fn to events to debug log them.
+
 		/* TODO: RENABLE
 	//	HZ_TRACE("Event: {0}", event);
 		if (event.GetEventType() == Hazel::EventType::KeyPressed)

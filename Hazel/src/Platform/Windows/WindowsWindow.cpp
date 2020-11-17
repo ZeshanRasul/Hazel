@@ -6,6 +6,8 @@
 #include "Hazel/Events/KeyEvent.h"
 #include "Hazel/Events/MouseEvent.h"
 
+#include "Hazel/KeyCodes.h"
+
 #include "Hazel/Application.h"
 
 #include "Platform/DirectX11/DirectXGraphicsContext.h"
@@ -19,16 +21,37 @@ namespace Hazel {
 
 		switch (msg)
 		{
-		case WM_CLOSE:
+			case WM_CLOSE:
+			{
 
-			WindowsWindow::WindowData& data = *(WindowsWindow::WindowData*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+				WindowsWindow::WindowData& data = *(WindowsWindow::WindowData*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
 			
-			WindowCloseEvent event;
-			data.EventCallback(event);
+				WindowCloseEvent event;
+				data.EventCallback(event);
 
-			PostQuitMessage(0);
-			break;
-		}
+				PostQuitMessage(0);
+				break;
+			}
+			case WM_KEYDOWN:
+			{
+				if (wParam == HZ_KEY_S)
+				{
+					SetWindowText(hWnd, L"Hello World");
+				}
+				break;
+			}
+			case WM_KEYUP:
+			{
+				if (wParam == HZ_KEY_S)
+				{
+					SetWindowText(hWnd, L"Hazel Engine");
+				}
+				break;
+			}
+
+		} 
+
+
 
 		return DefWindowProc(hWnd, msg, wParam, lParam);
 	}
