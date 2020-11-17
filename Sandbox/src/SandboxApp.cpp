@@ -1,10 +1,5 @@
 #include <Hazel.h>
 
-#include <d3d11.h>
-
-#pragma comment(lib, "d3d11.lib")
-
-
 class ExampleLayer : public Hazel::Layer
 {
 public:
@@ -33,18 +28,26 @@ public:
 
 	// TODO Add a To wchar_t* fn to events to debug log them.
 
-		/* TODO: RENABLE
+	//	 TODO: RENABLE
 	//	HZ_TRACE("Event: {0}", event);
 		if (event.GetEventType() == Hazel::EventType::KeyPressed)
-		{
-			Hazel::KeyPressedEvent& e = (Hazel::KeyPressedEvent&)event;
+		{		
+			event.GetName();
+			//Hazel::KeyPressedEvent& e = (Hazel::KeyPressedEvent&)event;
+			/*
 			if (e.GetKeyCode() == HZ_KEY_TAB)
 			{
 				HZ_TRACE("Tab key pressed (event)!");
 			}
 			HZ_TRACE("{0}", (char)e.GetKeyCode());
+			*/
 		}
-		*/
+		if (event.GetEventType() == Hazel::EventType::KeyReleased)
+		{
+			event.GetName();
+			
+		}
+		
 	}
 };
 

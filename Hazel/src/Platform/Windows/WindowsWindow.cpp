@@ -16,44 +16,43 @@
 
 namespace Hazel {
 
-	LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+	// Window Class Code:
+	// Setup static WindowClass
+	WindowsWindow::WindowClass WindowsWindow::WindowClass::wndClass;
+
+	WindowsWindow::WindowClass::WindowClass() noexcept
+		: hInstance(GetModuleHandle(nullptr))
 	{
+		WNDCLASSEX wc = { 0 };
+		wc.cbSize = sizeof(wc);
+		wc.style = CS_OWNDC;
+		wc.lpfnWndProc = HandleMessageSetup;
+		wc.cbClsExtra = 0;
+		wc.cbWndExtra = 0;
+		wc.hInstance = GetInstance();
+		wc.hIcon = nullptr;
+		wc.hCursor = nullptr;
+		wc.hbrBackground = nullptr;
+		wc.lpszMenuName = nullptr;
+		wc.lpszClassName = GetName();
+		wc.hIconSm = nullptr;
 
-		switch (msg)
-		{
-			case WM_CLOSE:
-			{
+		RegisterClassEx(&wc);
+	}
 
-				WindowsWindow::WindowData& data = *(WindowsWindow::WindowData*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-			
-				WindowCloseEvent event;
-				data.EventCallback(event);
+	WindowsWindow::WindowClass::~WindowClass()
+	{
+		UnregisterClass(wndClassName, GetInstance());
+	}
 
-				PostQuitMessage(0);
-				break;
-			}
-			case WM_KEYDOWN:
-			{
-				if (wParam == HZ_KEY_S)
-				{
-					SetWindowText(hWnd, L"Hello World");
-				}
-				break;
-			}
-			case WM_KEYUP:
-			{
-				if (wParam == HZ_KEY_S)
-				{
-					SetWindowText(hWnd, L"Hazel Engine");
-				}
-				break;
-			}
+	const wchar_t* WindowsWindow::WindowClass::GetName() noexcept
+	{
+		return wndClassName;
+	}
 
-		} 
-
-
-
-		return DefWindowProc(hWnd, msg, wParam, lParam);
+	HINSTANCE WindowsWindow::WindowClass::GetInstance() noexcept
+	{
+		return wndClass.hInstance;
 	}
 
 	Window* Window::Create(const WindowProps& props)
@@ -62,7 +61,6 @@ namespace Hazel {
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
-		:m_hInstance(GetModuleHandle(nullptr))
 	{
 		Init(props);
 	}
@@ -72,7 +70,7 @@ namespace Hazel {
 		Shutdown();
 	}
 
-	void CALLBACK WindowsWindow::Init(const WindowProps& props)
+	void WindowsWindow::Init(const WindowProps& props)
 	{
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
@@ -80,40 +78,29 @@ namespace Hazel {
 
 		HZ_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
-		const wchar_t* pClassName = L"Hazel Window";
+		// Calculate window size based on desired client region size
 
-		// Register window class
-		// First setup configuration structure
-		WNDCLASSEX wc = { 0 };
-		wc.cbSize = sizeof( wc );
-		wc.style = CS_OWNDC;
-		wc.lpfnWndProc = WndProc;
-		wc.cbClsExtra = 4;
-		wc.cbWndExtra = 0;
-		wc.hInstance = m_hInstance;
-		wc.hIcon = nullptr;
-		wc.hCursor = nullptr;
-		wc.hbrBackground = nullptr;
-		wc.lpszMenuName = nullptr;
-		wc.lpszClassName = pClassName;
-		wc.hIconSm = nullptr;
+		RECT wr;
+		wr.left = 100;
+		wr.right = m_Data.Width + wr.left;
+		wr.top = 100;
+		wr.bottom = m_Data.Height + wr.top;
+		AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU, FALSE);
 
-		RegisterClassEx( &wc );
-
+		// Possibly change this to a parameter passed in to window props.
 		const wchar_t* pWindowName = L"Hazel Engine";
 
 		HWND m_Hwnd = CreateWindowEx(
-			0, pClassName,
+			0, WindowClass::GetName(),
 			pWindowName,
 			WS_CAPTION | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU,
-			200, 200, 640, 480,
-			nullptr, nullptr, m_hInstance, nullptr
+			CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
+			nullptr, nullptr, WindowClass::GetInstance(), this
 		);
 
-		ShowWindow(m_Hwnd, SW_SHOW);
+		ShowWindow(m_Hwnd, SW_SHOWDEFAULT);
 
-		SetWindowLongPtr(m_Hwnd, GWLP_USERDATA, (LONG_PTR)&m_Data);
-		
+	
 		m_GraphicsContext = new DirectXGraphicsContext();
 		m_GraphicsContext->Init();
 		 
@@ -228,7 +215,7 @@ namespace Hazel {
 
 	void WindowsWindow::Shutdown()
 	{
-		
+		DestroyWindow(m_Hwnd);
 	}
 
 	void WindowsWindow::OnUpdate()
@@ -265,4 +252,144 @@ namespace Hazel {
 		return m_Data.VSync;
 	}
 
+
+	LRESULT CALLBACK WindowsWindow::HandleMessageSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
+	{
+		// Use the create long paramater passed in from CreateWindow() to store our window class pointer on the WinAPI side
+		if (msg == WM_NCCREATE)
+		{
+			// Extract pointer from creation data and cast to window pointer
+			const CREATESTRUCT* const p_CreationData = reinterpret_cast<CREATESTRUCT*>(lParam);
+			WindowsWindow* const p_Wnd = static_cast<WindowsWindow*>(p_CreationData->lpCreateParams);
+
+			// Set long pointer to be the pointer to our window
+			SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(p_Wnd));
+			// Set our wnd proc to our normal non-setup window proc
+			SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowsWindow::HandleMessagThunk));
+
+			// Forward message to our member function message handler
+			return p_Wnd->HandleMessage(hWnd, msg, wParam, lParam);
+		}
+
+		return DefWindowProc(hWnd, msg, wParam, lParam);
+	}
+
+	LRESULT CALLBACK WindowsWindow::HandleMessagThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
+	{
+		// Retrieve window ptr to class
+		WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+		// Forward message to our member function message handler
+		return p_Wnd->HandleMessage(hWnd, msg, wParam, lParam);
+	}
+
+	LRESULT WindowsWindow::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
+	{
+		switch (msg)
+		{
+			case WM_CLOSE:
+			{
+				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+				WindowData& data = p_Wnd->m_Data;
+
+				WindowCloseEvent event;
+				data.EventCallback(event);
+
+				PostQuitMessage(0);
+				break;
+			}
+			case WM_KEYDOWN:
+			{
+				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+				WindowData& data = p_Wnd->m_Data;
+
+				if (wParam == HZ_KEY_S)
+				{
+					SetWindowText(hWnd, L"Hello World");
+				}
+
+				// TODO Condition based on whether it is a repeat count or not
+				KeyPressedEvent event(wParam, 0);
+				data.EventCallback(event);
+
+				break;
+			}
+			case WM_KEYUP:
+			{
+				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+				WindowData& data = p_Wnd->m_Data;
+
+				if (wParam == HZ_KEY_S)
+				{
+					SetWindowText(hWnd, L"Hazel Engine");
+				}
+
+				KeyReleasedEvent event(wParam);
+				data.EventCallback(event);
+
+				break;
+			}
+
+		}
+
+		return DefWindowProc(hWnd, msg, wParam, lParam);
+	}
+	
 }
+
+
+
+/*
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+
+	switch (msg)
+	{
+	case WM_CLOSE:
+	{
+
+		WindowsWindow::WindowData& data = *(WindowsWindow::WindowData*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+
+		WindowCloseEvent event;
+		data.EventCallback(event);
+
+		PostQuitMessage(0);
+		break;
+	}
+	case WM_KEYDOWN:
+	{
+		WindowsWindow::WindowData& data = *(WindowsWindow::WindowData*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+
+		if (wParam == HZ_KEY_S)
+		{
+			SetWindowText(hWnd, L"Hello World");
+		}
+
+		KeyPressedEvent event(wParam, 0);
+		data.EventCallback(event);
+
+		break;
+	}
+	case WM_KEYUP:
+	{
+		WindowsWindow::WindowData& data = *(WindowsWindow::WindowData*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+
+		if (wParam == HZ_KEY_S)
+		{
+			SetWindowText(hWnd, L"Hazel Engine");
+		}
+
+		KeyReleasedEvent event(wParam);
+		data.EventCallback(event);
+
+		break;
+	}
+
+	}
+
+
+
+	return DefWindowProc(hWnd, msg, wParam, lParam);
+}
+
+*/

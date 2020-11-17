@@ -7,17 +7,26 @@ namespace Hazel {
 
 	class WindowsWindow : public Window
 	{
+	private:
+		class WindowClass
+		{
+		public:
+			static const wchar_t* GetName() noexcept;
+			static HINSTANCE GetInstance() noexcept;
+		private:
+			WindowClass() noexcept;
+			~WindowClass();
+			WindowClass(const WindowClass&) = delete;
+			static constexpr const wchar_t* wndClassName = L"Hazel Engine Window";
+			static WindowClass wndClass;
+			HINSTANCE hInstance;
+		};
+
 	public:
 		WindowsWindow(const WindowProps& props);
 		virtual ~WindowsWindow();
-		struct WindowData
-		{
-			std::string Title;
-			unsigned int Width, Height;
-			bool VSync;
-
-			EventCallbackFn EventCallback;
-		};
+		WindowsWindow(const WindowsWindow&) = delete;
+		Window& operator=(const Window&) = delete;
 
 		void OnUpdate() override;
 
@@ -31,21 +40,30 @@ namespace Hazel {
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
 
-	//	inline virtual WindowData GetWindowData() const { return m_Data; }
 
 	private:
+		struct WindowData
+		{
+			std::string Title;
+			unsigned int Width, Height;
+			bool VSync;
+
+			EventCallbackFn EventCallback;
+		};
+
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
+
+		static LRESULT CALLBACK HandleMessageSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
+		static LRESULT CALLBACK HandleMessagThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
+		LRESULT HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 		
 	private:
 		void* m_Window;
 
-
 		WindowData m_Data;
 
 		GraphicsContext* m_GraphicsContext;
-
-		HINSTANCE m_hInstance;
 
 		HWND m_Hwnd;
 	};
