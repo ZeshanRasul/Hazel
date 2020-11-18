@@ -12,18 +12,18 @@ namespace Hazel
 		return keystates[keycode];
 	}
 
-	WindowsInput::Win32Event WindowsInput::ReadKeyImpl()
+	WindowsInput::Win32KeyboardEvent WindowsInput::ReadKeyImpl()
 	{
 		if (keybuffer.size() > 0)
 		{
-			WindowsInput::Win32Event event = keybuffer.front();
+			WindowsInput::Win32KeyboardEvent event = keybuffer.front();
 			keybuffer.pop();
 			return event;
 		}
 		else
 		{
 			// TODO return optional instead
-			return WindowsInput::Win32Event();
+			return WindowsInput::Win32KeyboardEvent();
 		}
 	}
 
@@ -54,7 +54,7 @@ namespace Hazel
 
 	void WindowsInput::FlushKeyImpl()
 	{
-		keybuffer = std::queue<Win32Event>();
+		keybuffer = std::queue<Win32KeyboardEvent>();
 	}
 
 	void WindowsInput::FlushCharImpl()
@@ -86,14 +86,14 @@ namespace Hazel
 	void WindowsInput::OnKeyPressedImpl(unsigned char keycode) noexcept
 	{
 		keystates[keycode] = true;
-		keybuffer.push(Win32Event(Win32Event::Type::Press, keycode));
+		keybuffer.push(Win32KeyboardEvent(Win32KeyboardEvent::Type::Press, keycode));
 		TrimBufferImpl(keybuffer);
 	}
 
 	void WindowsInput::OnKeyReleasedImpl(unsigned char keycode) noexcept
 	{
 		keystates[keycode] = false;
-		keybuffer.push(Win32Event(Win32Event::Type::Release, keycode));
+		keybuffer.push(Win32KeyboardEvent(Win32KeyboardEvent::Type::Release, keycode));
 		TrimBufferImpl(keybuffer);
 	}
 

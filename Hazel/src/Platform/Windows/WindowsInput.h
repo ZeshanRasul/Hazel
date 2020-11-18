@@ -6,10 +6,9 @@ namespace Hazel {
 
 	class WindowsInput : public Input
 	{
-		friend class WindowsWindow;
 	protected:
 		virtual bool IsKeyPressedImpl(unsigned char keycode) override;
-		virtual Win32Event ReadKeyImpl() override;
+		virtual Win32KeyboardEvent ReadKeyImpl() override;
 		virtual bool IsKeyEmptyImpl() override;
 		virtual void FlushKeyImpl() override;
 		virtual char ReadCharImpl() override;
@@ -43,7 +42,7 @@ namespace Hazel {
 		// TODO: decide whether to keep this as false or not
 		bool autorepeatEnabled = false;
 		std::bitset<nKeys> keystates;
-		std::queue<Win32Event> keybuffer;
+		std::queue<Win32KeyboardEvent> keybuffer;
 		std::queue<char> charbuffer;
 	};
 

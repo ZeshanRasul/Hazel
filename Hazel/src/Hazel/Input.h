@@ -7,9 +7,11 @@ namespace Hazel {
 
 	class HAZEL_API Input
 	{
-		friend class Window;
+		#ifdef HZ_PLATFORM_WINDOWS
+			friend class WindowsWindow;
+		#endif
 	public:
-		class Win32Event
+		class Win32KeyboardEvent
 		{
 		public:
 			enum class Type
@@ -22,7 +24,7 @@ namespace Hazel {
 			Type type;
 			unsigned char code;
 		public:
-			Win32Event()
+			Win32KeyboardEvent()
 				:
 				type(Type::Invalid),
 				code(0u)
@@ -30,7 +32,7 @@ namespace Hazel {
 
 			}
 
-			Win32Event(Type type, unsigned char code) noexcept
+			Win32KeyboardEvent(Type type, unsigned char code) noexcept
 				:
 				type(type),
 				code(code)
@@ -60,7 +62,7 @@ namespace Hazel {
 		};
 	public:
 		inline static bool IsKeyPressed(unsigned char keycode) { return s_Instance->IsKeyPressedImpl(keycode); }
-		inline static Win32Event ReadKey() { return s_Instance->ReadKeyImpl(); }
+		inline static Win32KeyboardEvent ReadKey() { return s_Instance->ReadKeyImpl(); }
 		inline static bool IsKeyEmpty() { return s_Instance->IsKeyEmptyImpl(); }
 		inline static void FlushKey() { return s_Instance->FlushKeyImpl(); }
 		inline static char ReadChar() { return s_Instance->ReadCharImpl(); }
@@ -79,19 +81,11 @@ namespace Hazel {
 		inline static bool GetMouseY()  { return s_Instance->GetMouseYImpl(); }
 		*/
 
-		inline static void OnKeyPressed(unsigned char keycode) {
-			return s_Instance->OnKeyPressedImpl(keycode);
-		}
-		inline static void OnKeyReleased(unsigned char keycode) {
-			return s_Instance->OnKeyReleasedImpl(keycode);
-		}
-		inline static void OnChar(char character) { return s_Instance->OnCharImpl(character); }
-		inline static void ClearState() { return s_Instance->ClearStateImpl(); }
 
 
 	protected:
 		virtual bool IsKeyPressedImpl(unsigned char keycode) = 0;
-		virtual Win32Event ReadKeyImpl() = 0;
+		virtual Win32KeyboardEvent ReadKeyImpl() = 0;
 		virtual bool IsKeyEmptyImpl() = 0;
 		virtual void FlushKeyImpl() = 0;
 		virtual char ReadCharImpl() = 0;
@@ -104,7 +98,6 @@ namespace Hazel {
 
 
 		/*
-		virtual bool IsKeyPressedImpl(int keycode) = 0;
 
 		virtual bool IsMouseButtonPressedImpl(int button) = 0;
 		virtual std::pair<float, float> GetMousePositionImpl() = 0;
@@ -113,6 +106,15 @@ namespace Hazel {
 		*/
 
 	private:
+
+		inline static void OnKeyPressed(unsigned char keycode) {
+			return s_Instance->OnKeyPressedImpl(keycode);
+		}
+		inline static void OnKeyReleased(unsigned char keycode) {
+			return s_Instance->OnKeyReleasedImpl(keycode);
+		}
+		inline static void OnChar(char character) { return s_Instance->OnCharImpl(character); }
+		inline static void ClearState() { return s_Instance->ClearStateImpl(); }
 
 
 		virtual void OnKeyPressedImpl(unsigned char keycode) = 0;
