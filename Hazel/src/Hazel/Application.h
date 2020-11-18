@@ -39,7 +39,7 @@ namespace Hazel {
 		void PushOverlay(Layer* layer);
 		HWND s_Hwnd;
 
-
+		
 		ID3D11Device* g_pd3dDevice;
 		ID3D11DeviceContext* g_pd3dDeviceContext;
 		IDXGISwapChain* g_pSwapChain;

@@ -49,8 +49,6 @@ namespace Hazel {
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
 		
-	//	HZ_CORE_TRACE("Event: {0}", event);
-
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
 			(*--it)->OnEvent(event);
@@ -62,28 +60,24 @@ namespace Hazel {
 	}
 	
 	void Application::Run()
-	{
-	//	const float ClearColour[4] = { 0, 100, 249, 0 };
-		
+	{		
 		while (m_Running)
 		{
-			//g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, ClearColour);
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();
 			}
 
-		//	m_ImGuiLayer->Begin();
+		/*
+			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnImGuiRender();
 			}
-		//	m_ImGuiLayer->End();
+			m_ImGuiLayer->End();
+		*/
 
 			m_Window->OnUpdate();
-
-	//		g_pSwapChain->Present(1, 0);
-
 		}
 	}
 
@@ -95,6 +89,7 @@ namespace Hazel {
 
 	bool Application::OnWindowResize(WindowResizeEvent& event)
 	{
+		/*
 		HZ_CORE_TRACE(event);
 		ImGuiIO& io = ImGui::GetIO();
 		io.DisplaySize = ImVec2((float)event.GetWidth(), (float)event.GetHeight());
@@ -138,11 +133,12 @@ namespace Hazel {
 			vp.TopLeftY = 0;
 			g_pd3dDeviceContext->RSSetViewports(1, &vp);
 		}
-
+		*/
+		// change to void return type
 		return false;
 
 	}
 
 
 	
-	}
+}

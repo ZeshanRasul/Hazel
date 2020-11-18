@@ -12,6 +12,8 @@
 
 #include "Platform/DirectX11/DirectXGraphicsContext.h"
 
+#include "../resource1.h"
+
 
 
 namespace Hazel {
@@ -30,12 +32,16 @@ namespace Hazel {
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
 		wc.hInstance = GetInstance();
-		wc.hIcon = nullptr;
+		wc.hIcon = static_cast<HICON>(LoadImage(
+			GetInstance(), MAKEINTRESOURCE(IDI_ICON1),
+			IMAGE_ICON, 32, 32, 0));
 		wc.hCursor = nullptr;
 		wc.hbrBackground = nullptr;
 		wc.lpszMenuName = nullptr;
 		wc.lpszClassName = GetName();
-		wc.hIconSm = nullptr;
+		wc.hIconSm = static_cast<HICON>(LoadImage(
+			GetInstance(), MAKEINTRESOURCE(IDI_ICON1),
+			IMAGE_ICON, 16, 16, 0));
 
 		RegisterClassEx(&wc);
 	}
@@ -97,6 +103,11 @@ namespace Hazel {
 			CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 			nullptr, nullptr, WindowClass::GetInstance(), this
 		);
+
+		if (m_Hwnd == nullptr)
+		{
+			throw HZWND_LAST_EXCEPT();
+		}
 
 		ShowWindow(m_Hwnd, SW_SHOWDEFAULT);
 
@@ -333,63 +344,59 @@ namespace Hazel {
 
 		return DefWindowProc(hWnd, msg, wParam, lParam);
 	}
+
+	WindowsWindow::Exception::Exception(int line, const char* file, HRESULT hr) noexcept
+		:
+		HazelException(line, file),
+		hr(hr)
+	{
+
+	}
+
+	const char* WindowsWindow::Exception::what() const noexcept
+	{
+		std::ostringstream oss;
+		oss << GetType() << std::endl
+			<< "[Error Code]" << GetErrorCode() << std::endl
+			<< "[Description]" << GetErrorString() << std::endl
+			<< GetOriginString();
+		whatBuffer = oss.str();
+		return whatBuffer.c_str();
+	}
+
+	const char* WindowsWindow::Exception::GetType() const noexcept
+	{
+		return "Hazel Window Exception";
+	}
 	
-}
-
-
-
-/*
-
-LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-
-	switch (msg)
+	std::string WindowsWindow::Exception::TranslateErrorCode(HRESULT hr) noexcept
 	{
-	case WM_CLOSE:
-	{
+		char* p_MsgBuffer = nullptr;
+		DWORD nMsgLen = FormatMessage(
+			FORMAT_MESSAGE_ALLOCATE_BUFFER |
+			FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+			nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			reinterpret_cast<LPWSTR>(&p_MsgBuffer), 0, nullptr
+		);
 
-		WindowsWindow::WindowData& data = *(WindowsWindow::WindowData*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-
-		WindowCloseEvent event;
-		data.EventCallback(event);
-
-		PostQuitMessage(0);
-		break;
-	}
-	case WM_KEYDOWN:
-	{
-		WindowsWindow::WindowData& data = *(WindowsWindow::WindowData*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-
-		if (wParam == HZ_KEY_S)
+		if (nMsgLen == 0)
 		{
-			SetWindowText(hWnd, L"Hello World");
+			return "Unidentified Error Code";
 		}
 
-		KeyPressedEvent event(wParam, 0);
-		data.EventCallback(event);
-
-		break;
+		std::string errorString = p_MsgBuffer;
+		LocalFree(p_MsgBuffer);
+		return errorString;
 	}
-	case WM_KEYUP:
+
+	HRESULT WindowsWindow::Exception::GetErrorCode() const noexcept
 	{
-		WindowsWindow::WindowData& data = *(WindowsWindow::WindowData*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-
-		if (wParam == HZ_KEY_S)
-		{
-			SetWindowText(hWnd, L"Hazel Engine");
-		}
-
-		KeyReleasedEvent event(wParam);
-		data.EventCallback(event);
-
-		break;
+		return hr;
 	}
 
+	std::string WindowsWindow::Exception::GetErrorString() const noexcept
+	{
+		return TranslateErrorCode(hr);
 	}
-
-
-
-	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-*/

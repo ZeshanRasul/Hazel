@@ -2,17 +2,34 @@
 
 #include "Hazel/Window.h"
 #include "Hazel/Renderer/GraphicsContext.h"
+#include "Hazel/HazelException.h"
 
 namespace Hazel {
 
 	class WindowsWindow : public Window
 	{
+	public: 
+		class Exception : public HazelException
+		{
+		public:
+			Exception(int line, const char* file, HRESULT hr) noexcept;
+			const char* what() const noexcept override;
+			virtual const char* GetType() const noexcept;
+			static std::string TranslateErrorCode(HRESULT hr) noexcept;
+			HRESULT GetErrorCode() const noexcept;
+			std::string GetErrorString() const noexcept;
+
+		private:
+			HRESULT hr;
+		};
+
 	private:
 		class WindowClass
 		{
 		public:
 			static const wchar_t* GetName() noexcept;
 			static HINSTANCE GetInstance() noexcept;
+
 		private:
 			WindowClass() noexcept;
 			~WindowClass();
@@ -68,4 +85,7 @@ namespace Hazel {
 		HWND m_Hwnd;
 	};
 
+// Error exception helper macro
+#define HZWND_EXCEPT(hr) WindowsWindow::Exception(__LINE__, __FILE__, hr)
+#define HZWND_LAST_EXCEPT() WindowsWindow::Exception(__LINE__, __FILE__, GetLastError())
 }
