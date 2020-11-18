@@ -6,13 +6,15 @@
 #include "Hazel/Events/KeyEvent.h"
 #include "Hazel/Events/MouseEvent.h"
 
+#include "Hazel/Input.h"
+
 #include "Hazel/KeyCodes.h"
 
 #include "Hazel/Application.h"
 
 #include "Platform/DirectX11/DirectXGraphicsContext.h"
 
-#include "../resource1.h"
+#include "../../resource.h"
 
 
 
@@ -238,6 +240,12 @@ namespace Hazel {
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+			/*
+			if (Input::IsKeyPressed(VK_MENU))
+			{
+				MessageBox(nullptr, L"Something Happened!", L"Alt Key Was Pressed", MB_OK | MB_ICONEXCLAMATION);
+			}
+			*/
 		}
 
 		m_GraphicsContext->SwapBuffers();
@@ -308,11 +316,21 @@ namespace Hazel {
 				PostQuitMessage(0);
 				break;
 			}
-			case WM_KEYDOWN:
+			case WM_KILLFOCUS:
 			{
+				Input::ClearState();
+				break;
+			}
+			case WM_KEYDOWN:
+			case WM_SYSKEYDOWN:
+			{
+				// TODO Decide if we want to keep autorepeat enabled or not
+				if (!(lParam & 0x40000000) || Input::AutorepeatIsEnabled())
+				{
+					Input::OnKeyPressed(static_cast<unsigned char>(wParam));
+				}
 				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 				WindowData& data = p_Wnd->m_Data;
-
 				if (wParam == HZ_KEY_S)
 				{
 					SetWindowText(hWnd, L"Hello World");
@@ -325,7 +343,9 @@ namespace Hazel {
 				break;
 			}
 			case WM_KEYUP:
+			case WM_SYSKEYUP:
 			{
+				Input::OnKeyReleased(static_cast<unsigned char>(wParam));
 				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 				WindowData& data = p_Wnd->m_Data;
 
@@ -338,6 +358,10 @@ namespace Hazel {
 				data.EventCallback(event);
 
 				break;
+			}
+			case WM_CHAR:
+			{
+				Input::OnChar(static_cast<unsigned char>(wParam));
 			}
 
 		}
