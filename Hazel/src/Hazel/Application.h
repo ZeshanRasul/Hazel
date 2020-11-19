@@ -22,7 +22,7 @@ namespace Hazel {
 		Application();
 		virtual ~Application();
 
-		void Run();
+		int Run();
 
 		void OnEvent(Event& event);
 

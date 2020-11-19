@@ -59,7 +59,7 @@ namespace Hazel {
 		}
 	}
 	
-	void Application::Run()
+	int Application::Run()
 	{		
 		while (m_Running)
 		{
@@ -76,7 +76,10 @@ namespace Hazel {
 			}
 			m_ImGuiLayer->End();
 		*/
-
+			if (const auto ecode = WindowsWindow::ProcessMessages())
+			{
+				return *ecode;
+			}
 			m_Window->OnUpdate();
 		}
 	}

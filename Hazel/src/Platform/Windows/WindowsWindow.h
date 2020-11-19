@@ -54,6 +54,7 @@ namespace Hazel {
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
+		static std::optional<int> ProcessMessages();
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
 

@@ -235,24 +235,6 @@ namespace Hazel {
 
 	void WindowsWindow::OnUpdate()
 	{
-		MSG msg;
-		BOOL result;
-
-		while (result = GetMessage(&msg, nullptr, 0, 0) > 0)
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-			/*
-			if (Input::IsKeyPressed(VK_MENU))
-			{
-			}
-			if (Input::IsLeftPressed())
-			{
-				MessageBox(nullptr, L"Something Happened!", L"Left Mouse Button Was Pressed", MB_OK | MB_ICONEXCLAMATION);
-			}
-			*/
-		}
-
 		m_GraphicsContext->SwapBuffers();
 
 	}
@@ -274,6 +256,32 @@ namespace Hazel {
 	bool WindowsWindow::IsVSync() const
 	{
 		return m_Data.VSync;
+	}
+
+	std::optional<int> WindowsWindow::ProcessMessages()
+	{
+		MSG msg;
+
+		while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		{
+			if (msg.message == WM_QUIT)
+			{
+				return (int)msg.wParam;
+			}
+
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+			/*
+			if (Input::IsKeyPressed(VK_MENU))
+			{
+			}
+			if (Input::IsLeftPressed())
+			{
+				MessageBox(nullptr, L"Something Happened!", L"Left Mouse Button Was Pressed", MB_OK | MB_ICONEXCLAMATION);
+			}
+			*/
+			return {};
+		}
 	}
 
 
@@ -494,6 +502,7 @@ namespace Hazel {
 				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 				WindowData& data = p_Wnd->m_Data;
 
+				// TODO create offset variable
 				MouseScrolledEvent event(pt.x, pt.y);
 				data.EventCallback(event);
 

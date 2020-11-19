@@ -42,10 +42,9 @@ public:
 			HZ_TRACE("{0}", (char)e.GetKeyCode());
 			*/
 		}
-		if (event.GetEventType() == Hazel::EventType::KeyReleased)
+		if (event.GetEventType() == Hazel::EventType::MouseButtonPressed)
 		{
 			event.GetName();
-			
 		}
 		
 	}
