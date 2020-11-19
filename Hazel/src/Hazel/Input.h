@@ -83,13 +83,17 @@ namespace Hazel {
 		///MOUSE FUNCTIONS/////
 		///////////////////////
 
+		
+
+
 		inline static std::pair<int, int> GetMousePos() { return s_Instance->GetMousePosImpl(); }
 		inline static int GetMousePosX() { return s_Instance->GetMousePosXImpl(); }
 		inline static int GetMousePosY() { return s_Instance->GetMousePosYImpl(); }
+		inline static bool IsInWindow() { return s_Instance->IsInWindowImpl(); }
 		inline static bool IsLeftPressed() { return s_Instance->IsLeftPressedImpl(); }
 		inline static bool IsRightPressed() { return s_Instance->IsRightPressedImpl(); }
-		template <class T>
-		inline static T ReadMouse() { return s_Instance->ReadMouseImpl(); }
+		//template <class T>
+//		inline static Win32MouseEvent ReadMouse() { return s_Instance->ReadMouseImpl(); }
 		inline static bool IsMouseEmpty() { return s_Instance->IsMouseEmptyImpl(); }
 		inline static void FlushMouse() { return s_Instance->FlushMouseImpl(); }
 		// TODO Check if TrimBuffer needs to be implemented here.
@@ -128,12 +132,14 @@ namespace Hazel {
 		///MOUSE FUNCTIONS/////
 		///////////////////////
 
+
 		virtual std::pair<int, int> GetMousePosImpl() = 0;
 		virtual int GetMousePosXImpl() = 0;
 		virtual int GetMousePosYImpl() = 0;
+		virtual bool IsInWindowImpl() = 0;
 		virtual bool IsLeftPressedImpl() = 0;
 		virtual bool IsRightPressedImpl() = 0;
-	//	virtual T ReadMouseImpl() = 0;
+	//	virtual Win32MouseEvent ReadMouseImpl() = 0;
 		virtual bool IsMouseEmptyImpl() = 0;
 		virtual void FlushMouseImpl() = 0; 
 
@@ -169,21 +175,27 @@ namespace Hazel {
 		///////////////////////
 
 		inline static void OnMouseMove(int x, int y) { return s_Instance->OnMouseMoveImpl(x, y); }
+		inline static void OnMouseEnter() { return s_Instance->OnMouseEnterImpl(); }
+		inline static void OnMouseLeave() { return s_Instance->OnMouseLeaveImpl(); }
 		inline static void OnLeftPressed(int x, int y) { return s_Instance->OnLeftPressedImpl(x, y); }
 		inline static void OnLeftReleased(int x, int y) { return s_Instance->OnLeftReleasedImpl(x, y); }
 		inline static void OnRightPressed(int x, int y) { return s_Instance->OnRightPressedImpl(x, y); }
 		inline static void OnRightReleased(int x, int y) { return s_Instance->OnRightReleasedImpl(x, y); }
 		inline static void OnWheelUp(int x, int y) { return s_Instance->OnWheelUpImpl(x, y); }
 		inline static void OnWheelDown(int x, int y) { return s_Instance->OnWheelDownImpl(x, y); }
+		inline static void OnWheelDelta(int x, int y, int delta) { return s_Instance->OnWheelDeltaImpl(x, y, delta); }
 		inline static void TrimMouseBuffer() { return s_Instance->TrimMouseBufferImpl(); }
 
 		virtual void OnMouseMoveImpl(int x, int y) = 0;
+		virtual void OnMouseEnterImpl() = 0;
+		virtual void OnMouseLeaveImpl() = 0;
 		virtual void OnLeftPressedImpl(int x, int y) = 0;
 		virtual void OnLeftReleasedImpl(int x, int y) = 0;
 		virtual void OnRightPressedImpl(int x, int y) = 0;
 		virtual void OnRightReleasedImpl(int x, int y) = 0;
 		virtual void OnWheelUpImpl(int x, int y) = 0;
 		virtual void OnWheelDownImpl(int x, int y) = 0;
+		virtual void OnWheelDeltaImpl(int x, int y, int delta) = 0;
 		virtual void TrimMouseBufferImpl() = 0;;
 
 	private:

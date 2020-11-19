@@ -19,7 +19,9 @@ namespace Hazel {
 				WheelUp,
 				WheelDown,
 				Move,
-				Invalid
+				Invalid,
+				Enter,
+				Leave
 			};
 
 		private:
@@ -108,12 +110,14 @@ namespace Hazel {
 		virtual std::pair<int, int> GetMousePosImpl() override;
 		virtual int GetMousePosXImpl() override;
 		virtual int GetMousePosYImpl() override;
+		virtual bool IsInWindowImpl() override;
 		virtual bool IsLeftPressedImpl() override;
 		virtual bool IsRightPressedImpl() override;
-		Win32MouseEvent ReadMouseImpl();
+	//	Win32MouseEvent ReadMouseImpl() override;
 		virtual bool IsMouseEmptyImpl() override
 		{
-			return mouseBuffer.empty();
+			//return mouseBuffer.empty();
+			return false;
 		}
 		virtual void FlushMouseImpl() override;
 
@@ -141,12 +145,15 @@ namespace Hazel {
 		///////////////////////
 
 		virtual void OnMouseMoveImpl(int x, int y) override;
+		virtual void OnMouseEnterImpl() override;
+		virtual void OnMouseLeaveImpl() override;
 		virtual void OnLeftPressedImpl(int x, int y) override;
 		virtual void OnLeftReleasedImpl(int x, int y) override;
 		virtual void OnRightPressedImpl(int x, int y) override;
 		virtual void OnRightReleasedImpl(int x, int y) override;
 		virtual void OnWheelUpImpl(int x, int y) override;
 		virtual void OnWheelDownImpl(int x, int y) override;
+		virtual void OnWheelDeltaImpl(int x, int y, int delta) override;
 		virtual void TrimMouseBufferImpl() override;
 
 
@@ -166,6 +173,8 @@ namespace Hazel {
 		int y;
 		bool isLeftPressed = false;
 		bool isRightPressed = false;
+		bool isInWindow = false;
+		int wheelDeltaCarry = 0;
 
 
 		std::queue<Win32MouseEvent> mouseBuffer;

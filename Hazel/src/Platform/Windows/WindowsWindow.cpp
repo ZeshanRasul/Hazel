@@ -17,7 +17,6 @@
 #include "../../resource.h"
 
 
-
 namespace Hazel {
 
 	// Window Class Code:
@@ -93,7 +92,10 @@ namespace Hazel {
 		wr.right = m_Data.Width + wr.left;
 		wr.top = 100;
 		wr.bottom = m_Data.Height + wr.top;
-		AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU, FALSE);
+		if (AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU, FALSE) == 0)
+		{
+			throw HZWND_LAST_EXCEPT();
+		}
 
 		// Possibly change this to a parameter passed in to window props.
 		const wchar_t* pWindowName = L"Hazel Engine";
@@ -243,7 +245,10 @@ namespace Hazel {
 			/*
 			if (Input::IsKeyPressed(VK_MENU))
 			{
-				MessageBox(nullptr, L"Something Happened!", L"Alt Key Was Pressed", MB_OK | MB_ICONEXCLAMATION);
+			}
+			if (Input::IsLeftPressed())
+			{
+				MessageBox(nullptr, L"Something Happened!", L"Left Mouse Button Was Pressed", MB_OK | MB_ICONEXCLAMATION);
 			}
 			*/
 		}
@@ -377,7 +382,39 @@ namespace Hazel {
 			case WM_MOUSEMOVE:
 			{
 				const POINTS pt = MAKEPOINTS(lParam);
-				Input::OnMouseMove(pt.x, pt.y);
+
+				// Check if mouse is in client region or not
+
+				if (pt.x >= 0 && pt.x <= m_Data.Width && pt.y >= 0 && pt.y <= m_Data.Height)
+				{
+					Input::OnMouseMove(pt.x, pt.y);
+					
+					if (!Input::IsInWindow())
+					{
+						SetCapture(m_Hwnd);
+						Input::OnMouseEnter();
+					}
+				}
+				else // not in client region. Only log move is left or right mouse button is down
+				{
+					if (wParam & (MK_LBUTTON | MK_RBUTTON))
+					{
+						Input::OnMouseMove(pt.x, pt.y);
+					}
+					else
+					{
+						ReleaseCapture();
+						Input::OnMouseLeave();
+					}
+				}
+
+
+				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+				WindowData& data = p_Wnd->m_Data;
+
+				MouseMovedEvent event((float)pt.x, (float)pt.y);
+				data.EventCallback(event);
+
 				break;
 			}
 
@@ -385,6 +422,13 @@ namespace Hazel {
 			{
 				const POINTS pt = MAKEPOINTS(lParam);
 				Input::OnLeftPressed(pt.x, pt.y);
+
+				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+				WindowData& data = p_Wnd->m_Data;
+
+				MouseButtonPressedEvent event(0);
+				data.EventCallback(event);
+
 				break;
 			}
 
@@ -392,6 +436,13 @@ namespace Hazel {
 			{
 				const POINTS pt = MAKEPOINTS(lParam);
 				Input::OnRightPressed(pt.x, pt.y);
+
+				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+				WindowData& data = p_Wnd->m_Data;
+
+				MouseButtonPressedEvent event(1);
+				data.EventCallback(event);
+
 				break;
 			}
 
@@ -399,6 +450,20 @@ namespace Hazel {
 			{
 				const POINTS pt = MAKEPOINTS(lParam);
 				Input::OnLeftReleased(pt.x, pt.y);
+
+				// Release mouse drag if mouse release is outside the window
+				if (pt.x < 0 || pt.x > m_Data.Width || pt.y < 0 || pt.y > m_Data.Height)
+				{
+					ReleaseCapture();
+					Input::OnMouseLeave();
+				}
+			
+				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+				WindowData& data = p_Wnd->m_Data;
+
+				MouseButtonReleasedEvent event(0);
+				data.EventCallback(event);
+
 				break;
 			}
 
@@ -406,6 +471,19 @@ namespace Hazel {
 			{
 				const POINTS pt = MAKEPOINTS(lParam);
 				Input::OnRightReleased(pt.x, pt.y);
+
+				if (pt.x < 0 || pt.x > m_Data.Width || pt.y < 0 || pt.y > m_Data.Height)
+				{
+					ReleaseCapture();
+					Input::OnMouseLeave();
+				}
+
+				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+				WindowData& data = p_Wnd->m_Data;
+
+				MouseButtonReleasedEvent event(1);
+				data.EventCallback(event);
+
 				break;
 			}
 
@@ -413,15 +491,16 @@ namespace Hazel {
 			{
 				const POINTS pt = MAKEPOINTS(lParam);
 
-				if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
-				{
-					Input::OnWheelUp(pt.x, pt.y);
-				}
-				else
-				{
-					Input::OnWheelDown(pt.x, pt.y);
-				}
-					break;
+				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+				WindowData& data = p_Wnd->m_Data;
+
+				MouseScrolledEvent event(pt.x, pt.y);
+				data.EventCallback(event);
+
+
+				const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
+				Input::OnWheelDelta(pt.x, pt.y, delta);
+				break;
 			}
 
 		}

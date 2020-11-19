@@ -140,6 +140,11 @@ namespace Hazel
 		return y;
 	}
 
+	bool WindowsInput::IsInWindowImpl()
+	{
+		return isInWindow;
+	}
+
 	bool WindowsInput::IsLeftPressedImpl()
 	{
 		return isLeftPressed;
@@ -150,6 +155,7 @@ namespace Hazel
 		return isRightPressed;
 	}
 
+	/*
 	WindowsInput::Win32MouseEvent WindowsInput::ReadMouseImpl()
 	{
 		if (mouseBuffer.size() > 0)
@@ -163,6 +169,7 @@ namespace Hazel
 			return WindowsInput::Win32MouseEvent();
 		}
 	}
+	*/
 
 	void WindowsInput::FlushMouseImpl()
 	{
@@ -175,6 +182,20 @@ namespace Hazel
 		y = newY;
 
 		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::Move, *this));
+		TrimMouseBufferImpl();
+	}
+
+	void WindowsInput::OnMouseLeaveImpl()
+	{
+		isInWindow = false;
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::Leave, *this));
+		TrimMouseBufferImpl();
+	}
+
+	void WindowsInput::OnMouseEnterImpl()
+	{
+		isInWindow = true;
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::Enter, *this));
 		TrimMouseBufferImpl();
 	}
 
@@ -220,6 +241,23 @@ namespace Hazel
 	{
 		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::WheelDown, *this));
 		TrimMouseBufferImpl();
+	}
+
+	void WindowsInput::OnWheelDeltaImpl(int x, int y, int delta)
+	{
+		wheelDeltaCarry += delta;
+
+		while (wheelDeltaCarry >= WHEEL_DELTA)
+		{
+			wheelDeltaCarry -= WHEEL_DELTA;
+			OnWheelUpImpl(x, y);
+		}
+
+		while (wheelDeltaCarry <= WHEEL_DELTA)
+		{
+			wheelDeltaCarry += WHEEL_DELTA;
+			OnWheelDownImpl(x, y);
+		}
 	}
 
 	void WindowsInput::TrimMouseBufferImpl()
