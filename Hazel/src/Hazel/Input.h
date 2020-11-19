@@ -7,9 +7,8 @@ namespace Hazel {
 
 	class HAZEL_API Input
 	{
-		#ifdef HZ_PLATFORM_WINDOWS
+#ifdef HZ_PLATFORM_WINDOWS
 			friend class WindowsWindow;
-		#endif
 	public:
 		class Win32KeyboardEvent
 		{
@@ -61,12 +60,92 @@ namespace Hazel {
 			}
 		};
 
-	
+	public:
+		class Win32MouseEvent
+		{
+		public:
+			enum class Type
+			{
+				LPress,
+				LRelease,
+				RPress,
+				RRelease,
+				WheelUp,
+				WheelDown,
+				Move,
+				Invalid,
+				Enter,
+				Leave
+			};
+
+		private:
+			Type type;
+			bool isLeftPressed;
+			bool isRightPressed;
+			int x;
+			int y;
+
+		public:
+			Win32MouseEvent() noexcept
+				:
+				type(Type::Invalid),
+				isLeftPressed(false),
+				isRightPressed(false),
+				x(0),
+				y(0)
+			{}
+
+			Win32MouseEvent(Type type) noexcept
+				:
+				type(type),
+				isLeftPressed(Input::IsLeftPressed()),
+				isRightPressed(Input::IsRightPressed()),
+				x(Input::GetMousePosX()),
+				y(Input::GetMousePosY())
+			{}
+
+			bool IsValid() const noexcept
+			{
+				return type != Type::Invalid;
+			}
+
+			Type GetType() const noexcept
+			{
+				return type;
+			}
+
+			std::pair<int, int> GetMousePos() const noexcept
+			{
+				return { x,y };
+			}
+
+			int GetMousePosX() const noexcept
+			{
+				return x;
+			}
+
+			int GetMousePosY() const noexcept
+			{
+				return y;
+			}
+
+			bool IsLeftPressed() const noexcept
+			{
+				return isLeftPressed;
+			}
+
+			bool IsRightPressed() const noexcept
+			{
+				return isRightPressed;
+			}
+		};
+#endif
 
 	public:
 		///////////////////////
 		///KEYBOARD FUNCTIONS//
 		///////////////////////
+
 		inline static bool IsKeyPressed(unsigned char keycode) { return s_Instance->IsKeyPressedImpl(keycode); }
 		inline static Win32KeyboardEvent ReadKey() { return s_Instance->ReadKeyImpl(); }
 		inline static bool IsKeyEmpty() { return s_Instance->IsKeyEmptyImpl(); }
@@ -83,35 +162,18 @@ namespace Hazel {
 		///MOUSE FUNCTIONS/////
 		///////////////////////
 
-		
-
-
 		inline static std::pair<int, int> GetMousePos() { return s_Instance->GetMousePosImpl(); }
 		inline static int GetMousePosX() { return s_Instance->GetMousePosXImpl(); }
 		inline static int GetMousePosY() { return s_Instance->GetMousePosYImpl(); }
 		inline static bool IsInWindow() { return s_Instance->IsInWindowImpl(); }
 		inline static bool IsLeftPressed() { return s_Instance->IsLeftPressedImpl(); }
 		inline static bool IsRightPressed() { return s_Instance->IsRightPressedImpl(); }
-		//template <class T>
-//		inline static Win32MouseEvent ReadMouse() { return s_Instance->ReadMouseImpl(); }
+		inline static Win32MouseEvent ReadMouse() { return s_Instance->ReadMouseImpl(); }
 		inline static bool IsMouseEmpty() { return s_Instance->IsMouseEmptyImpl(); }
 		inline static void FlushMouse() { return s_Instance->FlushMouseImpl(); }
 		// TODO Check if TrimBuffer needs to be implemented here.
 
-
-		/*
-		inline static bool IsKeyPressed(int keycode) { return s_Instance->IsKeyPressedImpl(keycode); }
-
-		inline static bool IsMouseButtonPressed(int button) { return s_Instance->IsMouseButtonPressedImpl(button); };
-		inline static std::pair<float, float> GetMousePosition()  { return s_Instance->GetMousePositionImpl(); }
-		inline static bool GetMouseX()  { return s_Instance->GetMouseXImpl(); }
-		inline static bool GetMouseY()  { return s_Instance->GetMouseYImpl(); }
-		*/
-
-
-
 	protected:
-
 		///////////////////////
 		///KEYBOARD FUNCTIONS//
 		///////////////////////
@@ -132,32 +194,22 @@ namespace Hazel {
 		///MOUSE FUNCTIONS/////
 		///////////////////////
 
-
 		virtual std::pair<int, int> GetMousePosImpl() = 0;
 		virtual int GetMousePosXImpl() = 0;
 		virtual int GetMousePosYImpl() = 0;
 		virtual bool IsInWindowImpl() = 0;
 		virtual bool IsLeftPressedImpl() = 0;
 		virtual bool IsRightPressedImpl() = 0;
-	//	virtual Win32MouseEvent ReadMouseImpl() = 0;
+		virtual Win32MouseEvent ReadMouseImpl() = 0;
 		virtual bool IsMouseEmptyImpl() = 0;
 		virtual void FlushMouseImpl() = 0; 
-
-
-
-		/*
-
-		virtual bool IsMouseButtonPressedImpl(int button) = 0;
-		virtual std::pair<float, float> GetMousePositionImpl() = 0;
-		virtual float GetMouseXImpl() = 0;
-		virtual float GetMouseYImpl() = 0;
-		*/
 
 	private:
 
 		///////////////////////
 		///KEYBOARD FUNCTIONS//
 		///////////////////////
+
 		inline static void OnKeyPressed(unsigned char keycode) { return s_Instance->OnKeyPressedImpl(keycode); }
 		inline static void OnKeyReleased(unsigned char keycode) { return s_Instance->OnKeyReleasedImpl(keycode); }
 		inline static void OnChar(char character) { return s_Instance->OnCharImpl(character); }
@@ -199,7 +251,6 @@ namespace Hazel {
 		virtual void TrimMouseBufferImpl() = 0;;
 
 	private:
-
 		static Input* s_Instance;
 	};
 

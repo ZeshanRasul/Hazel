@@ -512,6 +512,9 @@ namespace Hazel {
 				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 				WindowData& data = p_Wnd->m_Data;
 
+				data.Width = width;
+				data.Height = height;
+
 				WindowResizeEvent event(width, height);
 				if (data.EventCallback != nullptr)
 				{

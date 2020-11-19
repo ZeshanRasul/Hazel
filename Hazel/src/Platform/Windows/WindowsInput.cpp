@@ -155,7 +155,7 @@ namespace Hazel
 		return isRightPressed;
 	}
 
-	/*
+	
 	WindowsInput::Win32MouseEvent WindowsInput::ReadMouseImpl()
 	{
 		if (mouseBuffer.size() > 0)
@@ -169,7 +169,7 @@ namespace Hazel
 			return WindowsInput::Win32MouseEvent();
 		}
 	}
-	*/
+	
 
 	void WindowsInput::FlushMouseImpl()
 	{
@@ -181,21 +181,21 @@ namespace Hazel
 		x = newX;
 		y = newY;
 
-		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::Move, *this));
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::Move));
 		TrimMouseBufferImpl();
 	}
 
 	void WindowsInput::OnMouseLeaveImpl()
 	{
 		isInWindow = false;
-		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::Leave, *this));
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::Leave));
 		TrimMouseBufferImpl();
 	}
 
 	void WindowsInput::OnMouseEnterImpl()
 	{
 		isInWindow = true;
-		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::Enter, *this));
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::Enter));
 		TrimMouseBufferImpl();
 	}
 
@@ -203,7 +203,7 @@ namespace Hazel
 	{
 		isLeftPressed = true;
 
-		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::LPress, *this));
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::LPress));
 		TrimMouseBufferImpl();
 	}
 
@@ -211,7 +211,7 @@ namespace Hazel
 	{
 		isLeftPressed = false;
 
-		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::LRelease, *this));
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::LRelease));
 		TrimMouseBufferImpl();
 	}
 
@@ -219,7 +219,7 @@ namespace Hazel
 	{
 		isRightPressed = true;
 
-		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::RPress, *this));
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::RPress));
 		TrimMouseBufferImpl();
 	}
 
@@ -227,19 +227,19 @@ namespace Hazel
 	{
 		isRightPressed = false;
 
-		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::RRelease, *this));
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::RRelease));
 		TrimMouseBufferImpl();
 	}
 
 	void WindowsInput::OnWheelUpImpl(int x, int y)
 	{
-		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::WheelUp, *this));
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::WheelUp));
 		TrimMouseBufferImpl();
 	}
 
 	void WindowsInput::OnWheelDownImpl(int x, int y)
 	{
-		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::WheelDown, *this));
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::WheelDown));
 		TrimMouseBufferImpl();
 	}
 

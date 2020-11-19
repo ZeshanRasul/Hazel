@@ -6,85 +6,7 @@ namespace Hazel {
 
 	class WindowsInput : public Input
 	{
-	public:
-		class Win32MouseEvent
-		{
-		public:
-			enum class Type
-			{
-				LPress,
-				LRelease,
-				RPress,
-				RRelease,
-				WheelUp,
-				WheelDown,
-				Move,
-				Invalid,
-				Enter,
-				Leave
-			};
-
-		private:
-			Type type;
-			bool isLeftPressed;
-			bool isRightPressed;
-			int x;
-			int y;
-
-		public:
-			Win32MouseEvent() noexcept
-				:
-				type(Type::Invalid),
-				isLeftPressed(false),
-				isRightPressed(false),
-				x(0),
-				y(0)
-			{}
-
-			Win32MouseEvent(Type type, const WindowsInput& parent) noexcept
-				:
-				type(type),
-				isLeftPressed(parent.isLeftPressed),
-				isRightPressed(parent.isRightPressed),
-				x(parent.x),
-				y(parent.y)
-			{}
-
-			bool IsValid() const noexcept
-			{
-				return type != Type::Invalid;
-			}
-
-			Type GetType() const noexcept
-			{
-				return type;
-			}
-
-			std::pair<int, int> GetMousePos() const noexcept
-			{
-				return { x,y };
-			}
-
-			int GetMousePosX() const noexcept
-			{
-				return x;
-			}
-
-			int GetMousePosY() const noexcept
-			{
-				return y;
-			}
-
-			bool IsLeftPressed() const noexcept
-			{
-				return isLeftPressed;
-			}
-
-			bool IsRightPressed() const noexcept
-			{
-				return isRightPressed;
-			}
-		};
+	
 
 	protected:
 		///////////////////////
@@ -113,7 +35,7 @@ namespace Hazel {
 		virtual bool IsInWindowImpl() override;
 		virtual bool IsLeftPressedImpl() override;
 		virtual bool IsRightPressedImpl() override;
-	//	Win32MouseEvent ReadMouseImpl() override;
+		virtual Win32MouseEvent ReadMouseImpl() override;
 		virtual bool IsMouseEmptyImpl() override
 		{
 			//return mouseBuffer.empty();
