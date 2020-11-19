@@ -28,17 +28,10 @@ namespace Hazel {
 
 		inline static Application& Get() { return *s_Instance; };
 
-		inline HWND& GetHWND() { return s_Hwnd; };
-
-
-		inline void SetHWND(HWND HWNDInput) { s_Hwnd = HWNDInput; };
-
 		inline Window& GetWindow() { return *m_Window; }
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
-		HWND s_Hwnd;
-
 		
 		ID3D11Device* g_pd3dDevice;
 		ID3D11DeviceContext* g_pd3dDeviceContext;

@@ -138,14 +138,6 @@ namespace Hazel {
 			});
 
 
-		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
-			{
-				WindowData& data = *(WindowData*)(glfwGetWindowUserPointer(window));
-
-				WindowCloseEvent event;
-				data.EventCallback(event);
-			}); DONE
-
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
@@ -509,6 +501,22 @@ namespace Hazel {
 
 				const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
 				Input::OnWheelDelta(pt.x, pt.y, delta);
+				break;
+			}
+			
+			case WM_SIZE:
+			{
+				UINT width = LOWORD(lParam);
+				UINT height = HIWORD(lParam);
+
+				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+				WindowData& data = p_Wnd->m_Data;
+
+				WindowResizeEvent event(width, height);
+				if (data.EventCallback != nullptr)
+				{
+					data.EventCallback(event);
+				}
 				break;
 			}
 

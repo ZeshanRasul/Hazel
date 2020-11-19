@@ -82,6 +82,8 @@ namespace Hazel {
 			}
 			m_Window->OnUpdate();
 		}
+
+		return 0;
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& event)
