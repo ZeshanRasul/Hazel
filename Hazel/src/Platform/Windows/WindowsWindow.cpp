@@ -321,6 +321,11 @@ namespace Hazel {
 				Input::ClearState();
 				break;
 			}
+
+			///////////////////////
+			///KEYBOARD Messages///
+			///////////////////////
+
 			case WM_KEYDOWN:
 			case WM_SYSKEYDOWN:
 			{
@@ -362,6 +367,61 @@ namespace Hazel {
 			case WM_CHAR:
 			{
 				Input::OnChar(static_cast<unsigned char>(wParam));
+				break;
+			}
+
+			///////////////////////
+			///MOUSE MESSAGES//////
+			///////////////////////
+
+			case WM_MOUSEMOVE:
+			{
+				const POINTS pt = MAKEPOINTS(lParam);
+				Input::OnMouseMove(pt.x, pt.y);
+				break;
+			}
+
+			case WM_LBUTTONDOWN:
+			{
+				const POINTS pt = MAKEPOINTS(lParam);
+				Input::OnLeftPressed(pt.x, pt.y);
+				break;
+			}
+
+			case WM_RBUTTONDOWN:
+			{
+				const POINTS pt = MAKEPOINTS(lParam);
+				Input::OnRightPressed(pt.x, pt.y);
+				break;
+			}
+
+			case WM_LBUTTONUP:
+			{
+				const POINTS pt = MAKEPOINTS(lParam);
+				Input::OnLeftReleased(pt.x, pt.y);
+				break;
+			}
+
+			case WM_RBUTTONUP:
+			{
+				const POINTS pt = MAKEPOINTS(lParam);
+				Input::OnRightReleased(pt.x, pt.y);
+				break;
+			}
+
+			case WM_MOUSEWHEEL:
+			{
+				const POINTS pt = MAKEPOINTS(lParam);
+
+				if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
+				{
+					Input::OnWheelUp(pt.x, pt.y);
+				}
+				else
+				{
+					Input::OnWheelDown(pt.x, pt.y);
+				}
+					break;
 			}
 
 		}

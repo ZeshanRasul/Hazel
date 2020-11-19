@@ -7,6 +7,10 @@ namespace Hazel
 {
 	Input* Input::s_Instance = new WindowsInput();
 
+	///////////////////////
+	///KEYBOARD FUNCTIONS//
+	///////////////////////
+
 	bool WindowsInput::IsKeyPressedImpl(unsigned char keycode)
 	{
 		return keystates[keycode];
@@ -62,7 +66,7 @@ namespace Hazel
 		charbuffer = std::queue<char>();
 	}
 
-	void WindowsInput::FlushImpl()
+	void WindowsInput::FlushKeyboardImpl()
 	{
 		FlushKeyImpl();
 		FlushCharImpl();
@@ -87,20 +91,20 @@ namespace Hazel
 	{
 		keystates[keycode] = true;
 		keybuffer.push(Win32KeyboardEvent(Win32KeyboardEvent::Type::Press, keycode));
-		TrimBufferImpl(keybuffer);
+		TrimKeyboardBufferImpl(keybuffer);
 	}
 
 	void WindowsInput::OnKeyReleasedImpl(unsigned char keycode) noexcept
 	{
 		keystates[keycode] = false;
 		keybuffer.push(Win32KeyboardEvent(Win32KeyboardEvent::Type::Release, keycode));
-		TrimBufferImpl(keybuffer);
+		TrimKeyboardBufferImpl(keybuffer);
 	}
 
 	void WindowsInput::OnCharImpl(char character) noexcept
 	{
 		charbuffer.push(character);
-		TrimBufferImpl(charbuffer);
+		TrimKeyboardBufferImpl(charbuffer);
 	}
 
 	void WindowsInput::ClearStateImpl() noexcept
@@ -109,11 +113,120 @@ namespace Hazel
 	}
 
 	template<typename T>
-	void WindowsInput::TrimBufferImpl(std::queue<T>& buffer) noexcept
+	void WindowsInput::TrimKeyboardBufferImpl(std::queue<T>& buffer) noexcept
 	{
 		while (buffer.size() > bufferSize)
 		{ 
 			buffer.pop();
+		}
+	}
+
+	///////////////////////
+	///MOUSE FUNCTIONS/////
+	///////////////////////
+
+	std::pair<int, int> WindowsInput::GetMousePosImpl() 
+	{
+		return { x, y };
+	}
+
+	int WindowsInput::GetMousePosXImpl()
+	{
+		return x;
+	}
+
+	int WindowsInput::GetMousePosYImpl()
+	{
+		return y;
+	}
+
+	bool WindowsInput::IsLeftPressedImpl()
+	{
+		return isLeftPressed;
+	}
+
+	bool WindowsInput::IsRightPressedImpl()
+	{
+		return isRightPressed;
+	}
+
+	WindowsInput::Win32MouseEvent WindowsInput::ReadMouseImpl()
+	{
+		if (mouseBuffer.size() > 0)
+		{
+			WindowsInput::Win32MouseEvent event = mouseBuffer.front();
+			mouseBuffer.pop();
+			return event;
+		}
+		else
+		{
+			return WindowsInput::Win32MouseEvent();
+		}
+	}
+
+	void WindowsInput::FlushMouseImpl()
+	{
+		mouseBuffer = std::queue<Win32MouseEvent>();
+	}
+
+	void WindowsInput::OnMouseMoveImpl(int newX, int newY)
+	{
+		x = newX;
+		y = newY;
+
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::Move, *this));
+		TrimMouseBufferImpl();
+	}
+
+	void WindowsInput::OnLeftPressedImpl(int x, int y)
+	{
+		isLeftPressed = true;
+
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::LPress, *this));
+		TrimMouseBufferImpl();
+	}
+
+	void WindowsInput::OnLeftReleasedImpl(int x, int y)
+	{
+		isLeftPressed = false;
+
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::LRelease, *this));
+		TrimMouseBufferImpl();
+	}
+
+	void WindowsInput::OnRightPressedImpl(int x, int y)
+	{
+		isRightPressed = true;
+
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::RPress, *this));
+		TrimMouseBufferImpl();
+	}
+
+	void WindowsInput::OnRightReleasedImpl(int x, int y)
+	{
+		isRightPressed = false;
+
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::RRelease, *this));
+		TrimMouseBufferImpl();
+	}
+
+	void WindowsInput::OnWheelUpImpl(int x, int y)
+	{
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::WheelUp, *this));
+		TrimMouseBufferImpl();
+	}
+
+	void WindowsInput::OnWheelDownImpl(int x, int y)
+	{
+		mouseBuffer.push(Win32MouseEvent(Win32MouseEvent::Type::WheelDown, *this));
+		TrimMouseBufferImpl();
+	}
+
+	void WindowsInput::TrimMouseBufferImpl()
+	{
+		while (mouseBuffer.size() > bufferSize)
+		{
+			mouseBuffer.pop();
 		}
 	}
 
