@@ -290,7 +290,7 @@ namespace Hazel {
 					
 					if (!Input::IsInWindow())
 					{
-						SetCapture(m_Hwnd);
+						SetCapture(hWnd);
 						Input::OnMouseEnter();
 					}
 				}
