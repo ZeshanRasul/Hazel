@@ -10,7 +10,7 @@ namespace Hazel {
 #ifdef HZ_PLATFORM_WINDOWS
 			friend class WindowsWindow;
 	public:
-		class Win32KeyboardEvent
+		class InputKeyboardEvent
 		{
 		public:
 			enum class Type
@@ -23,7 +23,7 @@ namespace Hazel {
 			Type type;
 			unsigned char code;
 		public:
-			Win32KeyboardEvent()
+			InputKeyboardEvent()
 				:
 				type(Type::Invalid),
 				code(0u)
@@ -31,7 +31,7 @@ namespace Hazel {
 
 			}
 
-			Win32KeyboardEvent(Type type, unsigned char code) noexcept
+			InputKeyboardEvent(Type type, unsigned char code) noexcept
 				:
 				type(type),
 				code(code)
@@ -61,7 +61,7 @@ namespace Hazel {
 		};
 
 	public:
-		class Win32MouseEvent
+		class InputMouseEvent
 		{
 		public:
 			enum class Type
@@ -86,7 +86,7 @@ namespace Hazel {
 			int y;
 
 		public:
-			Win32MouseEvent() noexcept
+			InputMouseEvent() noexcept
 				:
 				type(Type::Invalid),
 				isLeftPressed(false),
@@ -95,7 +95,7 @@ namespace Hazel {
 				y(0)
 			{}
 
-			Win32MouseEvent(Type type) noexcept
+			InputMouseEvent(Type type) noexcept
 				:
 				type(type),
 				isLeftPressed(Input::IsLeftPressed()),
@@ -147,7 +147,7 @@ namespace Hazel {
 		///////////////////////
 
 		inline static bool IsKeyPressed(unsigned char keycode) { return s_Instance->IsKeyPressedImpl(keycode); }
-		inline static Win32KeyboardEvent ReadKey() { return s_Instance->ReadKeyImpl(); }
+		inline static InputKeyboardEvent ReadKey() { return s_Instance->ReadKeyImpl(); }
 		inline static bool IsKeyEmpty() { return s_Instance->IsKeyEmptyImpl(); }
 		inline static void FlushKey() { return s_Instance->FlushKeyImpl(); }
 		inline static char ReadChar() { return s_Instance->ReadCharImpl(); }
@@ -168,7 +168,7 @@ namespace Hazel {
 		inline static bool IsInWindow() { return s_Instance->IsInWindowImpl(); }
 		inline static bool IsLeftPressed() { return s_Instance->IsLeftPressedImpl(); }
 		inline static bool IsRightPressed() { return s_Instance->IsRightPressedImpl(); }
-		inline static Win32MouseEvent ReadMouse() { return s_Instance->ReadMouseImpl(); }
+		inline static InputMouseEvent ReadMouse() { return s_Instance->ReadMouseImpl(); }
 		inline static bool IsMouseEmpty() { return s_Instance->IsMouseEmptyImpl(); }
 		inline static void FlushMouse() { return s_Instance->FlushMouseImpl(); }
 		// TODO Check if TrimBuffer needs to be implemented here.
@@ -179,7 +179,7 @@ namespace Hazel {
 		///////////////////////
 
 		virtual bool IsKeyPressedImpl(unsigned char keycode) = 0;
-		virtual Win32KeyboardEvent ReadKeyImpl() = 0;
+		virtual InputKeyboardEvent ReadKeyImpl() = 0;
 		virtual bool IsKeyEmptyImpl() = 0;
 		virtual void FlushKeyImpl() = 0;
 		virtual char ReadCharImpl() = 0;
@@ -200,7 +200,7 @@ namespace Hazel {
 		virtual bool IsInWindowImpl() = 0;
 		virtual bool IsLeftPressedImpl() = 0;
 		virtual bool IsRightPressedImpl() = 0;
-		virtual Win32MouseEvent ReadMouseImpl() = 0;
+		virtual InputMouseEvent ReadMouseImpl() = 0;
 		virtual bool IsMouseEmptyImpl() = 0;
 		virtual void FlushMouseImpl() = 0; 
 

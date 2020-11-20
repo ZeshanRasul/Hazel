@@ -117,106 +117,10 @@ namespace Hazel {
 
 	
 		m_GraphicsContext = new DirectXGraphicsContext();
-		m_GraphicsContext->Init();
+		m_GraphicsContext->Init(m_Hwnd);
 		 
 		
 		SetVSync(true);
-
-		// TODO REDO Event callbacks with Windows events
-		/*
-		// Set GLFW Callbacks
-		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
-			{
-				// either use data directly as m_Data or use Win32SetWindowLongPtrA
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-
-				data.Width = width;
-				data.Height = height;
-
-				WindowResizeEvent event(width, height);
-				data.EventCallback(event);
-			});
-
-
-		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
-			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-
-				switch (action)
-				{
-				case GLFW_PRESS:
-				{
-					KeyPressedEvent event(key, 0);
-					data.EventCallback(event);
-
-					break;
-				}
-
-				case GLFW_RELEASE:
-				{
-					KeyReleasedEvent event(key);
-					data.EventCallback(event);
-
-					break;
-				}
-
-				case GLFW_REPEAT:
-				{
-					// GLFW doesn't provide us with a repeat count so for now we will hardcode it as 1.
-					KeyPressedEvent event(key, 1);
-					data.EventCallback(event);
-					break;
-				}
-				}
-			});
-
-		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int key)
-		{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-
-				KeyTypedEvent event(key);
-				data.EventCallback(event);
-		});
-
-		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
-			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-
-				switch (action)
-				{
-				case GLFW_PRESS:
-				{
-					MouseButtonPressedEvent event(button);
-					data.EventCallback(event);
-					break;
-				}
-
-				case GLFW_RELEASE:
-				{
-					MouseButtonReleasedEvent event(button);
-					data.EventCallback(event);
-					break;
-				}
-				}
-			});
-
-		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
-			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-
-				MouseScrolledEvent event((float)xOffset, (float)yOffset);
-				data.EventCallback(event);
-			});
-
-		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPosition, double yPosition)
-			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-
-				MouseMovedEvent event((float)xPosition, (float)yPosition);
-				data.EventCallback(event);
-			});
-			*/
-
 
 	}
 
@@ -227,7 +131,8 @@ namespace Hazel {
 
 	void WindowsWindow::OnUpdate()
 	{
-		m_GraphicsContext->SwapBuffers();
+		m_GraphicsContext->ClearBuffer(0.49f, 0.6f, 0.49f);
+		m_GraphicsContext->EndFrame();
 
 	}
 
@@ -263,15 +168,7 @@ namespace Hazel {
 
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
-			/*
-			if (Input::IsKeyPressed(VK_MENU))
-			{
-			}
-			if (Input::IsLeftPressed())
-			{
-				MessageBox(nullptr, L"Something Happened!", L"Left Mouse Button Was Pressed", MB_OK | MB_ICONEXCLAMATION);
-			}
-			*/
+		
 			return {};
 		}
 	}
@@ -308,6 +205,8 @@ namespace Hazel {
 
 	LRESULT WindowsWindow::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 	{
+		// TODO Redo event creation to match previous implementation
+
 		switch (msg)
 		{
 			case WM_CLOSE:

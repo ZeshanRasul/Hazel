@@ -5,8 +5,10 @@ namespace Hazel {
 	class GraphicsContext
 	{
 	public:
-		virtual void Init() = 0;
-		virtual void SwapBuffers() = 0;
+		// TODO can refactor to take window instead when implementing other rendering APIs 
+		virtual void Init(HWND hWnd) = 0;
+		virtual void ClearBuffer(float red, float green, float blue) = 0;
+		virtual void EndFrame() = 0;
 	};
 
 }

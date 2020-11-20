@@ -14,7 +14,7 @@ namespace Hazel {
 		///////////////////////
 
 		virtual bool IsKeyPressedImpl(unsigned char keycode) override;
-		virtual Win32KeyboardEvent ReadKeyImpl() override;
+		virtual InputKeyboardEvent ReadKeyImpl() override;
 		virtual bool IsKeyEmptyImpl() override;
 		virtual void FlushKeyImpl() override;
 		virtual char ReadCharImpl() override;
@@ -35,7 +35,7 @@ namespace Hazel {
 		virtual bool IsInWindowImpl() override;
 		virtual bool IsLeftPressedImpl() override;
 		virtual bool IsRightPressedImpl() override;
-		virtual Win32MouseEvent ReadMouseImpl() override;
+		virtual InputMouseEvent ReadMouseImpl() override;
 		virtual bool IsMouseEmptyImpl() override
 		{
 			//return mouseBuffer.empty();
@@ -85,7 +85,7 @@ namespace Hazel {
 		// TODO: decide whether to keep this as false or not
 		bool autorepeatEnabled = false;
 		std::bitset<nKeys> keystates;
-		std::queue<Win32KeyboardEvent> keybuffer;
+		std::queue<InputKeyboardEvent> keybuffer;
 		std::queue<char> charbuffer;
 
 		///////////////////////
@@ -99,7 +99,7 @@ namespace Hazel {
 		int wheelDeltaCarry = 0;
 
 
-		std::queue<Win32MouseEvent> mouseBuffer;
+		std::queue<InputMouseEvent> mouseBuffer;
 	};
 
 }
