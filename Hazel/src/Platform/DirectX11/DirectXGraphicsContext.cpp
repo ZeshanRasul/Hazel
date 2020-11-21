@@ -8,29 +8,6 @@ namespace Hazel {
 
 	}
 
-	DirectXGraphicsContext::~DirectXGraphicsContext()
-	{
-		if (m_RenderTargetView != nullptr)
-		{
-			m_RenderTargetView->Release();
-		}
-		// Release ptr resources
-		if (m_DeviceContext != nullptr)
-		{
-			m_DeviceContext->Release();
-		}
-
-		if (m_SwapChain != nullptr)
-		{
-			m_SwapChain->Release();
-		}
-
-		if (m_Device != nullptr)
-		{
-			m_Device->Release();
-		}
-	}
-
 	void DirectXGraphicsContext::Init(HWND hWnd)
 	{
 		// Create description structure
@@ -71,18 +48,16 @@ namespace Hazel {
 
 		// Gain access to texture subresource in swap chain (back buffer)
 
-		ID3D11Resource* pBackBuffer = nullptr;
-		m_SwapChain->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&pBackBuffer));
-		m_Device->CreateRenderTargetView(pBackBuffer, nullptr, &m_RenderTargetView);
-		pBackBuffer->Release();
-		
+		Microsoft::WRL::ComPtr<ID3D11Resource> pBackBuffer = nullptr;
+		m_SwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer);
+		m_Device->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &m_RenderTargetView);		
 
 	}
 
 	void DirectXGraphicsContext::ClearBuffer(float red, float green, float blue)
 	{
 		const float color[] = { red, green, blue, 1.0f };
-		m_DeviceContext->ClearRenderTargetView(m_RenderTargetView, color);
+		m_DeviceContext->ClearRenderTargetView(m_RenderTargetView.Get(), color);
 	}
 
 	void DirectXGraphicsContext::EndFrame()
