@@ -101,7 +101,7 @@ namespace Hazel {
 		const wchar_t* pWindowName = L"Hazel Engine";
 
 		HWND m_Hwnd = CreateWindowEx(
-			0, L"HELLO",
+			0, WindowClass::GetName(),
 			pWindowName,
 			WS_CAPTION | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU,
 			CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
