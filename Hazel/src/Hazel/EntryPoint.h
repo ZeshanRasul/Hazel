@@ -2,6 +2,8 @@
 
 #include <Windows.h>
 
+#include "HazelException.h"
+
 #ifdef HZ_PLATFORM_WINDOWS
 
 	extern Hazel::Application* Hazel::CreateApplication();
@@ -20,14 +22,22 @@
 			delete app;
 		}
 		
+		catch (const Hazel::HazelException& e)
+		{
+			MessageBoxA(nullptr, e.what(), e.GetType(), MB_OK | MB_ICONEXCLAMATION);
+		}
+
 		catch (const std::exception& e)
 		{
-			MessageBox(nullptr, reinterpret_cast<LPCWSTR>(e.what()), L"Standard Exception", MB_OK | MB_ICONEXCLAMATION);
+			char* exceptionTitle = "Standard Exception";
+			MessageBoxA(nullptr, e.what(), "Standard Exception", MB_OK | MB_ICONEXCLAMATION);
 		}
 
 		catch (...)
 		{
-			MessageBox(nullptr, L"No details available", L"Standard Exception", MB_OK | MB_ICONEXCLAMATION);
+			std::wstring exceptionTitle = L"Standard Exception";
+
+			MessageBoxA(nullptr, "No details available", "Hello", MB_OK | MB_ICONEXCLAMATION);
 		}
 
 		return -1;
