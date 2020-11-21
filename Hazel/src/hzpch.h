@@ -21,7 +21,8 @@
 #include "Hazel/Log.h"
 
 #ifdef HZ_PLATFORM_WINDOWS
-	// target Windows 7 or later
+	// TODO check this doesn't cause any issues
+	#pragma warning(disable:4005)
 	#define _WIN32_WINNT 0x0601
 	#include <sdkddkver.h>
 	// The following #defines disable a bunch of unused windows stuff. If you 

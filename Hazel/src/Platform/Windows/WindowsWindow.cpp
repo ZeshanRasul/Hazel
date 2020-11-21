@@ -171,6 +171,8 @@ namespace Hazel {
 		
 			return {};
 		}
+
+		return {};
 	}
 
 
@@ -246,7 +248,7 @@ namespace Hazel {
 				}
 
 				// TODO Condition based on whether it is a repeat count or not
-				KeyPressedEvent event(wParam, 0);
+				KeyPressedEvent event((int)wParam, 0);
 				data.EventCallback(event);
 
 				break;
@@ -263,7 +265,7 @@ namespace Hazel {
 					SetWindowText(hWnd, L"Hazel Engine");
 				}
 
-				KeyReleasedEvent event(wParam);
+				KeyReleasedEvent event((int)wParam);
 				data.EventCallback(event);
 
 				break;
@@ -284,7 +286,7 @@ namespace Hazel {
 
 				// Check if mouse is in client region or not
 
-				if (pt.x >= 0 && pt.x <= m_Data.Width && pt.y >= 0 && pt.y <= m_Data.Height)
+				if (pt.x >= 0 && pt.x <= (int)m_Data.Width && pt.y >= 0 && pt.y <= (int)m_Data.Height)
 				{
 					Input::OnMouseMove(pt.x, pt.y);
 					
@@ -351,7 +353,7 @@ namespace Hazel {
 				Input::OnLeftReleased(pt.x, pt.y);
 
 				// Release mouse drag if mouse release is outside the window
-				if (pt.x < 0 || pt.x > m_Data.Width || pt.y < 0 || pt.y > m_Data.Height)
+				if (pt.x < 0 || pt.x > (int)m_Data.Width || pt.y < 0 || pt.y > (int)m_Data.Height)
 				{
 					ReleaseCapture();
 					Input::OnMouseLeave();
@@ -371,7 +373,7 @@ namespace Hazel {
 				const POINTS pt = MAKEPOINTS(lParam);
 				Input::OnRightReleased(pt.x, pt.y);
 
-				if (pt.x < 0 || pt.x > m_Data.Width || pt.y < 0 || pt.y > m_Data.Height)
+				if (pt.x < 0 || pt.x > (int)m_Data.Width || pt.y < 0 || pt.y > (int)m_Data.Height)
 				{
 					ReleaseCapture();
 					Input::OnMouseLeave();

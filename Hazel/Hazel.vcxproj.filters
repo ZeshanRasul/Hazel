@@ -116,7 +116,6 @@
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\hzpch.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">
@@ -180,11 +179,5 @@
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\hzpch.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Hazel.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\HazelIcon.ico" />
   </ItemGroup>
 </Project>
