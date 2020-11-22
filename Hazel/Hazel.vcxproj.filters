@@ -116,6 +116,9 @@
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\hzpch.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\Platform\DirectX11\DXErr.h" />
+    <ClInclude Include="src\Platform\DirectX11\DXGIInfoManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">
@@ -179,5 +182,16 @@
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\hzpch.cpp" />
+    <ClCompile Include="src\Platform\DirectX11\DXErr.cpp" />
+    <ClCompile Include="src\Platform\DirectX11\DXGIInfoManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Hazel.aps" />
+    <None Include="src\Platform\DirectX11\DXGetErrorDescription.inl" />
+    <None Include="src\Platform\DirectX11\DXGetErrorString.inl" />
+    <None Include="src\Platform\DirectX11\DXTrace.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Hazel.rc" />
   </ItemGroup>
 </Project>

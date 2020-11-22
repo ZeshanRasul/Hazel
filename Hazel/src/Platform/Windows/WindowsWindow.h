@@ -11,16 +11,29 @@ namespace Hazel {
 	public: 
 		class Exception : public HazelException
 		{
+			using HazelException::HazelException;
 		public:
-			Exception(int line, const char* file, HRESULT hr) noexcept;
-			const char* what() const noexcept override;
-			virtual const char* GetType() const noexcept;
 			static std::string TranslateErrorCode(HRESULT hr) noexcept;
-			HRESULT GetErrorCode() const noexcept;
-			std::string GetErrorString() const noexcept;
+		};
 
+		class HrException : public Exception
+		{
+		public:
+			HrException(int line, const char* file, HRESULT hr) noexcept;
+			const char* what() const noexcept override;
+			const char* GetType() const noexcept override;
+			HRESULT GetErrorCode() const noexcept;
+			std::string GetErrorDescription() const noexcept;
+	
 		private:
 			HRESULT hr;
+		};
+
+		class NoGraphicsException : Exception
+		{
+		public:
+			using Exception::Exception;
+			const char* GetType() const noexcept override;
 		};
 
 	private:
@@ -54,7 +67,8 @@ namespace Hazel {
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
-		static std::optional<int> ProcessMessages();
+		static std::optional<int> ProcessMessages() noexcept;
+		GraphicsContext& GetGraphics();
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
 
@@ -87,6 +101,7 @@ namespace Hazel {
 	};
 
 // Error exception helper macro
-#define HZWND_EXCEPT(hr) WindowsWindow::Exception(__LINE__, __FILE__, hr)
-#define HZWND_LAST_EXCEPT() WindowsWindow::Exception(__LINE__, __FILE__, GetLastError())
+#define HZWND_EXCEPT(hr) WindowsWindow::HrException(__LINE__, __FILE__, hr)
+#define HZWND_LAST_EXCEPT() WindowsWindow::HrException(__LINE__, __FILE__, GetLastError())
+#define HZWND_NOGFX_EXCEPT() WindowsWindow::NoGraphicsException(__LINE__, __FILE__)
 }

@@ -155,7 +155,7 @@ namespace Hazel {
 		return m_Data.VSync;
 	}
 
-	std::optional<int> WindowsWindow::ProcessMessages()
+	std::optional<int> WindowsWindow::ProcessMessages() noexcept
 	{
 		MSG msg;
 
@@ -173,6 +173,15 @@ namespace Hazel {
 		}
 
 		return {};
+	}
+
+	GraphicsContext& WindowsWindow::GetGraphics()
+	{
+		if (!m_GraphicsContext)
+		{
+			throw HZWND_NOGFX_EXCEPT();
+		}
+		return *m_GraphicsContext;
 	}
 
 
@@ -214,7 +223,7 @@ namespace Hazel {
 			case WM_CLOSE:
 			{
 				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-				WindowData& data = p_Wnd->m_Data;
+				WindowData& data = (p_Wnd->m_Data);
 
 				WindowCloseEvent event;
 				data.EventCallback(event);
@@ -429,26 +438,25 @@ namespace Hazel {
 		return DefWindowProc(hWnd, msg, wParam, lParam);
 	}
 
-	WindowsWindow::Exception::Exception(int line, const char* file, HRESULT hr) noexcept
+	WindowsWindow::HrException::HrException(int line, const char* file, HRESULT hr) noexcept
 		:
-		HazelException(line, file),
+		Exception(line, file),
 		hr(hr)
-	{
+	{}
 
-	}
-
-	const char* WindowsWindow::Exception::what() const noexcept
+	const char* WindowsWindow::HrException::what() const noexcept
 	{
 		std::ostringstream oss;
 		oss << GetType() << std::endl
-			<< "[Error Code]" << GetErrorCode() << std::endl
-			<< "[Description]" << GetErrorString() << std::endl
+			<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode() 
+			<< std::dec << " (" << (unsigned long)GetErrorCode() << ")" << std::endl
+			<< "[Description]" << GetErrorDescription() << std::endl
 			<< GetOriginString();
 		whatBuffer = oss.str();
 		return whatBuffer.c_str();
 	}
 
-	const char* WindowsWindow::Exception::GetType() const noexcept
+	const char* WindowsWindow::HrException::GetType() const noexcept
 	{
 		return "Hazel Window Exception";
 	}
@@ -456,7 +464,7 @@ namespace Hazel {
 	std::string WindowsWindow::Exception::TranslateErrorCode(HRESULT hr) noexcept
 	{
 		char* p_MsgBuffer = nullptr;
-		DWORD nMsgLen = FormatMessage(
+		const DWORD nMsgLen = FormatMessage(
 			FORMAT_MESSAGE_ALLOCATE_BUFFER |
 			FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 			nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
@@ -473,14 +481,19 @@ namespace Hazel {
 		return errorString;
 	}
 
-	HRESULT WindowsWindow::Exception::GetErrorCode() const noexcept
+	HRESULT WindowsWindow::HrException::GetErrorCode() const noexcept
 	{
 		return hr;
 	}
 
-	std::string WindowsWindow::Exception::GetErrorString() const noexcept
+	std::string WindowsWindow::HrException::GetErrorDescription() const noexcept
 	{
-		return TranslateErrorCode(hr);
+		return Exception::TranslateErrorCode(hr);
+	}
+
+	const char* WindowsWindow::NoGraphicsException::GetType() const noexcept
+	{
+		return "Hazel Window Exception [No Graphics]";
 	}
 }
 
