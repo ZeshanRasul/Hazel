@@ -37,7 +37,9 @@ project "Hazel"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
-		"%{prj.name}/src/**.inl"
+		"%{prj.name}/src/**.inl",
+		"%{prj.name}/src/**.hlsl"
+
 	}
 
 	defines
@@ -72,6 +74,14 @@ project "Hazel"
 			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox\"")
 		}
 
+		filter("files:**PixelShader.hlsl")
+			shadertype("Pixel")
+			shaderobjectfileoutput("PixelShader.cso")
+
+		filter("files:**VertexShader.hlsl")
+			shadertype("Vertex")
+			shaderobjectfileoutput("VertexShader.cso")	
+		
 		filter "configurations:Debug"
 			defines 
 			{
@@ -125,6 +135,12 @@ project "Sandbox"
 	links 
 	{
 		"Hazel"
+	}
+
+	postbuildcommands
+	{
+		("{COPY} ../Hazel/PixelShader.cso  ../bin/" .. outputdir .. "/Hazel"),
+		("{COPY} ../Hazel/VertexShader.cso ../bin/" .. outputdir .. "/Hazel")
 	}
 
 	filter "system:windows"

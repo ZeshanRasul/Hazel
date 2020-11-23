@@ -19,6 +19,9 @@
     <Filter Include="Platform\DirectX11">
       <UniqueIdentifier>{6EE5EAC0-5AC9-AB16-C329-A669AF2C9698}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\DirectX11\Shaders">
+      <UniqueIdentifier>{47985CB8-33A8-0889-9C61-6DA78890F721}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
     </Filter>
@@ -190,7 +193,11 @@
     <ClCompile Include="src\hzpch.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="src\Platform\DirectX11\Shaders\VertexShader.hlsl" />
-    <FxCompile Include="src\Platform\DirectX11\Shaders\PixelShader.hlsl" />
+    <FxCompile Include="src\Platform\DirectX11\Shaders\PixelShader.hlsl">
+      <Filter>Platform\DirectX11\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Platform\DirectX11\Shaders\VertexShader.hlsl">
+      <Filter>Platform\DirectX11\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
