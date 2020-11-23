@@ -165,12 +165,13 @@
     <ClInclude Include="src\Hazel\Window.h" />
     <ClInclude Include="src\Platform\DirectX11\DXErr.h" />
     <ClInclude Include="src\Platform\DirectX11\DXGIInfoManager.h" />
+    <ClInclude Include="src\Platform\DirectX11\DXGetErrorDescription.inl" />
+    <ClInclude Include="src\Platform\DirectX11\DXGetErrorString.inl" />
+    <ClInclude Include="src\Platform\DirectX11\DXTrace.inl" />
     <ClInclude Include="src\Platform\DirectX11\DirectX11IndexBuffer.h" />
     <ClInclude Include="src\Platform\DirectX11\DirectX11RendererAPI.h" />
     <ClInclude Include="src\Platform\DirectX11\DirectX11VertexBuffer.h" />
     <ClInclude Include="src\Platform\DirectX11\DirectXGraphics.h" />
-    <ClInclude Include="src\Platform\DirectX11\imgui_impl_dx11.h" />
-    <ClInclude Include="src\Platform\DirectX11\imgui_impl_win32.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\hzpch.h" />
@@ -194,8 +195,6 @@
     <ClCompile Include="src\Platform\DirectX11\DirectX11RendererAPI.cpp" />
     <ClCompile Include="src\Platform\DirectX11\DirectX11VertexBuffer.cpp" />
     <ClCompile Include="src\Platform\DirectX11\DirectXGraphics.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\imgui_impl_dx11.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\imgui_impl_win32.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\hzpch.cpp">

@@ -68,7 +68,7 @@ namespace Hazel {
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
 		static std::optional<int> ProcessMessages() noexcept;
-		Graphics& GetGraphics();
+		virtual Graphics& GetGraphics() const override;
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
 

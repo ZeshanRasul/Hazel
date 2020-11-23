@@ -97,6 +97,15 @@
     <ClInclude Include="src\Platform\DirectX11\DXGIInfoManager.h">
       <Filter>Platform\DirectX11</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\DXGetErrorDescription.inl">
+      <Filter>Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\DXGetErrorString.inl">
+      <Filter>Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\DXTrace.inl">
+      <Filter>Platform\DirectX11</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\DirectX11\DirectX11IndexBuffer.h">
       <Filter>Platform\DirectX11</Filter>
     </ClInclude>
@@ -107,12 +116,6 @@
       <Filter>Platform\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\DirectX11\DirectXGraphics.h">
-      <Filter>Platform\DirectX11</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DirectX11\imgui_impl_dx11.h">
-      <Filter>Platform\DirectX11</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DirectX11\imgui_impl_win32.h">
       <Filter>Platform\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsInput.h">
@@ -176,12 +179,6 @@
       <Filter>Platform\DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\DirectX11\DirectXGraphics.cpp">
-      <Filter>Platform\DirectX11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DirectX11\imgui_impl_dx11.cpp">
-      <Filter>Platform\DirectX11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DirectX11\imgui_impl_win32.cpp">
       <Filter>Platform\DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">

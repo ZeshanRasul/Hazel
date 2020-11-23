@@ -3,8 +3,6 @@
 
 #include "imgui.h"
 
-#include "Platform/DirectX11/imgui_impl_dx11.h"
-
 #include "Platform/Windows/WindowsWindow.h"
 
 

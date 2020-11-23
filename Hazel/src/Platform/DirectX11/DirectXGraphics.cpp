@@ -83,6 +83,51 @@ namespace Hazel {
 		m_DeviceContext->ClearRenderTargetView(m_RenderTargetView.Get(), color);
 	}
 
+	void DirectXGraphics::DrawTestTriangle()
+	{
+		HRESULT hr;
+
+		// Create Vertex Structure
+		struct Vertex
+		{
+			float x;
+			float y;
+		};
+
+		// Create an array of vertices for the vertex buffer
+		const Vertex vertices[] = 
+		{ 
+			{0.0f, 0.5f}, 
+			{0.5f, -0.5f}, 
+			{-0.5f, -0.5f} 
+		};
+
+		// Create a buffer and description for the buffer
+		Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
+		D3D11_BUFFER_DESC bufferDesc = {};
+		bufferDesc.ByteWidth = sizeof(vertices);
+		bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		bufferDesc.CPUAccessFlags = 0u;
+		bufferDesc.MiscFlags = 0u;
+		bufferDesc.StructureByteStride = sizeof(Vertex);
+
+		// Create a subresource and fill that subresource with the array of vertices
+		D3D11_SUBRESOURCE_DATA subresourceData = {};
+		subresourceData.pSysMem = vertices;
+		
+		// Create the buffer
+		GFX_THROW_INFO(m_Device->CreateBuffer(&bufferDesc, &subresourceData, pVertexBuffer.GetAddressOf()));
+		
+		// Bind the Vertex Buffers on the Input Assembler stage of pipeline
+		UINT strides = sizeof(Vertex);
+		UINT offset = 0;
+		m_DeviceContext->IASetVertexBuffers(0, 1, pVertexBuffer.GetAddressOf(), &strides, &offset);
+		
+		// Draw call
+		m_DeviceContext->Draw(3u, 0u);
+	}
+
 	void DirectXGraphics::EndFrame()
 	{
 		HRESULT hr;

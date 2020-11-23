@@ -53,6 +53,7 @@ namespace Hazel {
 		virtual void EndFrame() override;
 		
 		virtual void ClearBuffer(float red, float green, float blue) override;
+		virtual void DrawTestTriangle() override;
 
 	private:
 	#ifndef NDEBUG

@@ -175,7 +175,7 @@ namespace Hazel {
 		return {};
 	}
 
-	Graphics& WindowsWindow::GetGraphics()
+	Graphics& WindowsWindow::GetGraphics() const
 	{
 		if (!m_Graphics)
 		{
