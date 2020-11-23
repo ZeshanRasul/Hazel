@@ -122,7 +122,7 @@ namespace Hazel {
 		subresourceData.pSysMem = vertices;
 		
 		// Create the buffer
-		GFX_THROW_INFO(m_Device->CreateBuffer(&bufferDesc, &subresourceData, pVertexBuffer.GetAddressOf()));
+		GFX_THROW_INFO(m_Device->CreateBuffer(&bufferDesc, &subresourceData, &pVertexBuffer));
 		
 		// Bind the Vertex Buffers on the Input Assembler stage of pipeline
 		UINT strides = sizeof(Vertex);
@@ -135,14 +135,28 @@ namespace Hazel {
 		Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
 
 		// Read the compiled shader to a blob
-		GFX_THROW_INFO(D3DReadFileToBlob(L"../Hazel/VertexShader.cso", pBlob.GetAddressOf()));
+		GFX_THROW_INFO(D3DReadFileToBlob(L"../Hazel/VertexShader.cso", &pBlob));
 
-		// Create the vertex shader using the device
-		GFX_THROW_INFO(m_Device->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, pVertexShader.GetAddressOf()));
+		// Create the Vertex Shader using the device
+		GFX_THROW_INFO(m_Device->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader));
 
-		// Bind vertex shader to the Vertex Shader stage pipeline
-		m_DeviceContext->VSSetShader(pVertexShader.Get(), nullptr, 0);
+		// Bind Vertex Shader to the Vertex Shader stage pipeline
+		m_DeviceContext->VSSetShader(pVertexShader.Get(), nullptr, 0u);
+
+		// 3) Create Pixel Shader
+		// Create a Pixel Shader and a blob to hold the bytecode from the PixelShader.cso
+		Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
+		Microsoft::WRL::ComPtr<ID3DBlob> pBlobPS;
 		
+		// Read the compiled Pixel Shader to the Pixel Shader blob
+		GFX_THROW_INFO(D3DReadFileToBlob(L"../Hazel/PixelShader.cso", &pBlobPS));
+
+		// Create the Pixel Shader using the blob to fill the Pixel Shader D3D ptr
+		GFX_THROW_INFO(m_Device->CreatePixelShader(pBlobPS->GetBufferPointer(), pBlobPS->GetBufferSize(), nullptr, &pPixelShader));
+
+		// Bind Pixel Shader to Pixel Shader stage of pipeline
+		m_DeviceContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
+
 		// Draw call
 		GFX_THROW_INFO_ONLY(m_DeviceContext->Draw(3u, 0u));
 	}
