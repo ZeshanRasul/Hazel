@@ -2,7 +2,7 @@
 
 namespace Hazel {
 
-	class GraphicsContext
+	class Graphics
 	{
 	public:
 		// TODO can refactor to take window instead when implementing other rendering APIs 

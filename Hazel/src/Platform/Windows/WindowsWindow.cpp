@@ -12,7 +12,7 @@
 
 #include "Hazel/Application.h"
 
-#include "Platform/DirectX11/DirectXGraphicsContext.h"
+#include "Platform/DirectX11/DirectXGraphics.h"
 
 #include "../../resource.h"
 
@@ -116,8 +116,8 @@ namespace Hazel {
 		ShowWindow(m_Hwnd, SW_SHOWDEFAULT);
 
 	
-		m_GraphicsContext = new DirectXGraphicsContext();
-		m_GraphicsContext->Init(m_Hwnd);
+		m_Graphics = new DirectXGraphics();
+		m_Graphics->Init(m_Hwnd);
 		 
 		
 		SetVSync(true);
@@ -131,8 +131,8 @@ namespace Hazel {
 
 	void WindowsWindow::OnUpdate()
 	{
-		m_GraphicsContext->ClearBuffer(0.49f, 0.6f, 0.49f);
-		m_GraphicsContext->EndFrame();
+		m_Graphics->ClearBuffer(0.49f, 0.6f, 0.49f);
+		m_Graphics->EndFrame();
 
 	}
 
@@ -175,13 +175,13 @@ namespace Hazel {
 		return {};
 	}
 
-	GraphicsContext& WindowsWindow::GetGraphics()
+	Graphics& WindowsWindow::GetGraphics()
 	{
-		if (!m_GraphicsContext)
+		if (!m_Graphics)
 		{
 			throw HZWND_NOGFX_EXCEPT();
 		}
-		return *m_GraphicsContext;
+		return *m_Graphics;
 	}
 
 

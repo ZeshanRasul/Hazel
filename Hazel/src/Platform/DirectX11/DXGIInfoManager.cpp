@@ -1,7 +1,7 @@
 #include "hzpch.h"
 #include "DXGIInfoManager.h"
 #include "Platform/Windows/WindowsWindow.h"
-#include "Platform/DirectX11/DirectXGraphicsContext.h"
+#include "Platform/DirectX11/DirectXGraphics.h"
 #include <dxgidebug.h>
 #include <memory>
 
@@ -9,7 +9,7 @@
 
 namespace Hazel
 {
-#define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw DirectXGraphicsContext::HrException( __LINE__,__FILE__,hr )
+#define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw DirectXGraphics::HrException( __LINE__,__FILE__,hr )
 }
 	DxgiInfoManager::DxgiInfoManager()
 	{
@@ -34,7 +34,7 @@ namespace Hazel
 
 		HRESULT hr;
 		if (FAILED(hr = (DxgiGetDebugInterface(__uuidof(IDXGIInfoQueue), reinterpret_cast<void**>(&pDxgiInfoQueue))))) 
-			throw Hazel::DirectXGraphicsContext::HrException(__LINE__, __FILE__, hr);
+			throw Hazel::DirectXGraphics::HrException(__LINE__, __FILE__, hr);
 	}
 
 	DxgiInfoManager::~DxgiInfoManager()
@@ -61,12 +61,12 @@ namespace Hazel
 			HRESULT hr;
 			SIZE_T messageLength;
 			// get the size of message i in bytes
-			if (FAILED(hr = (pDxgiInfoQueue->GetMessage(DXGI_DEBUG_ALL, i, nullptr, &messageLength)))) throw Hazel::DirectXGraphicsContext::HrException(__LINE__, __FILE__, hr);
+			if (FAILED(hr = (pDxgiInfoQueue->GetMessage(DXGI_DEBUG_ALL, i, nullptr, &messageLength)))) throw Hazel::DirectXGraphics::HrException(__LINE__, __FILE__, hr);
 			// allocate memory for message
 			auto bytes = std::make_unique<byte[]>(messageLength);
 			auto pMessage = reinterpret_cast<DXGI_INFO_QUEUE_MESSAGE*>(bytes.get());
 			// get the message and push its description into the vector
-			if (FAILED(hr = (pDxgiInfoQueue->GetMessage(DXGI_DEBUG_ALL, i, pMessage, &messageLength)))) throw Hazel::DirectXGraphicsContext::HrException(__LINE__, __FILE__, hr);
+			if (FAILED(hr = (pDxgiInfoQueue->GetMessage(DXGI_DEBUG_ALL, i, pMessage, &messageLength)))) throw Hazel::DirectXGraphics::HrException(__LINE__, __FILE__, hr);
 			messages.emplace_back(pMessage->pDescription);
 		}
 		return messages;

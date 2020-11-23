@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Hazel/Window.h"
-#include "Hazel/Renderer/GraphicsContext.h"
+#include "Hazel/Renderer/Graphics.h"
 #include "Hazel/HazelException.h"
 
 namespace Hazel {
@@ -68,7 +68,7 @@ namespace Hazel {
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
 		static std::optional<int> ProcessMessages() noexcept;
-		GraphicsContext& GetGraphics();
+		Graphics& GetGraphics();
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
 
@@ -95,7 +95,7 @@ namespace Hazel {
 
 		WindowData m_Data;
 
-		GraphicsContext* m_GraphicsContext;
+		Graphics* m_Graphics;
 
 		HWND m_Hwnd;
 	};

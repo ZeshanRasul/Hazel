@@ -1,7 +1,7 @@
 #pragma once
 #include "hzpch.h"
 
-#include "Hazel/Renderer/GraphicsContext.h"
+#include "Hazel/Renderer/Graphics.h"
 #include "Hazel/HazelException.h"
 #include "DXGIInfoManager.h"
 
@@ -10,7 +10,7 @@
 
 namespace Hazel {
 
-	class DirectXGraphicsContext : public GraphicsContext
+	class DirectXGraphics : public Graphics
 	{
 	public:
 		class Exception : public HazelException
@@ -44,10 +44,10 @@ namespace Hazel {
 		};
 
 	public:
-		DirectXGraphicsContext();
-		DirectXGraphicsContext(const DirectXGraphicsContext&) = delete;
-		DirectXGraphicsContext& operator=(const DirectXGraphicsContext&) = delete;
-		~DirectXGraphicsContext() = default;
+		DirectXGraphics();
+		DirectXGraphics(const DirectXGraphics&) = delete;
+		DirectXGraphics& operator=(const DirectXGraphics&) = delete;
+		~DirectXGraphics() = default;
 
 		virtual void Init(HWND hWnd) override;
 		virtual void EndFrame() override;

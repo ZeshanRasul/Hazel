@@ -1,5 +1,5 @@
 #include "hzpch.h"
-#include "Platform/DirectX11/DirectXGraphicsContext.h"
+#include "Platform/DirectX11/DirectXGraphics.h"
 
 #include "DXErr.h"
 
@@ -7,25 +7,25 @@
 
 namespace Hazel {
 
-#define GFX_EXCEPT_NOINFO(hr) DirectXGraphicsContext::HrException(__LINE__, __FILE__, (hr))
-#define GFX_THROW_NOINFO(hrcall) if(FAILED(hr = (hrcall))) throw DirectXGraphicsContext::HrException(__LINE__, __FILE__, hr)
+#define GFX_EXCEPT_NOINFO(hr) DirectXGraphics::HrException(__LINE__, __FILE__, (hr))
+#define GFX_THROW_NOINFO(hrcall) if(FAILED(hr = (hrcall))) throw DirectXGraphics::HrException(__LINE__, __FILE__, hr)
 
 #ifndef NDEBUG
-	#define GFX_EXCEPT(hr) DirectXGraphicsContext::HrException(__LINE__, __FILE__, (hr), infoManager.GetMessages())
+	#define GFX_EXCEPT(hr) DirectXGraphics::HrException(__LINE__, __FILE__, (hr), infoManager.GetMessages())
 	#define GFX_THROW_INFO(hrcall) infoManager.Set(); if (FAILED(hr = (hrcall))) throw GFX_EXCEPT(hr)
-	#define GFX_DEVICE_REMOVED_EXCEPT(hr) DirectXGraphicsContext::DeviceRemovedException(__LINE__, __FILE__, (hr), infoManager.GetMessages())
+	#define GFX_DEVICE_REMOVED_EXCEPT(hr) DirectXGraphics::DeviceRemovedException(__LINE__, __FILE__, (hr), infoManager.GetMessages())
 #else
-	#define GFX_EXCEPT(hr) DirectXGraphicsContext::HrException(__LINE__, __FILE__, (hr))
+	#define GFX_EXCEPT(hr) DirectXGraphics::HrException(__LINE__, __FILE__, (hr))
 	#define GFX_THROW_INFO(hrcall) GFX_THROW_NOINFO(hrcall)
-	#define GFX_DEVICE_REMOVED_EXCEPT(hr) DirectXGraphicsContext::DeviceRemovedException(__LINE__, __FILE__, (hr))
+	#define GFX_DEVICE_REMOVED_EXCEPT(hr) DirectXGraphics::DeviceRemovedException(__LINE__, __FILE__, (hr))
 #endif
 
-	DirectXGraphicsContext::DirectXGraphicsContext()
+	DirectXGraphics::DirectXGraphics()
 	{
 
 	}
 
-	void DirectXGraphicsContext::Init(HWND hWnd)
+	void DirectXGraphics::Init(HWND hWnd)
 	{
 		// Create description structure
 
@@ -77,13 +77,13 @@ namespace Hazel {
 
 	}
 
-	void DirectXGraphicsContext::ClearBuffer(float red, float green, float blue)
+	void DirectXGraphics::ClearBuffer(float red, float green, float blue)
 	{
 		const float color[] = { red, green, blue, 1.0f };
 		m_DeviceContext->ClearRenderTargetView(m_RenderTargetView.Get(), color);
 	}
 
-	void DirectXGraphicsContext::EndFrame()
+	void DirectXGraphics::EndFrame()
 	{
 		HRESULT hr;
 #ifndef NDEBUG
@@ -104,7 +104,7 @@ namespace Hazel {
 	}
 
 	// Graphics exception functions
-	DirectXGraphicsContext::HrException::HrException(int line, const char* file, HRESULT hr, std::vector<std::string> infoMsgs) noexcept
+	DirectXGraphics::HrException::HrException(int line, const char* file, HRESULT hr, std::vector<std::string> infoMsgs) noexcept
 		:
 		Exception(line, file),
 		hr(hr)
@@ -123,7 +123,7 @@ namespace Hazel {
 		}
 	}
 
-	const char* DirectXGraphicsContext::HrException::what() const noexcept
+	const char* DirectXGraphics::HrException::what() const noexcept
 	{
 		std::ostringstream oss;
 		oss << GetType() << std::endl
@@ -143,34 +143,34 @@ namespace Hazel {
 		return whatBuffer.c_str();
 	}
 
-	const char* DirectXGraphicsContext::HrException::GetType() const noexcept
+	const char* DirectXGraphics::HrException::GetType() const noexcept
 	{
 		return "Hazel Graphics Exception";
 	}
 
-	HRESULT DirectXGraphicsContext::HrException::GetErrorCode() const noexcept
+	HRESULT DirectXGraphics::HrException::GetErrorCode() const noexcept
 	{
 		return hr;
 	}
 
-	std::string DirectXGraphicsContext::HrException::GetErrorString() const noexcept
+	std::string DirectXGraphics::HrException::GetErrorString() const noexcept
 	{
 		return DXGetErrorStringA(hr);
 	}
 
-	std::string DirectXGraphicsContext::HrException::GetErrorDescription() const noexcept
+	std::string DirectXGraphics::HrException::GetErrorDescription() const noexcept
 	{
 		char buf[512];
 		DXGetErrorDescriptionA(hr, buf, sizeof(buf));
 		return buf;
 	}
 
-	std::string DirectXGraphicsContext::HrException::GetErrorInfo() const noexcept
+	std::string DirectXGraphics::HrException::GetErrorInfo() const noexcept
 	{
 		return info;
 	}
 
-	const char* DirectXGraphicsContext::DeviceRemovedException::GetType() const noexcept
+	const char* DirectXGraphics::DeviceRemovedException::GetType() const noexcept
 	{
 		return "Hazel Graphics Exception [Device Removed] (DXGI_ERROR_DEVICE_REMOVED)";
 	}
