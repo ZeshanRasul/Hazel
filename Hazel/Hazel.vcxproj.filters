@@ -189,4 +189,7 @@
     </ClCompile>
     <ClCompile Include="src\hzpch.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="src\Platform\DirectX11\Shaders\VertexShader.hlsl" />
+  </ItemGroup>
 </Project>

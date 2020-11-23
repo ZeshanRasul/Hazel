@@ -2,8 +2,10 @@
 #include "Platform/DirectX11/DirectXGraphics.h"
 
 #include "DXErr.h"
+#include <d3dcompiler.h>
 
 #pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "D3DCompiler.lib")
 
 namespace Hazel {
 
@@ -89,6 +91,7 @@ namespace Hazel {
 	{
 		HRESULT hr;
 
+		// 1) Set Vertex Buffer
 		// Create Vertex Structure
 		struct Vertex
 		{
@@ -125,6 +128,20 @@ namespace Hazel {
 		UINT strides = sizeof(Vertex);
 		UINT offset = 0;
 		m_DeviceContext->IASetVertexBuffers(0, 1, pVertexBuffer.GetAddressOf(), &strides, &offset);
+
+		// 2) Create Vertex Shader
+		// Create a vertex shader and a blob to store the vertex shader file bytecode
+		Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
+		Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
+
+		// Read the compiled shader to a blob
+		GFX_THROW_INFO(D3DReadFileToBlob(L"../Hazel/VertexShader.cso", pBlob.GetAddressOf()));
+
+		// Create the vertex shader using the device
+		GFX_THROW_INFO(m_Device->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, pVertexShader.GetAddressOf()));
+
+		// Bind vertex shader to the Vertex Shader stage pipeline
+		m_DeviceContext->VSSetShader(pVertexShader.Get(), nullptr, 0);
 		
 		// Draw call
 		GFX_THROW_INFO_ONLY(m_DeviceContext->Draw(3u, 0u));
