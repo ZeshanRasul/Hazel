@@ -126,8 +126,8 @@ namespace Hazel {
 		
 		// Bind the Vertex Buffers on the Input Assembler stage of pipeline
 		UINT strides = sizeof(Vertex);
-		UINT offset = 0;
-		m_DeviceContext->IASetVertexBuffers(0, 1, pVertexBuffer.GetAddressOf(), &strides, &offset);
+		UINT offset = 0u;
+		m_DeviceContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &strides, &offset);
 
 		// 2) Create Vertex Shader
 		// Create a vertex shader and a blob to store the vertex shader file bytecode
@@ -174,9 +174,27 @@ namespace Hazel {
 		// Set Viewport(s) to Rasterizer Stage of pipeline
 		m_DeviceContext->RSSetViewports(1u, &vp);
 
+		// 6) Set Primitive Topology type to Input Assembler for our Vertex Buffer
+		m_DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		// Draw call
-		GFX_THROW_INFO_ONLY(m_DeviceContext->Draw(3u, 0u));
+		// 7) Create Input Layout for the Vertex Shader to use when taking our Vertex structure as an input
+		// Create Input Layout 
+		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
+
+		// Create description structure for Input Elements
+		D3D11_INPUT_ELEMENT_DESC inputDesc[] =
+		{
+			{"Position", 0u, DXGI_FORMAT_R32G32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u }
+		};
+			
+		// Create Input Layout 
+		GFX_THROW_INFO(m_Device->CreateInputLayout(inputDesc, (UINT)std::size(inputDesc), pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &pInputLayout));
+
+		// Bind Input Layout to Input Assembler stage of pipeline
+		m_DeviceContext->IASetInputLayout(pInputLayout.Get());
+		
+		// 8) Draw call
+		GFX_THROW_INFO_ONLY(m_DeviceContext->Draw((UINT)std::size(vertices), 0u));
 	}
 
 	void DirectXGraphics::EndFrame()

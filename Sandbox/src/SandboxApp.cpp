@@ -13,6 +13,7 @@ public:
 		Hazel::Application& app = Hazel::Application::Get();
 		Hazel::Window& window = app.GetWindow();
 		Hazel::Graphics& graphics = window.GetGraphics();
+		graphics.ClearBuffer(0.6f, 0.4f, 0.6f);
 		graphics.DrawTestTriangle();
 	}
 

@@ -131,7 +131,6 @@ namespace Hazel {
 
 	void WindowsWindow::OnUpdate()
 	{
-		m_Graphics->ClearBuffer(0.49f, 0.6f, 0.49f);
 		m_Graphics->EndFrame();
 
 	}
