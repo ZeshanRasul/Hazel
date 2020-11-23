@@ -14,10 +14,12 @@ namespace Hazel {
 	#define GFX_EXCEPT(hr) DirectXGraphics::HrException(__LINE__, __FILE__, (hr), infoManager.GetMessages())
 	#define GFX_THROW_INFO(hrcall) infoManager.Set(); if (FAILED(hr = (hrcall))) throw GFX_EXCEPT(hr)
 	#define GFX_DEVICE_REMOVED_EXCEPT(hr) DirectXGraphics::DeviceRemovedException(__LINE__, __FILE__, (hr), infoManager.GetMessages())
+	#define GFX_THROW_INFO_ONLY(call) infoManager.Set(); (call); {auto v = infoManager.GetMessages(); if (!v.empty()) {throw DirectXGraphics::InfoException(__LINE__, __FILE__, v);}}
 #else
 	#define GFX_EXCEPT(hr) DirectXGraphics::HrException(__LINE__, __FILE__, (hr))
 	#define GFX_THROW_INFO(hrcall) GFX_THROW_NOINFO(hrcall)
 	#define GFX_DEVICE_REMOVED_EXCEPT(hr) DirectXGraphics::DeviceRemovedException(__LINE__, __FILE__, (hr))
+	#define GFX_THROW_INFO_ONLY (call) (call)
 #endif
 
 	DirectXGraphics::DirectXGraphics()
@@ -125,7 +127,7 @@ namespace Hazel {
 		m_DeviceContext->IASetVertexBuffers(0, 1, pVertexBuffer.GetAddressOf(), &strides, &offset);
 		
 		// Draw call
-		m_DeviceContext->Draw(3u, 0u);
+		GFX_THROW_INFO_ONLY(m_DeviceContext->Draw(3u, 0u));
 	}
 
 	void DirectXGraphics::EndFrame()
@@ -218,5 +220,43 @@ namespace Hazel {
 	const char* DirectXGraphics::DeviceRemovedException::GetType() const noexcept
 	{
 		return "Hazel Graphics Exception [Device Removed] (DXGI_ERROR_DEVICE_REMOVED)";
+	}
+
+	DirectXGraphics::InfoException::InfoException(int line, const char* file, std::vector<std::string> infoMsgs) noexcept
+		:
+		Exception(line, file)
+	{
+		// Join all info messages with newlines into single string
+		for (const auto& m : infoMsgs)
+		{
+			info += m;
+			info.push_back('\n');
+		}
+
+		// Remove final newline if exists
+		if (!info.empty())
+		{
+			info.pop_back();
+		}
+	}
+
+	const char* DirectXGraphics::InfoException::what() const noexcept
+	{
+		std::ostringstream oss;
+		oss << GetType() << std::endl
+			<< "\n[Error Info]\n" << GetErrorInfo() << std::endl << std::endl;
+		oss << GetOriginString();
+		whatBuffer = oss.str();
+		return whatBuffer.c_str();
+	}
+
+	const char* DirectXGraphics::InfoException::GetType() const noexcept
+	{
+		return "Hazel Graphics Info Exception";
+	}
+
+	std::string DirectXGraphics::InfoException::GetErrorInfo() const noexcept
+	{
+		return info;
 	}
 }
