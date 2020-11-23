@@ -102,9 +102,12 @@ namespace Hazel {
 		// Create an array of vertices for the vertex buffer
 		const Vertex vertices[] = 
 		{ 
-			{0.0f, 0.5f}, 
-			{0.5f, -0.5f}, 
-			{-0.5f, -0.5f} 
+			{0.0f, 0.3f}, 
+			{0.3f, -0.3f}, 
+			{-0.3f, -0.3f},
+			{0.3f, -0.3f},
+			{0.6f, 0.3f},
+			{0.9f, -0.3f}
 		};
 
 		// Create a buffer and description for the buffer
@@ -164,8 +167,8 @@ namespace Hazel {
 		
 		// Create Viewport object
 		D3D11_VIEWPORT vp;
-		vp.Width = 800;
-		vp.Height = 400;
+		vp.Width = 1280;
+		vp.Height = 720;
 		vp.MinDepth = 0;
 		vp.MaxDepth = 1;
 		vp.TopLeftX = 0;
