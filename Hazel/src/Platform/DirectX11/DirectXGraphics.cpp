@@ -157,6 +157,24 @@ namespace Hazel {
 		// Bind Pixel Shader to Pixel Shader stage of pipeline
 		m_DeviceContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
 
+		// 4) Set the Render Target(s)
+		m_DeviceContext->OMSetRenderTargets(1u, m_RenderTargetView.GetAddressOf(), nullptr);
+
+		// 5) Create a Viewport
+		
+		// Create Viewport object
+		D3D11_VIEWPORT vp;
+		vp.Width = 800;
+		vp.Height = 400;
+		vp.MinDepth = 0;
+		vp.MaxDepth = 1;
+		vp.TopLeftX = 0;
+		vp.TopLeftY = 0;
+
+		// Set Viewport(s) to Rasterizer Stage of pipeline
+		m_DeviceContext->RSSetViewports(1u, &vp);
+
+
 		// Draw call
 		GFX_THROW_INFO_ONLY(m_DeviceContext->Draw(3u, 0u));
 	}
