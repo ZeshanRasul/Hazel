@@ -95,20 +95,33 @@ namespace Hazel {
 		// Create Vertex Structure
 		struct Vertex
 		{
-			float x;
-			float y;
-			float r;
-			float g;
-			float b;
+			struct
+			{
+				float x;
+				float y;
+			} position;
+
+			struct
+			{
+				unsigned char r;
+				unsigned char g;
+				unsigned char b;
+				unsigned char a;
+			} colour;
 		};
 
 		// Create an array of vertices for the vertex buffer
-		const Vertex vertices[] = 
+		Vertex vertices[] = 
 		{ 
-			{0.0f, 0.5f, 1.0f, 0.0f, 0.0f}, 
-			{0.5f, -0.5f, 0.0f, 1.0f, 0.0f},
-			{-0.5f, -0.5f, 0.0f, 0.0f, 1.0f},
+			{0.0f, 0.5f, 255, 0, 0, 0}, 
+			{0.5f, -0.5f, 0, 255, 0, 0},
+			{-0.5f, -0.5f, 0, 0, 255, 0},
+			{-0.3f, 0.3f, 0, 255, 0, 0},
+			{0.3f, 0.3f, 0, 0, 255, 0},
+			{0.0f, -0.8f, 255, 0, 0, 0},
 		};
+
+		vertices[2].colour.g = 255;
 
 		// Create a buffer and description for the buffer
 		Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
@@ -131,6 +144,36 @@ namespace Hazel {
 		UINT strides = sizeof(Vertex);
 		UINT offset = 0u;
 		m_DeviceContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &strides, &offset);
+
+		// 1B) Create an Index Buffer
+		// Create an array of indices
+
+		const unsigned short indices[] =
+		{
+			0, 1, 2,
+			0, 2, 3,
+			0, 4, 1,
+			2, 1, 5
+		};
+
+		// Create a buffer and description for the buffer
+		Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
+		D3D11_BUFFER_DESC indexBufferDesc = {};
+		indexBufferDesc.ByteWidth = sizeof(indices);
+		indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		indexBufferDesc.CPUAccessFlags = 0u;
+		indexBufferDesc.MiscFlags = 0u;
+		indexBufferDesc.StructureByteStride = sizeof(unsigned short);
+
+
+		// Create subresource data for the buffer and fill the subresource with the indices array
+		D3D11_SUBRESOURCE_DATA indexSubresourceData = {};
+		indexSubresourceData.pSysMem = indices;
+
+		GFX_THROW_INFO(m_Device->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &pIndexBuffer));
+
+		m_DeviceContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
 
 		// 2) Create Vertex Shader
 		// Create a vertex shader and a blob to store the vertex shader file bytecode
@@ -160,7 +203,7 @@ namespace Hazel {
 		// Bind Pixel Shader to Pixel Shader stage of pipeline
 		m_DeviceContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
 
-		// 4) Set the Render Target(s)
+		// 4) Set the Render Target(s) to the Output Merger stage of the pipeline
 		m_DeviceContext->OMSetRenderTargets(1u, m_RenderTargetView.GetAddressOf(), nullptr);
 
 		// 5) Create a Viewport
@@ -188,7 +231,7 @@ namespace Hazel {
 		D3D11_INPUT_ELEMENT_DESC inputDesc[] =
 		{
 			{"Position", 0u, DXGI_FORMAT_R32G32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u },
-			{"Colour", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 8u, D3D11_INPUT_PER_VERTEX_DATA, 0u }
+			{"Colour", 0u, DXGI_FORMAT_R8G8B8A8_UNORM, 0u, 8u, D3D11_INPUT_PER_VERTEX_DATA, 0u }
 		};
 			
 		// Create Input Layout 
@@ -198,7 +241,7 @@ namespace Hazel {
 		m_DeviceContext->IASetInputLayout(pInputLayout.Get());
 		
 		// 8) Draw call
-		GFX_THROW_INFO_ONLY(m_DeviceContext->Draw((UINT)std::size(vertices), 0u));
+		GFX_THROW_INFO_ONLY(m_DeviceContext->DrawIndexed((UINT)std::size(indices), 0u, 0));
 	}
 
 	void DirectXGraphics::EndFrame()
