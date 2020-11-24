@@ -129,6 +129,7 @@
     </ClInclude>
     <ClInclude Include="src\hzpch.h" />
     <ClInclude Include="src\Hazel\HazelTimer.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">
@@ -201,5 +202,11 @@
     <FxCompile Include="src\Platform\DirectX11\Shaders\VertexShader.hlsl">
       <Filter>Platform\DirectX11\Shaders</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Hazel.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\HazelIcon.ico" />
   </ItemGroup>
 </Project>
