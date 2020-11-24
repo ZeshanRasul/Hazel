@@ -87,7 +87,7 @@ namespace Hazel {
 		m_DeviceContext->ClearRenderTargetView(m_RenderTargetView.Get(), color);
 	}
 
-	void DirectXGraphics::DrawTestTriangle()
+	void DirectXGraphics::DrawTestTriangle(float angle)
 	{
 		HRESULT hr;
 
@@ -118,7 +118,7 @@ namespace Hazel {
 			{-0.5f, -0.5f, 0, 0, 255, 0},
 			{-0.3f, 0.3f, 0, 255, 0, 0},
 			{0.3f, 0.3f, 0, 0, 255, 0},
-			{0.0f, -0.8f, 255, 0, 0, 0},
+			{0.0f, -1.0f, 255, 0, 0, 0},
 		};
 
 		vertices[2].colour.g = 255;
@@ -171,9 +171,51 @@ namespace Hazel {
 		D3D11_SUBRESOURCE_DATA indexSubresourceData = {};
 		indexSubresourceData.pSysMem = indices;
 
+		// Create the buffer
 		GFX_THROW_INFO(m_Device->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &pIndexBuffer));
 
 		m_DeviceContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
+
+		// 1C) Create Constant Buffer
+		// Create Constant Buffer struct
+		struct ConstantBuffer
+		{
+			struct
+			{
+				float element[4][4];
+			} transformation;
+		};
+
+		// Initialize Constant Buffer
+		ConstantBuffer cb =
+		{
+			{
+				(3.0f / 4.0f) * std::cos(angle),	std::sin(angle),	0.0f,	0.0f,
+				(3.0f / 4.0f) * -std::sin(angle),	std::cos(angle),	0.0f,	0.0f,
+				0.0f,								0.0f,				1.0f,	0.0f,
+				0.0f,								0.0f,				0.0f,	1.0f,
+			}
+		};
+
+		// Create a Buffer and description for the Buffer
+		Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer;
+		D3D11_BUFFER_DESC constantBufferDesc;
+		constantBufferDesc.ByteWidth = sizeof(ConstantBuffer);
+		constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		constantBufferDesc.MiscFlags = 0u;
+		constantBufferDesc.StructureByteStride = 0u;
+
+		// Create the subresource and fill it with the matrix data
+		D3D11_SUBRESOURCE_DATA cBufferSubresourceData;
+		cBufferSubresourceData.pSysMem = &cb;
+
+		// Create the buffer
+		m_Device->CreateBuffer(&constantBufferDesc, &cBufferSubresourceData, &constantBuffer);
+
+		// Bind constant buffer to the Vertex Shader stage of pipeline
+		m_DeviceContext->VSSetConstantBuffers(0u, 1u, constantBuffer.GetAddressOf());
 
 		// 2) Create Vertex Shader
 		// Create a vertex shader and a blob to store the vertex shader file bytecode

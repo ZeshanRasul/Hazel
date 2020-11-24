@@ -18,7 +18,7 @@ public:
 
 		const float c = sin(timer.Peek()) / 2.0f + 0.5f;
 		graphics.ClearBuffer(c, c, 0.9f);
-		graphics.DrawTestTriangle();
+		graphics.DrawTestTriangle(timer.Peek());
 	}
 
 	void OnEvent(Hazel::Event& event) override
