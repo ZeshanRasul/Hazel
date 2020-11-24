@@ -105,9 +105,9 @@ namespace Hazel {
 			{0.0f, 0.3f}, 
 			{0.3f, -0.3f}, 
 			{-0.3f, -0.3f},
-			{0.3f, -0.3f},
-			{0.6f, 0.3f},
-			{0.9f, -0.3f}
+			{0.4f, -0.3f},
+			{0.7f, 0.3f},
+			{1.0f, -0.3f}
 		};
 
 		// Create a buffer and description for the buffer
@@ -167,8 +167,8 @@ namespace Hazel {
 		
 		// Create Viewport object
 		D3D11_VIEWPORT vp;
-		vp.Width = 1280;
-		vp.Height = 720;
+		vp.Width = 800;
+		vp.Height = 600;
 		vp.MinDepth = 0;
 		vp.MaxDepth = 1;
 		vp.TopLeftX = 0;

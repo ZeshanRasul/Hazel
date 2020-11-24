@@ -4,6 +4,7 @@
 #include "LayerStack.h"
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
+#include "HazelTimer.h"
 
 #include "Hazel/ImGui/ImGuiLayer.h"
 
@@ -30,6 +31,8 @@ namespace Hazel {
 
 		inline Window& GetWindow() { return *m_Window; }
 
+		inline HazelTimer& GetTimer() { return m_Timer; }
+
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 		
@@ -44,6 +47,9 @@ namespace Hazel {
 		bool m_Running = true;
 
 		LayerStack m_LayerStack;
+
+		HazelTimer m_Timer;
+
 	};
 
 	// To be defined in client, we just need the declaration, linker will find the definition later

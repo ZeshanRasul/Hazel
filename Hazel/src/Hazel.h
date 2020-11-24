@@ -7,7 +7,6 @@
 #include "Hazel/Layer.h"
 #include "Hazel/Log.h"
 
-
 #include "Hazel/KeyCodes.h"
 #include "Hazel/Input.h"
 #include "Hazel/MouseButtonCodes.h"

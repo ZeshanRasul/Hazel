@@ -6,6 +6,7 @@ public:
 	ExampleLayer()
 		: Layer("Example")
 	{
+
 	}
 
 	void OnUpdate() override
@@ -13,7 +14,10 @@ public:
 		Hazel::Application& app = Hazel::Application::Get();
 		Hazel::Window& window = app.GetWindow();
 		Hazel::Graphics& graphics = window.GetGraphics();
-		graphics.ClearBuffer(0.6f, 0.4f, 0.6f);
+		Hazel::HazelTimer& timer = app.GetTimer();
+
+		const float c = sin(timer.Peek()) / 2.0f + 0.5f;
+		graphics.ClearBuffer(c, c, 0.9f);
 		graphics.DrawTestTriangle();
 	}
 
