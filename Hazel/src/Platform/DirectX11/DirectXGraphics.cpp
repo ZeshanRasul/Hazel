@@ -1,6 +1,7 @@
 #include "hzpch.h"
 #include "Platform/DirectX11/DirectXGraphics.h"
 
+#include <DirectXMath.h>
 #include "DXErr.h"
 #include <d3dcompiler.h>
 
@@ -87,7 +88,7 @@ namespace Hazel {
 		m_DeviceContext->ClearRenderTargetView(m_RenderTargetView.Get(), color);
 	}
 
-	void DirectXGraphics::DrawTestTriangle(float angle)
+	void DirectXGraphics::DrawTestTriangle(float angle, float x, float y)
 	{
 		HRESULT hr;
 
@@ -180,21 +181,16 @@ namespace Hazel {
 		// Create Constant Buffer struct
 		struct ConstantBuffer
 		{
-			struct
-			{
-				float element[4][4];
-			} transformation;
+			DirectX::XMMATRIX transformation;
 		};
 
 		// Initialize Constant Buffer
 		ConstantBuffer cb =
 		{
 			{
-				(3.0f / 4.0f) * std::cos(angle),	std::sin(angle),	0.0f,	0.0f,
-				(3.0f / 4.0f) * -std::sin(angle),	std::cos(angle),	0.0f,	0.0f,
-				0.0f,								0.0f,				1.0f,	0.0f,
-				0.0f,								0.0f,				0.0f,	1.0f,
+				DirectX::XMMatrixTranspose(DirectX::XMMatrixRotationZ(angle) * DirectX::XMMatrixScaling(3.0f / 4.0f, 1.0f, 1.0f) * DirectX::XMMatrixTranslation(x, y, 0.0f))
 			}
+			
 		};
 
 		// Create a Buffer and description for the Buffer

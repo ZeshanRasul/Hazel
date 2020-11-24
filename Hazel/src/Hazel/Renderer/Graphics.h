@@ -9,7 +9,7 @@ namespace Hazel {
 		virtual void Init(HWND hWnd) = 0;
 		virtual void ClearBuffer(float red, float green, float blue) = 0;
 		virtual void EndFrame() = 0;
-		virtual void DrawTestTriangle(float angle) = 0;
+		virtual void DrawTestTriangle(float angle, float x, float y) = 0;
 	};
 
 }
