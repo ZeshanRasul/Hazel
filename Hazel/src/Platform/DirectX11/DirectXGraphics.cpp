@@ -97,17 +97,17 @@ namespace Hazel {
 		{
 			float x;
 			float y;
+			float r;
+			float g;
+			float b;
 		};
 
 		// Create an array of vertices for the vertex buffer
 		const Vertex vertices[] = 
 		{ 
-			{0.0f, 0.3f}, 
-			{0.3f, -0.3f}, 
-			{-0.3f, -0.3f},
-			{0.4f, -0.3f},
-			{0.7f, 0.3f},
-			{1.0f, -0.3f}
+			{0.0f, 0.5f, 1.0f, 0.0f, 0.0f}, 
+			{0.5f, -0.5f, 0.0f, 1.0f, 0.0f},
+			{-0.5f, -0.5f, 0.0f, 0.0f, 1.0f},
 		};
 
 		// Create a buffer and description for the buffer
@@ -187,7 +187,8 @@ namespace Hazel {
 		// Create description structure for Input Elements
 		D3D11_INPUT_ELEMENT_DESC inputDesc[] =
 		{
-			{"Position", 0u, DXGI_FORMAT_R32G32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u }
+			{"Position", 0u, DXGI_FORMAT_R32G32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u },
+			{"Colour", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 8u, D3D11_INPUT_PER_VERTEX_DATA, 0u }
 		};
 			
 		// Create Input Layout 
