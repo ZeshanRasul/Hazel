@@ -108,8 +108,7 @@ namespace Hazel {
 		}
 
 		ShowWindow(m_Hwnd, SW_SHOWDEFAULT);
-
-	
+			
 		m_Graphics = new DirectXGraphics();
 		m_Graphics->Init(m_Hwnd);
 		 

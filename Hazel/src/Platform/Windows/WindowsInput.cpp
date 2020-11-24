@@ -16,7 +16,7 @@ namespace Hazel
 		return keystates[keycode];
 	}
 
-	WindowsInput::InputKeyboardEvent WindowsInput::ReadKeyImpl()
+	std::optional<WindowsInput::InputKeyboardEvent> WindowsInput::ReadKeyImpl()
 	{
 		if (keybuffer.size() > 0)
 		{
@@ -24,11 +24,7 @@ namespace Hazel
 			keybuffer.pop();
 			return event;
 		}
-		else
-		{
-			// TODO return optional instead
-			return WindowsInput::InputKeyboardEvent();
-		}
+		return {};
 	}
 
 	bool WindowsInput::IsKeyEmptyImpl()
@@ -36,7 +32,7 @@ namespace Hazel
 		return keybuffer.empty();
 	}
 
-	char WindowsInput::ReadCharImpl()
+	std::optional<char> WindowsInput::ReadCharImpl()
 	{
 		if (charbuffer.size() > 0)
 		{
@@ -44,10 +40,7 @@ namespace Hazel
 			charbuffer.pop();
 			return charcode;
 		} 
-		else
-		{
-			return 0;
-		}
+		return {};
 
 	}
 
@@ -156,7 +149,7 @@ namespace Hazel
 	}
 
 	
-	WindowsInput::InputMouseEvent WindowsInput::ReadMouseImpl()
+	std::optional<WindowsInput::InputMouseEvent> WindowsInput::ReadMouseImpl()
 	{
 		if (mouseBuffer.size() > 0)
 		{
@@ -164,10 +157,7 @@ namespace Hazel
 			mouseBuffer.pop();
 			return event;
 		}
-		else
-		{
-			return WindowsInput::InputMouseEvent();
-		}
+		return {};
 	}
 	
 

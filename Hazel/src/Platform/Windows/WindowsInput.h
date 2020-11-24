@@ -14,10 +14,10 @@ namespace Hazel {
 		///////////////////////
 
 		virtual bool IsKeyPressedImpl(unsigned char keycode) override;
-		virtual InputKeyboardEvent ReadKeyImpl() override;
+		virtual std::optional<InputKeyboardEvent> ReadKeyImpl() override;
 		virtual bool IsKeyEmptyImpl() override;
 		virtual void FlushKeyImpl() override;
-		virtual char ReadCharImpl() override;
+		virtual std::optional<char> ReadCharImpl() override;
 		virtual bool IsCharEmptyImpl() override;
 		virtual void FlushCharImpl() override;
 		virtual void FlushKeyboardImpl() override;
@@ -35,7 +35,7 @@ namespace Hazel {
 		virtual bool IsInWindowImpl() override;
 		virtual bool IsLeftPressedImpl() override;
 		virtual bool IsRightPressedImpl() override;
-		virtual InputMouseEvent ReadMouseImpl() override;
+		virtual std::optional<InputMouseEvent> ReadMouseImpl() override;
 		virtual bool IsMouseEmptyImpl() override
 		{
 			//return mouseBuffer.empty();

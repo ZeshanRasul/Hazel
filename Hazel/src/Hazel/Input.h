@@ -147,10 +147,10 @@ namespace Hazel {
 		///////////////////////
 
 		inline static bool IsKeyPressed(unsigned char keycode) { return s_Instance->IsKeyPressedImpl(keycode); }
-		inline static InputKeyboardEvent ReadKey() { return s_Instance->ReadKeyImpl(); }
+		inline static std::optional<InputKeyboardEvent> ReadKey() { return s_Instance->ReadKeyImpl(); }
 		inline static bool IsKeyEmpty() { return s_Instance->IsKeyEmptyImpl(); }
 		inline static void FlushKey() { return s_Instance->FlushKeyImpl(); }
-		inline static char ReadChar() { return s_Instance->ReadCharImpl(); }
+		inline static std::optional<char> ReadChar() { return s_Instance->ReadCharImpl(); }
 		inline static bool IsCharEmpty() { return s_Instance->IsCharEmptyImpl(); }
 		inline static void FlushChar() { return s_Instance->FlushCharImpl(); }
 		inline static void FlushKeyboard()	   { return s_Instance->FlushKeyboardImpl(); }
@@ -168,7 +168,7 @@ namespace Hazel {
 		inline static bool IsInWindow() { return s_Instance->IsInWindowImpl(); }
 		inline static bool IsLeftPressed() { return s_Instance->IsLeftPressedImpl(); }
 		inline static bool IsRightPressed() { return s_Instance->IsRightPressedImpl(); }
-		inline static InputMouseEvent ReadMouse() { return s_Instance->ReadMouseImpl(); }
+		inline static std::optional<InputMouseEvent> ReadMouse() { return s_Instance->ReadMouseImpl(); }
 		inline static bool IsMouseEmpty() { return s_Instance->IsMouseEmptyImpl(); }
 		inline static void FlushMouse() { return s_Instance->FlushMouseImpl(); }
 		// TODO Check if TrimBuffer needs to be implemented here.
@@ -179,10 +179,10 @@ namespace Hazel {
 		///////////////////////
 
 		virtual bool IsKeyPressedImpl(unsigned char keycode) = 0;
-		virtual InputKeyboardEvent ReadKeyImpl() = 0;
+		virtual std::optional<InputKeyboardEvent> ReadKeyImpl() = 0;
 		virtual bool IsKeyEmptyImpl() = 0;
 		virtual void FlushKeyImpl() = 0;
-		virtual char ReadCharImpl() = 0;
+		virtual std::optional<char> ReadCharImpl() = 0;
 		virtual bool IsCharEmptyImpl() = 0;
 		virtual void FlushCharImpl() = 0;
 		virtual void FlushKeyboardImpl() = 0;
@@ -200,7 +200,7 @@ namespace Hazel {
 		virtual bool IsInWindowImpl() = 0;
 		virtual bool IsLeftPressedImpl() = 0;
 		virtual bool IsRightPressedImpl() = 0;
-		virtual InputMouseEvent ReadMouseImpl() = 0;
+		virtual std::optional<InputMouseEvent> ReadMouseImpl() = 0;
 		virtual bool IsMouseEmptyImpl() = 0;
 		virtual void FlushMouseImpl() = 0; 
 

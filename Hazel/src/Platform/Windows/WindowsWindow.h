@@ -72,7 +72,6 @@ namespace Hazel {
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
 
-
 	private:
 		struct WindowData
 		{
@@ -89,7 +88,7 @@ namespace Hazel {
 		static LRESULT CALLBACK HandleMessageSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 		static LRESULT CALLBACK HandleMessagThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 		LRESULT HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
-		
+	
 	private:
 		void* m_Window;
 

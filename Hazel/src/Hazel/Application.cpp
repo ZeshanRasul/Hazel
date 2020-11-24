@@ -5,6 +5,8 @@
 
 #include "Platform/Windows/WindowsWindow.h"
 
+#include "Input.h"
+
 
 
 namespace Hazel {
@@ -74,6 +76,7 @@ namespace Hazel {
 			}
 			m_ImGuiLayer->End();
 		*/
+
 			if (const auto ecode = WindowsWindow::ProcessMessages())
 			{
 				return *ecode;
