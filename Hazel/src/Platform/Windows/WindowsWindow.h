@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Hazel/Window.h"
-#include "Hazel/Renderer/Graphics.h"
+#include "Platform/DirectX11/DirectXGraphics.h"
 #include "Hazel/HazelException.h"
 
 namespace Hazel {
@@ -68,7 +68,7 @@ namespace Hazel {
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
 		static std::optional<int> ProcessMessages() noexcept;
-		virtual Graphics& GetGraphics() const override;
+		virtual DirectXGraphics& GetGraphics() const override;
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
 
@@ -94,7 +94,7 @@ namespace Hazel {
 
 		WindowData m_Data;
 
-		Graphics* m_Graphics;
+		DirectXGraphics* m_Graphics;
 
 		HWND m_Hwnd;
 	};

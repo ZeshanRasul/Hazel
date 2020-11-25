@@ -73,24 +73,6 @@
     <ClInclude Include="src\Hazel\MouseButtonCodes.h">
       <Filter>Hazel</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Renderer\Graphics.h">
-      <Filter>Hazel\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Renderer\IndexBuffer.h">
-      <Filter>Hazel\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Renderer\RenderCommand.h">
-      <Filter>Hazel\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Renderer\Renderer.h">
-      <Filter>Hazel\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Renderer\RendererAPI.h">
-      <Filter>Hazel\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Renderer\VertexBuffer.h">
-      <Filter>Hazel\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\Hazel\Window.h">
       <Filter>Hazel</Filter>
     </ClInclude>
@@ -107,15 +89,6 @@
       <Filter>Platform\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\DirectX11\DXTrace.inl">
-      <Filter>Platform\DirectX11</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DirectX11\DirectX11IndexBuffer.h">
-      <Filter>Platform\DirectX11</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DirectX11\DirectX11RendererAPI.h">
-      <Filter>Platform\DirectX11</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DirectX11\DirectX11VertexBuffer.h">
       <Filter>Platform\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\DirectX11\DirectXGraphics.h">
@@ -153,34 +126,10 @@
     <ClCompile Include="src\Hazel\Log.cpp">
       <Filter>Hazel</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Renderer\IndexBuffer.cpp">
-      <Filter>Hazel\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\Renderer\RenderCommand.cpp">
-      <Filter>Hazel\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\Renderer\Renderer.cpp">
-      <Filter>Hazel\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\Renderer\RendererAPI.cpp">
-      <Filter>Hazel\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\Renderer\VertexBuffer.cpp">
-      <Filter>Hazel\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\Platform\DirectX11\DXErr.cpp">
       <Filter>Platform\DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\DirectX11\DXGIInfoManager.cpp">
-      <Filter>Platform\DirectX11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DirectX11\DirectX11IndexBuffer.cpp">
-      <Filter>Platform\DirectX11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DirectX11\DirectX11RendererAPI.cpp">
-      <Filter>Platform\DirectX11</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DirectX11\DirectX11VertexBuffer.cpp">
       <Filter>Platform\DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\DirectX11\DirectXGraphics.cpp">

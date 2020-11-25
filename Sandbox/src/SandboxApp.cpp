@@ -13,7 +13,7 @@ public:
 	{
 		Hazel::Application& app = Hazel::Application::Get();
 		Hazel::Window& window = app.GetWindow();
-		Hazel::Graphics& graphics = window.GetGraphics();
+		Hazel::DirectXGraphics& graphics = window.GetGraphics();
 		Hazel::HazelTimer& timer = app.GetTimer();
 
 		const float c = sin(timer.Peek()) / 2.0f + 0.5f;

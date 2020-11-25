@@ -4,7 +4,7 @@
 
 #include "Hazel/Core.h"
 #include "Hazel/Events/Event.h"
-#include "Hazel/Renderer/Graphics.h"
+#include "Platform/DirectX11/DirectXGraphics.h"
 
 namespace Hazel {
 
@@ -41,7 +41,7 @@ namespace Hazel {
 
 		virtual void* GetNativeWindow() const = 0;
 
-		virtual Graphics& GetGraphics() const = 0;
+		virtual DirectXGraphics& GetGraphics() const = 0;
 
 		static Window* Create(const WindowProps& props = WindowProps());
 
