@@ -77,11 +77,13 @@ project "Hazel"
 		filter("files:**PixelShader.hlsl")
 			shadertype("Pixel")
 			shaderobjectfileoutput("PixelShader.cso")
+			shadermodel("4.0")
 
 		filter("files:**VertexShader.hlsl")
 			shadertype("Vertex")
-			shaderobjectfileoutput("VertexShader.cso")	
-		
+			shaderobjectfileoutput("VertexShader.cso")
+			shadermodel("4.0")
+					
 		filter "configurations:Debug"
 			defines 
 			{
