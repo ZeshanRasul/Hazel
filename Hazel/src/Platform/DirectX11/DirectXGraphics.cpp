@@ -248,8 +248,8 @@ namespace Hazel {
 		
 		// Create Viewport object
 		D3D11_VIEWPORT vp;
-		vp.Width = 800;
-		vp.Height = 600;
+		vp.Width = 1280;
+		vp.Height = 960;
 		vp.MinDepth = 0;
 		vp.MaxDepth = 1;
 		vp.TopLeftX = 0;
