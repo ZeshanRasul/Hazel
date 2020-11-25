@@ -75,6 +75,7 @@ namespace Hazel {
 		Microsoft::WRL::ComPtr<IDXGISwapChain> m_SwapChain = nullptr;
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext> m_DeviceContext = nullptr;
 		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_RenderTargetView = nullptr;
+		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_DepthStencilView = nullptr;
 	};
 
 }

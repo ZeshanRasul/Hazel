@@ -80,15 +80,57 @@ namespace Hazel {
 		GFX_THROW_INFO(m_SwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
 		GFX_THROW_INFO(m_Device->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &m_RenderTargetView));
 
+		// Create Depth Stencil State
+		D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+		dsDesc.DepthEnable = true;
+		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+		// Create Depth Stencil State with Device
+		Microsoft::WRL::ComPtr<ID3D11DepthStencilState> pDSState;
+		GFX_THROW_INFO(m_Device->CreateDepthStencilState(&dsDesc, &pDSState));
+
+		// Set Depth Stencil State to Output Merger stage of pipeline
+		m_DeviceContext->OMSetDepthStencilState(pDSState.Get(), 1u);
+
+		// Create Depth Stencil texture
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
+		D3D11_TEXTURE2D_DESC dsTexDesc = {};
+		dsTexDesc.Width = 1280u;
+		dsTexDesc.Height = 960u;
+		dsTexDesc.MipLevels = 1u;
+		dsTexDesc.ArraySize = 1u;
+		dsTexDesc.Format = DXGI_FORMAT_D32_FLOAT;
+		dsTexDesc.SampleDesc.Count = 1u;
+		dsTexDesc.SampleDesc.Quality = 0u;
+		dsTexDesc.Usage = D3D11_USAGE_DEFAULT;
+		dsTexDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+		GFX_THROW_INFO(m_Device->CreateTexture2D(&dsTexDesc, nullptr, &pDepthStencil));
+
+		// Create View of Depth Stencil Texture
+
+		// Create Depth Stencil View Description
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsViewDesc = {};
+		dsViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
+		dsViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		dsViewDesc.Texture2D.MipSlice = 0u;
+
+		GFX_THROW_INFO(m_Device->CreateDepthStencilView(pDepthStencil.Get(), &dsViewDesc, &m_DepthStencilView));
+
+		// Bind Depth Stencil View to Output Merger stage of pipeline
+
+		m_DeviceContext->OMSetRenderTargets(1, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
 	}
 
 	void DirectXGraphics::ClearBuffer(float red, float green, float blue)
 	{
 		const float color[] = { red, green, blue, 1.0f };
 		m_DeviceContext->ClearRenderTargetView(m_RenderTargetView.Get(), color);
+		m_DeviceContext->ClearDepthStencilView(m_DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
 	}
 
-	void DirectXGraphics::DrawTestTriangle(float angle, float x, float y)
+	void DirectXGraphics::DrawTestTriangle(float angle, float x, float z)
 	{
 		HRESULT hr;
 
@@ -187,7 +229,7 @@ namespace Hazel {
 				DirectX::XMMatrixTranspose(
 											DirectX::XMMatrixRotationZ(angle) *
 											DirectX::XMMatrixRotationX(angle) *
-											DirectX::XMMatrixTranslation(x, y, 4.0f) *
+											DirectX::XMMatrixTranslation(x, 0.0f, z + 4.0f) *
 											DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 10.0f))
 			}
 
@@ -287,9 +329,6 @@ namespace Hazel {
 
 		// Bind Pixel Shader to Pixel Shader stage of pipeline
 		m_DeviceContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
-
-		// 4) Set the Render Target(s) to the Output Merger stage of the pipeline
-		m_DeviceContext->OMSetRenderTargets(1u, m_RenderTargetView.GetAddressOf(), nullptr);
 
 		// 5) Create a Viewport
 		
