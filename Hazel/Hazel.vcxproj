@@ -208,6 +208,7 @@
     <FxCompile Include="src\Platform\DirectX11\Shaders\PixelShader.hlsl">
       <ShaderType>Pixel</ShaderType>
       <ObjectFileOutput>PixelShader.cso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="src\Platform\DirectX11\Shaders\VertexShader.hlsl">
       <ShaderType>Vertex</ShaderType>

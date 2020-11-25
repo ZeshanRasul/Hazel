@@ -100,29 +100,23 @@ namespace Hazel {
 			{
 				float x;
 				float y;
+				float z;
 			} position;
 
-			struct
-			{
-				unsigned char r;
-				unsigned char g;
-				unsigned char b;
-				unsigned char a;
-			} colour;
 		};
 
 		// Create an array of vertices for the vertex buffer
-		Vertex vertices[] = 
-		{ 
-			{0.0f, 0.5f, 255, 0, 0, 0}, 
-			{0.5f, -0.5f, 0, 255, 0, 0},
-			{-0.5f, -0.5f, 0, 0, 255, 0},
-			{-0.3f, 0.3f, 0, 255, 0, 0},
-			{0.3f, 0.3f, 0, 0, 255, 0},
-			{0.0f, -1.0f, 255, 0, 0, 0},
+		Vertex vertices[] =
+		{
+			{ -1.0f,-1.0f,-1.0f	 },
+			{ 1.0f,-1.0f,-1.0f	 },
+			{ -1.0f,1.0f,-1.0f	 },
+			{ 1.0f,1.0f,-1.0f	 },
+			{ -1.0f,-1.0f,1.0f	 },
+			{ 1.0f,-1.0f,1.0f	 },
+			{ -1.0f,1.0f,1.0f	 },
+			{ 1.0f,1.0f,1.0f	 },
 		};
-
-		vertices[2].colour.g = 255;
 
 		// Create a buffer and description for the buffer
 		Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
@@ -137,10 +131,10 @@ namespace Hazel {
 		// Create a subresource and fill that subresource with the array of vertices
 		D3D11_SUBRESOURCE_DATA subresourceData = {};
 		subresourceData.pSysMem = vertices;
-		
+
 		// Create the buffer
 		GFX_THROW_INFO(m_Device->CreateBuffer(&bufferDesc, &subresourceData, &pVertexBuffer));
-		
+
 		// Bind the Vertex Buffers on the Input Assembler stage of pipeline
 		UINT strides = sizeof(Vertex);
 		UINT offset = 0u;
@@ -151,10 +145,12 @@ namespace Hazel {
 
 		const unsigned short indices[] =
 		{
-			0, 1, 2,
-			0, 2, 3,
-			0, 4, 1,
-			2, 1, 5
+			0,2,1, 2,3,1,
+			1,3,5, 3,7,5,
+			2,6,3, 3,6,7,
+			4,5,7, 4,7,6,
+			0,4,2, 2,4,6,
+			0,1,4, 1,5,4
 		};
 
 		// Create a buffer and description for the buffer
@@ -177,7 +173,7 @@ namespace Hazel {
 
 		m_DeviceContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
 
-		// 1C) Create Constant Buffer
+		// 1C) Create Constant Buffer for Matrix multiplication
 		// Create Constant Buffer struct
 		struct ConstantBuffer
 		{
@@ -188,15 +184,19 @@ namespace Hazel {
 		ConstantBuffer cb =
 		{
 			{
-				DirectX::XMMatrixTranspose(DirectX::XMMatrixRotationZ(angle) * DirectX::XMMatrixScaling(3.0f / 4.0f, 1.0f, 1.0f) * DirectX::XMMatrixTranslation(x, y, 0.0f))
+				DirectX::XMMatrixTranspose(
+											DirectX::XMMatrixRotationZ(angle) *
+											DirectX::XMMatrixRotationX(angle) *
+											DirectX::XMMatrixTranslation(x, y, 4.0f) *
+											DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 10.0f))
 			}
-			
+
 		};
 
 		// Create a Buffer and description for the Buffer
 		Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer;
 		D3D11_BUFFER_DESC constantBufferDesc;
-		constantBufferDesc.ByteWidth = sizeof(ConstantBuffer);
+		constantBufferDesc.ByteWidth = sizeof(cb);
 		constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -212,6 +212,53 @@ namespace Hazel {
 
 		// Bind constant buffer to the Vertex Shader stage of pipeline
 		m_DeviceContext->VSSetConstantBuffers(0u, 1u, constantBuffer.GetAddressOf());
+
+		// 1D) Create Constant Buffer for cube face colours
+		// Create struct for Constant Buffer
+		struct ConstantBufferColour
+		{
+			struct
+			{
+				float r;
+				float g;
+				float b;
+				float a;
+			} face_colours[6];
+		};
+
+		// Initialize Constant Buffer
+		ConstantBufferColour cbColour =
+		{
+			{
+				{1.0f,0.0f,1.0f},
+				{1.0f,0.0f,0.0f},
+				{0.0f,1.0f,0.0f},
+				{0.0f,0.0f,1.0f},
+				{1.0f,1.0f,0.0f},
+				{0.0f,1.0f,1.0f},
+			}
+		};
+
+		// Create Buffer and Description for Buffer
+		Microsoft::WRL::ComPtr<ID3D11Buffer> cBufferColour;
+		D3D11_BUFFER_DESC cBufferColourDesc = {};
+		cBufferColourDesc.ByteWidth = sizeof(cbColour);
+		cBufferColourDesc.Usage = D3D11_USAGE_DEFAULT;
+		cBufferColourDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		cBufferColourDesc.CPUAccessFlags = 0u;
+		cBufferColourDesc.MiscFlags = 0u;
+		cBufferColourDesc.StructureByteStride = 0u;
+
+		// Create Subresource data for Buffer
+		D3D11_SUBRESOURCE_DATA cbColourSD = {};
+		cbColourSD.pSysMem = &cbColour;
+
+		// Create Buffer with Device
+		GFX_THROW_INFO(m_Device->CreateBuffer(&cBufferColourDesc, &cbColourSD, &cBufferColour));
+
+		// Bind Constant Buffer to Pixel Shader stage of pipeline
+		m_DeviceContext->PSSetConstantBuffers(0u, 1u, cBufferColour.GetAddressOf());
+
 
 		// 2) Create Vertex Shader
 		// Create a vertex shader and a blob to store the vertex shader file bytecode
@@ -268,8 +315,7 @@ namespace Hazel {
 		// Create description structure for Input Elements
 		D3D11_INPUT_ELEMENT_DESC inputDesc[] =
 		{
-			{"Position", 0u, DXGI_FORMAT_R32G32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u },
-			{"Colour", 0u, DXGI_FORMAT_R8G8B8A8_UNORM, 0u, 8u, D3D11_INPUT_PER_VERTEX_DATA, 0u }
+			{"Position", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u }
 		};
 			
 		// Create Input Layout 
