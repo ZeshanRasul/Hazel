@@ -326,6 +326,8 @@ namespace Hazel {
 				const POINTS pt = MAKEPOINTS(lParam);
 				Input::OnLeftPressed(pt.x, pt.y);
 
+				SetForegroundWindow(m_Hwnd);
+
 				WindowsWindow* const p_Wnd = reinterpret_cast<WindowsWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 				WindowData& data = p_Wnd->m_Data;
 
