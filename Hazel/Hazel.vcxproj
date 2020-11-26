@@ -187,9 +187,11 @@
     <ClInclude Include="src\Platform\DirectX11\DXGetErrorString.inl" />
     <ClInclude Include="src\Platform\DirectX11\DXTrace.inl" />
     <ClInclude Include="src\Platform\DirectX11\DirectXGraphics.h" />
+    <ClInclude Include="src\Platform\DirectX11\GraphicsThrowMacros.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\hzpch.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsThrowMacros.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp" />

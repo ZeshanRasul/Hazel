@@ -7,12 +7,11 @@
 #include "Hazel/Events/MouseEvent.h"
 
 #include "Hazel/Input.h"
-
 #include "Hazel/KeyCodes.h"
-
 #include "Hazel/Application.h"
 
 #include "Platform/DirectX11/DirectXGraphics.h"
+#include "Platform/Windows/WindowsThrowMacros.h"
 
 #include "Hazel/resource.h"
 

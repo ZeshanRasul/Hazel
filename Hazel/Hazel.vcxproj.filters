@@ -112,6 +112,10 @@
     <ClInclude Include="src\hzpch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\Windows\WindowsThrowMacros.h">
+      <Filter>src\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\GraphicsThrowMacros.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">
