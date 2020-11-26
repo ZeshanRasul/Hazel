@@ -18,8 +18,9 @@ public:
 
 		const float c = sin(timer.Peek()) / 2.0f + 0.5f;
 		graphics.ClearBuffer(c, c, 0.9f);
-		graphics.DrawTestTriangle(timer.Peek(), 0.0f, 0.0f);
 		graphics.DrawTestTriangle(timer.Peek(), (float)Hazel::Input::GetMousePosX() / 640.0f - 1.0f, (float)-Hazel::Input::GetMousePosY() / 480.0f + 1.0f);
+		graphics.EndFrame();
+
 	}
 
 	void OnEvent(Hazel::Event& event) override

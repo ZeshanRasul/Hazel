@@ -38,7 +38,10 @@ project "Hazel"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/src/**.inl",
-		"%{prj.name}/src/**.hlsl"
+		"%{prj.name}/src/**.hlsl",
+		"%{prj.name}/resource.h",
+		"%{prj.name}/Hazel.rc",
+		"%{prj.name}/Hazel.aps"
 
 	}
 
@@ -124,7 +127,10 @@ project "Sandbox"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/resource.h",
+		"%{prj.name}/Sandbox.rc",
+		"%{prj.name}/Sandbox.aps"
 	}
 
 	includedirs

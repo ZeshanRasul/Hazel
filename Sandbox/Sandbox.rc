@@ -44,16 +44,6 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
-#endif    // English (United States) resources
-/////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
-// English (United Kingdom) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
-#pragma code_page(1252)
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -64,7 +54,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 // remains consistent on all systems.
 IDI_ICON1               ICON                    "C:\\dev\\Hazel\\HazelIcon.ico"
 
-#endif    // English (United Kingdom) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

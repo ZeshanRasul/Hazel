@@ -14,7 +14,7 @@
 
 #include "Platform/DirectX11/DirectXGraphics.h"
 
-#include "../resource.h"
+#include "Hazel/resource.h"
 
 namespace Hazel {
 
@@ -125,7 +125,6 @@ namespace Hazel {
 
 	void WindowsWindow::OnUpdate()
 	{
-		m_Graphics->EndFrame();
 
 	}
 
