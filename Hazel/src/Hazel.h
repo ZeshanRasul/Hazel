@@ -10,6 +10,8 @@
 #include "Hazel/Input.h"
 #include "Hazel/MouseButtonCodes.h"
 
+#include "Platform/DirectX11/Box.h"
+
 #include "Platform/DirectX11/DirectXGraphics.h"
 
 // --- Entry Point -------------------

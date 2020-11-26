@@ -107,217 +107,7 @@ namespace Hazel {
 		// Bind Depth Stencil View to Output Merger stage of pipeline
 
 		m_DeviceContext->OMSetRenderTargets(1, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
-	}
 
-	void DirectXGraphics::ClearBuffer(float red, float green, float blue)
-	{
-		const float color[] = { red, green, blue, 1.0f };
-		m_DeviceContext->ClearRenderTargetView(m_RenderTargetView.Get(), color);
-		m_DeviceContext->ClearDepthStencilView(m_DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
-	}
-
-	void DirectXGraphics::DrawTestTriangle(float angle, float x, float z)
-	{
-		HRESULT hr;
-
-		// 1) Set Vertex Buffer
-		// Create Vertex Structure
-		struct Vertex
-		{
-			struct
-			{
-				float x;
-				float y;
-				float z;
-			} position;
-
-		};
-
-		// Create an array of vertices for the vertex buffer
-		Vertex vertices[] =
-		{
-			{ -1.0f,-1.0f,-1.0f	 },
-			{ 1.0f,-1.0f,-1.0f	 },
-			{ -1.0f,1.0f,-1.0f	 },
-			{ 1.0f,1.0f,-1.0f	 },
-			{ -1.0f,-1.0f,1.0f	 },
-			{ 1.0f,-1.0f,1.0f	 },
-			{ -1.0f,1.0f,1.0f	 },
-			{ 1.0f,1.0f,1.0f	 },
-		};
-
-		// Create a buffer and description for the buffer
-		Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
-		D3D11_BUFFER_DESC bufferDesc = {};
-		bufferDesc.ByteWidth = sizeof(vertices);
-		bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		bufferDesc.CPUAccessFlags = 0u;
-		bufferDesc.MiscFlags = 0u;
-		bufferDesc.StructureByteStride = sizeof(Vertex);
-
-		// Create a subresource and fill that subresource with the array of vertices
-		D3D11_SUBRESOURCE_DATA subresourceData = {};
-		subresourceData.pSysMem = vertices;
-
-		// Create the buffer
-		GFX_THROW_INFO(m_Device->CreateBuffer(&bufferDesc, &subresourceData, &pVertexBuffer));
-
-		// Bind the Vertex Buffers on the Input Assembler stage of pipeline
-		UINT strides = sizeof(Vertex);
-		UINT offset = 0u;
-		m_DeviceContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &strides, &offset);
-
-		// 1B) Create an Index Buffer
-		// Create an array of indices
-
-		const unsigned short indices[] =
-		{
-			0,2,1, 2,3,1,
-			1,3,5, 3,7,5,
-			2,6,3, 3,6,7,
-			4,5,7, 4,7,6,
-			0,4,2, 2,4,6,
-			0,1,4, 1,5,4
-		};
-
-		// Create a buffer and description for the buffer
-		Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
-		D3D11_BUFFER_DESC indexBufferDesc = {};
-		indexBufferDesc.ByteWidth = sizeof(indices);
-		indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-		indexBufferDesc.CPUAccessFlags = 0u;
-		indexBufferDesc.MiscFlags = 0u;
-		indexBufferDesc.StructureByteStride = sizeof(unsigned short);
-
-
-		// Create subresource data for the buffer and fill the subresource with the indices array
-		D3D11_SUBRESOURCE_DATA indexSubresourceData = {};
-		indexSubresourceData.pSysMem = indices;
-
-		// Create the buffer
-		GFX_THROW_INFO(m_Device->CreateBuffer(&indexBufferDesc, &indexSubresourceData, &pIndexBuffer));
-
-		m_DeviceContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
-
-		// 1C) Create Constant Buffer for Matrix multiplication
-		// Create Constant Buffer struct
-		struct ConstantBuffer
-		{
-			DirectX::XMMATRIX transformation;
-		};
-
-		// Initialize Constant Buffer
-		ConstantBuffer cb =
-		{
-			{
-				DirectX::XMMatrixTranspose(
-											DirectX::XMMatrixRotationZ(angle) *
-											DirectX::XMMatrixRotationX(angle) *
-											DirectX::XMMatrixTranslation(x, 0.0f, z + 4.0f) *
-											DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 10.0f))
-			}
-
-		};
-
-		// Create a Buffer and description for the Buffer
-		Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer;
-		D3D11_BUFFER_DESC constantBufferDesc;
-		constantBufferDesc.ByteWidth = sizeof(cb);
-		constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		constantBufferDesc.MiscFlags = 0u;
-		constantBufferDesc.StructureByteStride = 0u;
-
-		// Create the subresource and fill it with the matrix data
-		D3D11_SUBRESOURCE_DATA cBufferSubresourceData;
-		cBufferSubresourceData.pSysMem = &cb;
-
-		// Create the buffer
-		m_Device->CreateBuffer(&constantBufferDesc, &cBufferSubresourceData, &constantBuffer);
-
-		// Bind constant buffer to the Vertex Shader stage of pipeline
-		m_DeviceContext->VSSetConstantBuffers(0u, 1u, constantBuffer.GetAddressOf());
-
-		// 1D) Create Constant Buffer for cube face colours
-		// Create struct for Constant Buffer
-		struct ConstantBufferColour
-		{
-			struct
-			{
-				float r;
-				float g;
-				float b;
-				float a;
-			} face_colours[6];
-		};
-
-		// Initialize Constant Buffer
-		ConstantBufferColour cbColour =
-		{
-			{
-				{1.0f,0.0f,1.0f},
-				{1.0f,0.0f,0.0f},
-				{0.0f,1.0f,0.0f},
-				{0.0f,0.0f,1.0f},
-				{1.0f,1.0f,0.0f},
-				{0.0f,1.0f,1.0f},
-			}
-		};
-
-		// Create Buffer and Description for Buffer
-		Microsoft::WRL::ComPtr<ID3D11Buffer> cBufferColour;
-		D3D11_BUFFER_DESC cBufferColourDesc = {};
-		cBufferColourDesc.ByteWidth = sizeof(cbColour);
-		cBufferColourDesc.Usage = D3D11_USAGE_DEFAULT;
-		cBufferColourDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		cBufferColourDesc.CPUAccessFlags = 0u;
-		cBufferColourDesc.MiscFlags = 0u;
-		cBufferColourDesc.StructureByteStride = 0u;
-
-		// Create Subresource data for Buffer
-		D3D11_SUBRESOURCE_DATA cbColourSD = {};
-		cbColourSD.pSysMem = &cbColour;
-
-		// Create Buffer with Device
-		GFX_THROW_INFO(m_Device->CreateBuffer(&cBufferColourDesc, &cbColourSD, &cBufferColour));
-
-		// Bind Constant Buffer to Pixel Shader stage of pipeline
-		m_DeviceContext->PSSetConstantBuffers(0u, 1u, cBufferColour.GetAddressOf());
-
-
-		// 2) Create Vertex Shader
-		// Create a vertex shader and a blob to store the vertex shader file bytecode
-		Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
-		Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
-
-		// Read the compiled shader to a blob
-		GFX_THROW_INFO(D3DReadFileToBlob(L"../Hazel/VertexShader.cso", &pBlob));
-
-		// Create the Vertex Shader using the device
-		GFX_THROW_INFO(m_Device->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader));
-
-		// Bind Vertex Shader to the Vertex Shader stage pipeline
-		m_DeviceContext->VSSetShader(pVertexShader.Get(), nullptr, 0u);
-
-		// 3) Create Pixel Shader
-		// Create a Pixel Shader and a blob to hold the bytecode from the PixelShader.cso
-		Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
-		Microsoft::WRL::ComPtr<ID3DBlob> pBlobPS;
-		
-		// Read the compiled Pixel Shader to the Pixel Shader blob
-		GFX_THROW_INFO(D3DReadFileToBlob(L"../Hazel/PixelShader.cso", &pBlobPS));
-
-		// Create the Pixel Shader using the blob to fill the Pixel Shader D3D ptr
-		GFX_THROW_INFO(m_Device->CreatePixelShader(pBlobPS->GetBufferPointer(), pBlobPS->GetBufferSize(), nullptr, &pPixelShader));
-
-		// Bind Pixel Shader to Pixel Shader stage of pipeline
-		m_DeviceContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
-
-		// 5) Create a Viewport
-		
 		// Create Viewport object
 		D3D11_VIEWPORT vp;
 		vp.Width = 1280;
@@ -330,27 +120,28 @@ namespace Hazel {
 		// Set Viewport(s) to Rasterizer Stage of pipeline
 		m_DeviceContext->RSSetViewports(1u, &vp);
 
-		// 6) Set Primitive Topology type to Input Assembler for our Vertex Buffer
-		m_DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	}
 
-		// 7) Create Input Layout for the Vertex Shader to use when taking our Vertex structure as an input
-		// Create Input Layout 
-		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
+	void DirectXGraphics::ClearBuffer(float red, float green, float blue)
+	{
+		const float color[] = { red, green, blue, 1.0f };
+		m_DeviceContext->ClearRenderTargetView(m_RenderTargetView.Get(), color);
+		m_DeviceContext->ClearDepthStencilView(m_DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+	}
 
-		// Create description structure for Input Elements
-		D3D11_INPUT_ELEMENT_DESC inputDesc[] =
-		{
-			{"Position", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u }
-		};
-			
-		// Create Input Layout 
-		GFX_THROW_INFO(m_Device->CreateInputLayout(inputDesc, (UINT)std::size(inputDesc), pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &pInputLayout));
+	void DirectXGraphics::DrawIndexed(UINT count)
+	{
+		GFX_THROW_INFO_ONLY(m_DeviceContext->DrawIndexed(count, 0u, 0));
+	}
 
-		// Bind Input Layout to Input Assembler stage of pipeline
-		m_DeviceContext->IASetInputLayout(pInputLayout.Get());
-		
-		// 8) Draw call
-		GFX_THROW_INFO_ONLY(m_DeviceContext->DrawIndexed((UINT)std::size(indices), 0u, 0));
+	void DirectXGraphics::SetProjection(DirectX::FXMMATRIX proj) noexcept
+	{
+		m_Projection = proj;
+	}
+
+	DirectX::XMMATRIX DirectXGraphics::GetProjection() const noexcept
+	{
+		return m_Projection;
 	}
 
 	void DirectXGraphics::EndFrame()

@@ -6,6 +6,28 @@ public:
 	ExampleLayer()
 		: Layer("Example")
 	{
+	}
+
+	void OnAttach() override
+	{
+		Hazel::Application& app = Hazel::Application::Get();
+		Hazel::Window& window = app.GetWindow();
+		Hazel::DirectXGraphics& graphics = window.GetGraphics();
+		std::mt19937 rng(std::random_device{}());
+		std::uniform_real_distribution<float> adist(0.0f, 3.1415f * 2.0f);
+		std::uniform_real_distribution<float> ddist(0.0f, 3.1415f * 2.0f);
+		std::uniform_real_distribution<float> odist(0.0f, 3.1415f * 0.3f);
+		std::uniform_real_distribution<float> rdist(6.0f, 20.0f);
+		for (auto i = 0; i < 80; i++)
+		{
+			boxes.push_back(std::make_unique<Hazel::Box>(
+				graphics, rng, adist,
+				ddist, odist, rdist
+				));
+		}
+
+		graphics.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
+
 
 	}
 
@@ -14,11 +36,19 @@ public:
 		Hazel::Application& app = Hazel::Application::Get();
 		Hazel::Window& window = app.GetWindow();
 		Hazel::DirectXGraphics& graphics = window.GetGraphics();
+
 		Hazel::HazelTimer& timer = app.GetTimer();
 
-		const float c = sin(timer.Peek()) / 2.0f + 0.5f;
-		graphics.ClearBuffer(c, c, 0.9f);
-		graphics.DrawTestTriangle(timer.Peek(), (float)Hazel::Input::GetMousePosX() / 640.0f - 1.0f, (float)-Hazel::Input::GetMousePosY() / 480.0f + 1.0f);
+		auto dt = timer.Mark();
+		
+		graphics.ClearBuffer(0.6f, 0.4f, 0.6f);
+	
+		for (auto& b : boxes)
+		{
+			b->Update(dt);
+			b->Draw(graphics);
+		}
+		
 		graphics.EndFrame();
 
 	}
@@ -39,6 +69,9 @@ public:
 		*/
 		
 	}
+
+private:
+	std::vector<std::unique_ptr<class Hazel::Box>> boxes;
 };
 
 class Sandbox : public Hazel::Application

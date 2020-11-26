@@ -3,6 +3,10 @@
 
 #include "Hazel/HazelException.h"
 #include "DXGIInfoManager.h"
+#include <d3dcompiler.h>
+#include <DirectXMath.h>
+#include <memory>
+#include <random>
 
 #include <wrl.h>
 #include <d3d11.h>
@@ -11,6 +15,7 @@ namespace Hazel {
 
 	class DirectXGraphics
 	{
+		friend class Bindable;
 	public:
 		class Exception : public HazelException
 		{
@@ -63,9 +68,12 @@ namespace Hazel {
 		virtual void EndFrame();
 		
 		virtual void ClearBuffer(float red, float green, float blue);
-		virtual void DrawTestTriangle(float angle, float x, float y);
+		void DrawIndexed(UINT count);
+		void SetProjection(DirectX::FXMMATRIX proj) noexcept;
+		DirectX::XMMATRIX GetProjection() const noexcept;
 
 	private:
+		DirectX::XMMATRIX m_Projection;
 	#ifndef NDEBUG
 		DxgiInfoManager infoManager;
 	#endif
