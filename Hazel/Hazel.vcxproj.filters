@@ -128,6 +128,7 @@
     <ClInclude Include="src\Platform\DirectX11\VertexBuffer.h" />
     <ClInclude Include="src\Platform\DirectX11\VertexShader.h" />
     <ClInclude Include="src\Platform\DirectX11\Box.h" />
+    <ClInclude Include="src\Platform\DirectX11\DrawableBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">

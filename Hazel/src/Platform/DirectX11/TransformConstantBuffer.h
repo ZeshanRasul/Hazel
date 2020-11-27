@@ -12,7 +12,7 @@ namespace Hazel {
 		void Bind(DirectXGraphics& graphics) noexcept override;
 	
 	private:
-		VertexConstantBuffer<DirectX::XMMATRIX> m_VertexConstantBuffer;
+		static std::unique_ptr<VertexConstantBuffer<DirectX::XMMATRIX>> m_VertexConstantBuffer;
 		const Drawable& parent;
 	};
 }

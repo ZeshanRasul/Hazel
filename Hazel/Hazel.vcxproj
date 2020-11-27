@@ -185,6 +185,7 @@
     <ClInclude Include="src\Platform\DirectX11\Bindable.h" />
     <ClInclude Include="src\Platform\DirectX11\Box.h" />
     <ClInclude Include="src\Platform\DirectX11\ConstantBuffers.h" />
+    <ClInclude Include="src\Platform\DirectX11\DrawableBase.h" />
     <ClInclude Include="src\Platform\DirectX11\DXErr.h" />
     <ClInclude Include="src\Platform\DirectX11\DXGIInfoManager.h" />
     <ClInclude Include="src\Platform\DirectX11\DXGetErrorDescription.inl" />

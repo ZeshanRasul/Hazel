@@ -1,10 +1,10 @@
 #pragma once
-#include "Drawable.h"
+#include "DrawableBase.h"
 #include <random>
 
 namespace Hazel {
 
-	class Box : public Drawable
+	class Box : public DrawableBase<Box>
 	{
 	public:
 		Box(DirectXGraphics& graphics, std::mt19937& rng,
