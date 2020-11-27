@@ -129,6 +129,13 @@
     <ClInclude Include="src\Platform\DirectX11\VertexShader.h" />
     <ClInclude Include="src\Platform\DirectX11\Box.h" />
     <ClInclude Include="src\Platform\DirectX11\DrawableBase.h" />
+    <ClInclude Include="src\Platform\DirectX11\Sphere.h" />
+    <ClInclude Include="src\Platform\DirectX11\Prism.h" />
+    <ClInclude Include="src\Platform\DirectX11\Plane.h" />
+    <ClInclude Include="src\Platform\DirectX11\IndexedTriangleList.h" />
+    <ClInclude Include="src\Platform\DirectX11\Cube.h" />
+    <ClInclude Include="src\Platform\DirectX11\Cone.h" />
+    <ClInclude Include="src\Platform\DirectX11\HazelMath.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">

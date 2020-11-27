@@ -184,7 +184,9 @@
     <ClInclude Include="src\Platform\DirectX11\BindableBase.h" />
     <ClInclude Include="src\Platform\DirectX11\Bindable.h" />
     <ClInclude Include="src\Platform\DirectX11\Box.h" />
+    <ClInclude Include="src\Platform\DirectX11\Cone.h" />
     <ClInclude Include="src\Platform\DirectX11\ConstantBuffers.h" />
+    <ClInclude Include="src\Platform\DirectX11\Cube.h" />
     <ClInclude Include="src\Platform\DirectX11\DrawableBase.h" />
     <ClInclude Include="src\Platform\DirectX11\DXErr.h" />
     <ClInclude Include="src\Platform\DirectX11\DXGIInfoManager.h" />
@@ -194,9 +196,14 @@
     <ClInclude Include="src\Platform\DirectX11\DirectXGraphics.h" />
     <ClInclude Include="src\Platform\DirectX11\GraphicsThrowMacros.h" />
     <ClInclude Include="src\Platform\DirectX11\Drawable.h" />
+    <ClInclude Include="src\Platform\DirectX11\HazelMath.h" />
     <ClInclude Include="src\Platform\DirectX11\IndexBuffer.h" />
+    <ClInclude Include="src\Platform\DirectX11\IndexedTriangleList.h" />
     <ClInclude Include="src\Platform\DirectX11\InputLayout.h" />
     <ClInclude Include="src\Platform\DirectX11\PixelShader.h" />
+    <ClInclude Include="src\Platform\DirectX11\Plane.h" />
+    <ClInclude Include="src\Platform\DirectX11\Prism.h" />
+    <ClInclude Include="src\Platform\DirectX11\Sphere.h" />
     <ClInclude Include="src\Platform\DirectX11\Topology.h" />
     <ClInclude Include="src\Platform\DirectX11\TransformConstantBuffer.h" />
     <ClInclude Include="src\Platform\DirectX11\VertexBuffer.h" />

@@ -1,6 +1,7 @@
 #include "hzpch.h"
 #include "Box.h"
 #include "BindableBase.h"
+#include "Sphere.h"
 #include "GraphicsThrowMacros.h"
 
 namespace Hazel {
@@ -27,28 +28,13 @@ namespace Hazel {
 
 			struct Vertex
 			{
-				struct
-				{
-					float x;
-					float y;
-					float z;
-				} position;
-
+				DirectX::XMFLOAT3 pos;
 			};
 
-			const std::vector<Vertex> vertices =
-			{
-				{ -1.0f,-1.0f,-1.0f	 },
-				{ 1.0f,-1.0f,-1.0f	 },
-				{ -1.0f,1.0f,-1.0f	 },
-				{ 1.0f,1.0f,-1.0f	 },
-				{ -1.0f,-1.0f,1.0f	 },
-				{ 1.0f,-1.0f,1.0f	 },
-				{ -1.0f,1.0f,1.0f	 },
-				{ 1.0f,1.0f,1.0f	 },
-			};
+			auto model = Sphere::Make<Vertex>();
+			model.Transform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
 
-			AddStaticBind(std::make_unique<VertexBuffer>(graphics, vertices));
+			AddStaticBind(std::make_unique<VertexBuffer>(graphics, model.vertices));
 
 			auto pVertexShader = std::make_unique<VertexShader>(graphics, L"../Hazel/VertexShader.cso");
 			auto pVertexShaderBytecode = pVertexShader->GetBytecode();
@@ -57,17 +43,8 @@ namespace Hazel {
 
 			AddStaticBind(std::make_unique<PixelShader>(graphics, L"../Hazel/PixelShader.cso"));
 
-			const std::vector<unsigned short> indices =
-			{
-				0,2,1, 2,3,1,
-				1,3,5, 3,7,5,
-				2,6,3, 3,6,7,
-				4,5,7, 4,7,6,
-				0,4,2, 2,4,6,
-				0,1,4, 1,5,4
-			};
-
-			AddStaticIndexBuffer(std::make_unique<IndexBuffer>(graphics, indices));
+		
+			AddStaticIndexBuffer(std::make_unique<IndexBuffer>(graphics, model.indices));
 
 			struct ConstantBufferColour
 			{
