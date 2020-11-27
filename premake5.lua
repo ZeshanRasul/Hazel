@@ -77,14 +77,14 @@ project "Hazel"
 			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox\"")
 		}
 
-		filter("files:**PixelShader.hlsl")
+		filter("files:**ColourBlendPS.hlsl")
 			shadertype("Pixel")
-			shaderobjectfileoutput("PixelShader.cso")
+			shaderobjectfileoutput("ColourBlendPS.cso")
 			shadermodel("4.0")
 
-		filter("files:**VertexShader.hlsl")
+		filter("files:**ColourBlendVS.hlsl")
 			shadertype("Vertex")
-			shaderobjectfileoutput("VertexShader.cso")
+			shaderobjectfileoutput("ColourBlendVS.cso")
 			shadermodel("4.0")
 					
 		filter "configurations:Debug"

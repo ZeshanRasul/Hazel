@@ -71,22 +71,19 @@ namespace Hazel {
 
 			AddStaticBind(std::make_unique<Topology>(graphics, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 		}
-		else
+	
+		struct Vertex
 		{
+			DirectX::XMFLOAT3 pos;
+		};
 
-			struct Vertex
-			{
-				DirectX::XMFLOAT3 pos;
-			};
+		auto model = Sphere::MakeTesselated<Vertex>(latdist(rng), longdist(rng));
 
-			auto model = Sphere::MakeTesselated<Vertex>(latdist(rng), longdist(rng));
+		model.Transform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
 
-			model.Transform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
+		AddBind(std::make_unique<VertexBuffer>(graphics, model.vertices));
 
-			AddBind(std::make_unique<VertexBuffer>(graphics, model.vertices));
-
-			AddIndexBuffer(std::make_unique<IndexBuffer>(graphics, model.indices));
-		}
+		AddIndexBuffer(std::make_unique<IndexBuffer>(graphics, model.indices));
 
 		AddBind(std::make_unique<TransformConstantBuffer>(graphics, *this));
 	}

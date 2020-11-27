@@ -29,14 +29,11 @@ public:
 				switch (typedist(rng))
 				{
 				case 0:
-				//	return std::make_unique<Hazel::Pyramid>(graphics, rng, adist, ddist, odist, rdist);
-					return {};
-
+					return std::make_unique<Hazel::Pyramid>(graphics, rng, adist, ddist, odist, rdist);
 				case 1:
 					return std::make_unique<Hazel::Melon>(graphics, rng, adist, ddist, odist, rdist, longdist, latdist);
-					return {};
 				case 2:
-//					return std::make_unique<Hazel::Box>(graphics, rng, adist, ddist, odist, rdist, bdist);
+					return std::make_unique<Hazel::Box>(graphics, rng, adist, ddist, odist, rdist, bdist);
 				default:
 					assert(false && "Bad drawable type in factory");
 					return {};
@@ -76,13 +73,13 @@ public:
 		auto dt = timer.Mark();
 		
 		graphics.ClearBuffer(0.6f, 0.4f, 0.6f);
-	/*
+	
 		for (auto& d : drawables)
 		{
 			d->Update(dt);
 			d->Draw(graphics);
 		}
-		*/
+		
 		graphics.EndFrame();
 
 	}
