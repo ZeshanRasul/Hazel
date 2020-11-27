@@ -94,8 +94,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\Hazel\PixelShader.cso\ (xcopy /Q /E /Y /I ..\Hazel\PixelShader.cso  ..\bin\Debug-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\PixelShader.cso  ..\bin\Debug-windows-x86_64\Hazel &gt; nul)
-IF EXIST ..\Hazel\VertexShader.cso\ (xcopy /Q /E /Y /I ..\Hazel\VertexShader.cso ..\bin\Debug-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\VertexShader.cso ..\bin\Debug-windows-x86_64\Hazel &gt; nul)</Command>
+      <Command>IF EXIST ..\Hazel\ColourBlendVS.cso\ (xcopy /Q /E /Y /I ..\Hazel\ColourBlendVS.cso ..\bin\Debug-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\ColourBlendVS.cso ..\bin\Debug-windows-x86_64\Hazel &gt; nul)
+IF EXIST ..\Hazel\ColourBlendPS.cso\ (xcopy /Q /E /Y /I ..\Hazel\ColourBlendPS.cso  ..\bin\Debug-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\ColourBlendPS.cso  ..\bin\Debug-windows-x86_64\Hazel &gt; nul)
+IF EXIST ..\Hazel\ColourIndexVS.cso\ (xcopy /Q /E /Y /I ..\Hazel\ColourIndexVS.cso ..\bin\Debug-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\ColourIndexVS.cso ..\bin\Debug-windows-x86_64\Hazel &gt; nul)
+IF EXIST ..\Hazel\ColourIndexPS.cso\ (xcopy /Q /E /Y /I ..\Hazel\ColourIndexPS.cso ..\bin\Debug-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\ColourIndexPS.cso ..\bin\Debug-windows-x86_64\Hazel &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -122,8 +124,10 @@ IF EXIST ..\Hazel\VertexShader.cso\ (xcopy /Q /E /Y /I ..\Hazel\VertexShader.cso
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\Hazel\PixelShader.cso\ (xcopy /Q /E /Y /I ..\Hazel\PixelShader.cso  ..\bin\Release-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\PixelShader.cso  ..\bin\Release-windows-x86_64\Hazel &gt; nul)
-IF EXIST ..\Hazel\VertexShader.cso\ (xcopy /Q /E /Y /I ..\Hazel\VertexShader.cso ..\bin\Release-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\VertexShader.cso ..\bin\Release-windows-x86_64\Hazel &gt; nul)</Command>
+      <Command>IF EXIST ..\Hazel\ColourBlendVS.cso\ (xcopy /Q /E /Y /I ..\Hazel\ColourBlendVS.cso ..\bin\Release-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\ColourBlendVS.cso ..\bin\Release-windows-x86_64\Hazel &gt; nul)
+IF EXIST ..\Hazel\ColourBlendPS.cso\ (xcopy /Q /E /Y /I ..\Hazel\ColourBlendPS.cso  ..\bin\Release-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\ColourBlendPS.cso  ..\bin\Release-windows-x86_64\Hazel &gt; nul)
+IF EXIST ..\Hazel\ColourIndexVS.cso\ (xcopy /Q /E /Y /I ..\Hazel\ColourIndexVS.cso ..\bin\Release-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\ColourIndexVS.cso ..\bin\Release-windows-x86_64\Hazel &gt; nul)
+IF EXIST ..\Hazel\ColourIndexPS.cso\ (xcopy /Q /E /Y /I ..\Hazel\ColourIndexPS.cso ..\bin\Release-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\ColourIndexPS.cso ..\bin\Release-windows-x86_64\Hazel &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -150,8 +154,10 @@ IF EXIST ..\Hazel\VertexShader.cso\ (xcopy /Q /E /Y /I ..\Hazel\VertexShader.cso
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\Hazel\PixelShader.cso\ (xcopy /Q /E /Y /I ..\Hazel\PixelShader.cso  ..\bin\Dist-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\PixelShader.cso  ..\bin\Dist-windows-x86_64\Hazel &gt; nul)
-IF EXIST ..\Hazel\VertexShader.cso\ (xcopy /Q /E /Y /I ..\Hazel\VertexShader.cso ..\bin\Dist-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\VertexShader.cso ..\bin\Dist-windows-x86_64\Hazel &gt; nul)</Command>
+      <Command>IF EXIST ..\Hazel\ColourBlendVS.cso\ (xcopy /Q /E /Y /I ..\Hazel\ColourBlendVS.cso ..\bin\Dist-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\ColourBlendVS.cso ..\bin\Dist-windows-x86_64\Hazel &gt; nul)
+IF EXIST ..\Hazel\ColourBlendPS.cso\ (xcopy /Q /E /Y /I ..\Hazel\ColourBlendPS.cso  ..\bin\Dist-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\ColourBlendPS.cso  ..\bin\Dist-windows-x86_64\Hazel &gt; nul)
+IF EXIST ..\Hazel\ColourIndexVS.cso\ (xcopy /Q /E /Y /I ..\Hazel\ColourIndexVS.cso ..\bin\Dist-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\ColourIndexVS.cso ..\bin\Dist-windows-x86_64\Hazel &gt; nul)
+IF EXIST ..\Hazel\ColourIndexPS.cso\ (xcopy /Q /E /Y /I ..\Hazel\ColourIndexPS.cso ..\bin\Dist-windows-x86_64\Hazel &gt; nul) ELSE (xcopy /Q /Y /I ..\Hazel\ColourIndexPS.cso ..\bin\Dist-windows-x86_64\Hazel &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

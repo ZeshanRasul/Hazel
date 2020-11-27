@@ -85,6 +85,24 @@
     <ClInclude Include="src\Hazel\resource.h">
       <Filter>src\Hazel</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\Bindable.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\BindableBase.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\Box.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\Cone.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\ConstantBuffers.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\Cube.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\DirectX11\DXErr.h">
       <Filter>src\Platform\DirectX11</Filter>
     </ClInclude>
@@ -103,7 +121,61 @@
     <ClInclude Include="src\Platform\DirectX11\DirectXGraphics.h">
       <Filter>src\Platform\DirectX11</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\Drawable.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\DrawableBase.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\GraphicsThrowMacros.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\HazelMath.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\IndexBuffer.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\IndexedTriangleList.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\InputLayout.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\Melon.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\PixelShader.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\Plane.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\Prism.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\Pyramid.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\Sphere.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\Topology.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\TransformConstantBuffer.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\VertexBuffer.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\VertexShader.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsInput.h">
+      <Filter>src\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Windows\WindowsThrowMacros.h">
       <Filter>src\Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
@@ -112,32 +184,6 @@
     <ClInclude Include="src\hzpch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\Windows\WindowsThrowMacros.h">
-      <Filter>src\Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DirectX11\GraphicsThrowMacros.h" />
-    <ClInclude Include="src\Platform\DirectX11\Bindable.h" />
-    <ClInclude Include="src\Platform\DirectX11\BindableBase.h" />
-    <ClInclude Include="src\Platform\DirectX11\Drawable.h" />
-    <ClInclude Include="src\Platform\DirectX11\ConstantBuffers.h" />
-    <ClInclude Include="src\Platform\DirectX11\IndexBuffer.h" />
-    <ClInclude Include="src\Platform\DirectX11\InputLayout.h" />
-    <ClInclude Include="src\Platform\DirectX11\PixelShader.h" />
-    <ClInclude Include="src\Platform\DirectX11\Topology.h" />
-    <ClInclude Include="src\Platform\DirectX11\TransformConstantBuffer.h" />
-    <ClInclude Include="src\Platform\DirectX11\VertexBuffer.h" />
-    <ClInclude Include="src\Platform\DirectX11\VertexShader.h" />
-    <ClInclude Include="src\Platform\DirectX11\Box.h" />
-    <ClInclude Include="src\Platform\DirectX11\DrawableBase.h" />
-    <ClInclude Include="src\Platform\DirectX11\Sphere.h" />
-    <ClInclude Include="src\Platform\DirectX11\Prism.h" />
-    <ClInclude Include="src\Platform\DirectX11\Plane.h" />
-    <ClInclude Include="src\Platform\DirectX11\IndexedTriangleList.h" />
-    <ClInclude Include="src\Platform\DirectX11\Cube.h" />
-    <ClInclude Include="src\Platform\DirectX11\Cone.h" />
-    <ClInclude Include="src\Platform\DirectX11\HazelMath.h" />
-    <ClInclude Include="src\Platform\DirectX11\Pyramid.h" />
-    <ClInclude Include="src\Platform\DirectX11\Melon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">
@@ -164,6 +210,12 @@
     <ClCompile Include="src\Hazel\Log.cpp">
       <Filter>src\Hazel</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\Bindable.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\Box.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\DirectX11\DXErr.cpp">
       <Filter>src\Platform\DirectX11</Filter>
     </ClCompile>
@@ -171,6 +223,36 @@
       <Filter>src\Platform\DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\DirectX11\DirectXGraphics.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\Drawable.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\IndexBuffer.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\InputLayout.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\Melon.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\PixelShader.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\Pyramid.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\Topology.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\TransformConstantBuffer.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\VertexBuffer.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\VertexShader.cpp">
       <Filter>src\Platform\DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
@@ -182,28 +264,20 @@
     <ClCompile Include="src\hzpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\DirectX11\Bindable.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\IndexBuffer.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\InputLayout.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\PixelShader.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\Topology.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\TransformConstantBuffer.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\VertexBuffer.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\VertexShader.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\Box.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\Drawable.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\Pyramid.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\Melon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="src\Platform\DirectX11\Shaders\ColourBlendPS.hlsl">
+      <Filter>src\Platform\DirectX11\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Platform\DirectX11\Shaders\ColourBlendVS.hlsl">
+      <Filter>src\Platform\DirectX11\Shaders</Filter>
+    </FxCompile>
     <FxCompile Include="src\Platform\DirectX11\Shaders\ColourIndexPS.hlsl">
       <Filter>src\Platform\DirectX11\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="src\Platform\DirectX11\Shaders\ColourIndexVS.hlsl">
       <Filter>src\Platform\DirectX11\Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="src\Platform\DirectX11\Shaders\ColourBlendVS.hlsl" />
-    <FxCompile Include="src\Platform\DirectX11\Shaders\ColourBlendPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Hazel.aps" />

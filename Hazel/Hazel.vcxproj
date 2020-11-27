@@ -181,21 +181,21 @@
     <ClInclude Include="src\Hazel\MouseButtonCodes.h" />
     <ClInclude Include="src\Hazel\Window.h" />
     <ClInclude Include="src\Hazel\resource.h" />
-    <ClInclude Include="src\Platform\DirectX11\BindableBase.h" />
     <ClInclude Include="src\Platform\DirectX11\Bindable.h" />
+    <ClInclude Include="src\Platform\DirectX11\BindableBase.h" />
     <ClInclude Include="src\Platform\DirectX11\Box.h" />
     <ClInclude Include="src\Platform\DirectX11\Cone.h" />
     <ClInclude Include="src\Platform\DirectX11\ConstantBuffers.h" />
     <ClInclude Include="src\Platform\DirectX11\Cube.h" />
-    <ClInclude Include="src\Platform\DirectX11\DrawableBase.h" />
     <ClInclude Include="src\Platform\DirectX11\DXErr.h" />
     <ClInclude Include="src\Platform\DirectX11\DXGIInfoManager.h" />
     <ClInclude Include="src\Platform\DirectX11\DXGetErrorDescription.inl" />
     <ClInclude Include="src\Platform\DirectX11\DXGetErrorString.inl" />
     <ClInclude Include="src\Platform\DirectX11\DXTrace.inl" />
     <ClInclude Include="src\Platform\DirectX11\DirectXGraphics.h" />
-    <ClInclude Include="src\Platform\DirectX11\GraphicsThrowMacros.h" />
     <ClInclude Include="src\Platform\DirectX11\Drawable.h" />
+    <ClInclude Include="src\Platform\DirectX11\DrawableBase.h" />
+    <ClInclude Include="src\Platform\DirectX11\GraphicsThrowMacros.h" />
     <ClInclude Include="src\Platform\DirectX11\HazelMath.h" />
     <ClInclude Include="src\Platform\DirectX11\IndexBuffer.h" />
     <ClInclude Include="src\Platform\DirectX11\IndexedTriangleList.h" />
@@ -211,9 +211,9 @@
     <ClInclude Include="src\Platform\DirectX11\VertexBuffer.h" />
     <ClInclude Include="src\Platform\DirectX11\VertexShader.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsThrowMacros.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\hzpch.h" />
-    <ClInclude Include="src\Platform\Windows\WindowsThrowMacros.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp" />
@@ -226,10 +226,10 @@
     <ClCompile Include="src\Hazel\Log.cpp" />
     <ClCompile Include="src\Platform\DirectX11\Bindable.cpp" />
     <ClCompile Include="src\Platform\DirectX11\Box.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\Drawable.cpp" />
     <ClCompile Include="src\Platform\DirectX11\DXErr.cpp" />
     <ClCompile Include="src\Platform\DirectX11\DXGIInfoManager.cpp" />
     <ClCompile Include="src\Platform\DirectX11\DirectXGraphics.cpp" />
+    <ClCompile Include="src\Platform\DirectX11\Drawable.cpp" />
     <ClCompile Include="src\Platform\DirectX11\IndexBuffer.cpp" />
     <ClCompile Include="src\Platform\DirectX11\InputLayout.cpp" />
     <ClCompile Include="src\Platform\DirectX11\Melon.cpp" />
@@ -247,28 +247,24 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\Platform\DirectX11\Shaders\ColourBlendPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">Pixel</ShaderType>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>4.0</ShaderModel>
+      <ObjectFileOutput>ColourBlendPS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="src\Platform\DirectX11\Shaders\ColourBlendVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">Vertex</ShaderType>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>4.0</ShaderModel>
+      <ObjectFileOutput>ColourBlendVS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="src\Platform\DirectX11\Shaders\ColourIndexPS.hlsl">
       <ShaderType>Pixel</ShaderType>
       <ShaderModel>4.0</ShaderModel>
-      <ObjectFileOutput>PixelShader.cso</ObjectFileOutput>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput>ColourIndexPS.cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="src\Platform\DirectX11\Shaders\ColourIndexVS.hlsl">
       <ShaderType>Vertex</ShaderType>
       <ShaderModel>4.0</ShaderModel>
-      <ObjectFileOutput>VertexShader.cso</ObjectFileOutput>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput>ColourIndexVS.cso</ObjectFileOutput>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

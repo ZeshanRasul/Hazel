@@ -77,14 +77,25 @@ project "Hazel"
 			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox\"")
 		}
 
+
+		filter("files:**ColourBlendVS.hlsl")
+			shadertype("Vertex")
+			shaderobjectfileoutput("ColourBlendVS.cso")
+			shadermodel("4.0")
+
 		filter("files:**ColourBlendPS.hlsl")
 			shadertype("Pixel")
 			shaderobjectfileoutput("ColourBlendPS.cso")
 			shadermodel("4.0")
 
-		filter("files:**ColourBlendVS.hlsl")
+		filter("files:**ColourIndexPS.hlsl")
+			shadertype("Pixel")
+			shaderobjectfileoutput("ColourIndexPS.cso")
+			shadermodel("4.0")
+
+		filter("files:**ColourIndexVS.hlsl")
 			shadertype("Vertex")
-			shaderobjectfileoutput("ColourBlendVS.cso")
+			shaderobjectfileoutput("ColourIndexVS.cso")
 			shadermodel("4.0")
 					
 		filter "configurations:Debug"
@@ -147,8 +158,10 @@ project "Sandbox"
 
 	postbuildcommands
 	{
-		("{COPY} ../Hazel/PixelShader.cso  ../bin/" .. outputdir .. "/Hazel"),
-		("{COPY} ../Hazel/VertexShader.cso ../bin/" .. outputdir .. "/Hazel")
+		("{COPY} ../Hazel/ColourBlendVS.cso ../bin/" .. outputdir .. "/Hazel"),
+		("{COPY} ../Hazel/ColourBlendPS.cso  ../bin/" .. outputdir .. "/Hazel"),
+		("{COPY} ../Hazel/ColourIndexVS.cso ../bin/" .. outputdir .. "/Hazel"),
+		("{COPY} ../Hazel/ColourIndexPS.cso ../bin/" .. outputdir .. "/Hazel")
 	}
 
 	filter "system:windows"
