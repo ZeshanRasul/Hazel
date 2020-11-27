@@ -200,9 +200,11 @@
     <ClInclude Include="src\Platform\DirectX11\IndexBuffer.h" />
     <ClInclude Include="src\Platform\DirectX11\IndexedTriangleList.h" />
     <ClInclude Include="src\Platform\DirectX11\InputLayout.h" />
+    <ClInclude Include="src\Platform\DirectX11\Melon.h" />
     <ClInclude Include="src\Platform\DirectX11\PixelShader.h" />
     <ClInclude Include="src\Platform\DirectX11\Plane.h" />
     <ClInclude Include="src\Platform\DirectX11\Prism.h" />
+    <ClInclude Include="src\Platform\DirectX11\Pyramid.h" />
     <ClInclude Include="src\Platform\DirectX11\Sphere.h" />
     <ClInclude Include="src\Platform\DirectX11\Topology.h" />
     <ClInclude Include="src\Platform\DirectX11\TransformConstantBuffer.h" />
@@ -230,7 +232,9 @@
     <ClCompile Include="src\Platform\DirectX11\DirectXGraphics.cpp" />
     <ClCompile Include="src\Platform\DirectX11\IndexBuffer.cpp" />
     <ClCompile Include="src\Platform\DirectX11\InputLayout.cpp" />
+    <ClCompile Include="src\Platform\DirectX11\Melon.cpp" />
     <ClCompile Include="src\Platform\DirectX11\PixelShader.cpp" />
+    <ClCompile Include="src\Platform\DirectX11\Pyramid.cpp" />
     <ClCompile Include="src\Platform\DirectX11\Topology.cpp" />
     <ClCompile Include="src\Platform\DirectX11\TransformConstantBuffer.cpp" />
     <ClCompile Include="src\Platform\DirectX11\VertexBuffer.cpp" />
@@ -242,12 +246,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="src\Platform\DirectX11\Shaders\PixelShader.hlsl">
+    <FxCompile Include="src\Platform\DirectX11\Shaders\ColourBlendPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\Platform\DirectX11\Shaders\ColourBlendVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\Platform\DirectX11\Shaders\ColourIndexPS.hlsl">
       <ShaderType>Pixel</ShaderType>
       <ShaderModel>4.0</ShaderModel>
       <ObjectFileOutput>PixelShader.cso</ObjectFileOutput>
     </FxCompile>
-    <FxCompile Include="src\Platform\DirectX11\Shaders\VertexShader.hlsl">
+    <FxCompile Include="src\Platform\DirectX11\Shaders\ColourIndexVS.hlsl">
       <ShaderType>Vertex</ShaderType>
       <ShaderModel>4.0</ShaderModel>
       <ObjectFileOutput>VertexShader.cso</ObjectFileOutput>

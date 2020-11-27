@@ -1,17 +1,18 @@
 #include "hzpch.h"
-#include "Box.h"
+#include "Melon.h"
 #include "BindableBase.h"
-#include "Cube.h"
+#include "Sphere.h"
 #include "GraphicsThrowMacros.h"
 
 namespace Hazel {
 
-	Box::Box(DirectXGraphics& graphics, std::mt19937& rng,
+	Melon::Melon(DirectXGraphics& graphics, std::mt19937& rng,
 		std::uniform_real_distribution<float>& adist,
 		std::uniform_real_distribution<float>& ddist,
 		std::uniform_real_distribution<float>& odist,
 		std::uniform_real_distribution<float>& rdist,
-		std::uniform_real_distribution<float>& bdist)
+		std::uniform_int_distribution<int>& longdist,
+		std::uniform_int_distribution<int>& latdist)
 		:
 		r(rdist(rng)),
 		droll(ddist(rng)),
@@ -26,25 +27,13 @@ namespace Hazel {
 	{
 		if (!IsStaticInitialized())
 		{
-
-			struct Vertex
-			{
-				DirectX::XMFLOAT3 pos;
-			};
-
-			auto model = Cube::Make<Vertex>();
-
-			AddStaticBind(std::make_unique<VertexBuffer>(graphics, model.vertices));
-
 			auto pVertexShader = std::make_unique<VertexShader>(graphics, L"../Hazel/ColourIndexVS.cso");
+
 			auto pVertexShaderBytecode = pVertexShader->GetBytecode();
 
 			AddStaticBind(std::move(pVertexShader));
 
 			AddStaticBind(std::make_unique<PixelShader>(graphics, L"../Hazel/ColourIndexPS.cso"));
-
-		
-			AddStaticIndexBuffer(std::make_unique<IndexBuffer>(graphics, model.indices));
 
 			struct PixelShaderConstants
 			{
@@ -57,40 +46,52 @@ namespace Hazel {
 				} face_colours[8];
 			};
 
-			PixelShaderConstants cbColour =
+			const PixelShaderConstants cBuffer =
 			{
 				{
-					{1.0f,0.0f,1.0f},
-					{1.0f,0.0f,0.0f},
-					{0.0f,1.0f,0.0f},
-					{0.0f,0.0f,1.0f},
-					{1.0f,1.0f,0.0f},
-					{0.0f,1.0f,1.0f},
+					{ 1.0f,1.0f,1.0f },
+					{ 1.0f,0.0f,0.0f },
+					{ 0.0f,1.0f,0.0f },
+					{ 1.0f,1.0f,0.0f },
+					{ 0.0f,0.0f,1.0f },
+					{ 1.0f,0.0f,1.0f },
+					{ 0.0f,1.0f,1.0f },
+					{ 0.0f,0.0f,0.0f },
 				}
 			};
 
-			AddStaticBind(std::make_unique<PixelConstantBuffer<PixelShaderConstants>>(graphics, cbColour));
+			AddStaticBind(std::make_unique<PixelConstantBuffer<PixelShaderConstants>>(graphics, cBuffer));
 
-			const std::vector<D3D11_INPUT_ELEMENT_DESC> inputDesc =
+			const std::vector<D3D11_INPUT_ELEMENT_DESC> inputElementDesc =
 			{
-				{"Position", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u }
+				{"Position", 0u, DXGI_FORMAT_R32G32B32_FLOAT, 0u, 0u, D3D11_INPUT_PER_VERTEX_DATA, 0u}
 			};
 
-			AddStaticBind(std::make_unique<InputLayout>(graphics, inputDesc, pVertexShaderBytecode));
+			AddStaticBind(std::make_unique<InputLayout>(graphics, inputElementDesc, pVertexShaderBytecode));
 
 			AddStaticBind(std::make_unique<Topology>(graphics, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 		}
-		else 
+		else
 		{
-			SetIndexFromStatic();
+
+			struct Vertex
+			{
+				DirectX::XMFLOAT3 pos;
+			};
+
+			auto model = Sphere::MakeTesselated<Vertex>(latdist(rng), longdist(rng));
+
+			model.Transform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
+
+			AddBind(std::make_unique<VertexBuffer>(graphics, model.vertices));
+
+			AddIndexBuffer(std::make_unique<IndexBuffer>(graphics, model.indices));
 		}
 
 		AddBind(std::make_unique<TransformConstantBuffer>(graphics, *this));
-
-		DirectX::XMStoreFloat3x3(&mt, DirectX::XMMatrixScaling(1.0f, 1.0f, bdist(rng)));
 	}
 
-	void Box::Update(float dt) noexcept
+	void Melon::Update(float dt) noexcept
 	{
 		roll += droll * dt;
 		pitch += dpitch * dt;
@@ -100,13 +101,12 @@ namespace Hazel {
 		chi += dchi * dt;
 	}
 
-	DirectX::XMMATRIX Box::GetTransformXM() const noexcept
+	DirectX::XMMATRIX Melon::GetTransformXM() const noexcept
 	{
-		return 
-			DirectX::XMLoadFloat3x3(&mt) *
-			DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *
+		return DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *
 			DirectX::XMMatrixTranslation(r, 0.0f, 0.0f) *
 			DirectX::XMMatrixRotationRollPitchYaw(theta, phi, chi) *
 			DirectX::XMMatrixTranslation(0.0f, 0.0f, 20.0f);
 	}
+
 }

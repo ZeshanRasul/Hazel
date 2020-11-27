@@ -136,6 +136,8 @@
     <ClInclude Include="src\Platform\DirectX11\Cube.h" />
     <ClInclude Include="src\Platform\DirectX11\Cone.h" />
     <ClInclude Include="src\Platform\DirectX11\HazelMath.h" />
+    <ClInclude Include="src\Platform\DirectX11\Pyramid.h" />
+    <ClInclude Include="src\Platform\DirectX11\Melon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">
@@ -190,14 +192,18 @@
     <ClCompile Include="src\Platform\DirectX11\VertexShader.cpp" />
     <ClCompile Include="src\Platform\DirectX11\Box.cpp" />
     <ClCompile Include="src\Platform\DirectX11\Drawable.cpp" />
+    <ClCompile Include="src\Platform\DirectX11\Pyramid.cpp" />
+    <ClCompile Include="src\Platform\DirectX11\Melon.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="src\Platform\DirectX11\Shaders\PixelShader.hlsl">
+    <FxCompile Include="src\Platform\DirectX11\Shaders\ColourIndexPS.hlsl">
       <Filter>src\Platform\DirectX11\Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="src\Platform\DirectX11\Shaders\VertexShader.hlsl">
+    <FxCompile Include="src\Platform\DirectX11\Shaders\ColourIndexVS.hlsl">
       <Filter>src\Platform\DirectX11\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="src\Platform\DirectX11\Shaders\ColourBlendVS.hlsl" />
+    <FxCompile Include="src\Platform\DirectX11\Shaders\ColourBlendPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Hazel.aps" />
