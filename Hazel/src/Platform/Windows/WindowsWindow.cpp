@@ -32,7 +32,7 @@ namespace Hazel {
 		wc.cbWndExtra = 0;
 		wc.hInstance = GetInstance();
 		wc.hIcon = static_cast<HICON>(LoadImage(GetInstance(), MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 32, 32, 0));
-		wc.hCursor = nullptr;
+		wc.hCursor = LoadCursor(0, IDC_ARROW);
 		wc.hbrBackground = nullptr;
 		wc.lpszMenuName = nullptr;
 		wc.lpszClassName = GetName();
